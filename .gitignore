@@ -1,0 +1,38 @@
+
+*DS_Store
+*.egg-info
+*.iml
+*.orig
+*.pfb
+*.pyc
+*.py~
+*.sublime-project
+*.sublime-workspace
+.*.swp
+.idea
+static_all/
+frontend/node_modules/
+frontend/dcc/dist/
+frontend/dcc/coverage/
+frontend/dcc/junit/
+frontend/npm-debug.log
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+npm-debug.log
+ve/
+
+# testing
+/coverage
+
+# production
+/build
+frontend/build/
+
+# misc
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+gogovgo/settings/local_dev.py
+
+

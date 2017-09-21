@@ -1,0 +1,170 @@
+html {
+    height: 100%;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+#root-elm { height: 100% }
+#root-elm > [data-reactroot] { height: 100% }
+
+.page-container {
+    padding: 20px 80px;background: #1052d0; /* Old browsers */
+    background: -moz-linear-gradient(-45deg, #1052d0 0%, #0d3fa3 53%, #0d3fa3 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(-45deg, #1052d0 0%,#0d3fa3 53%,#0d3fa3 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(135deg, #1052d0 0%,#0d3fa3 53%,#0d3fa3 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1052d0', endColorstr='#0d3fa3',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+    height: 100%;
+}
+
+.go-gov-go {
+    width: 134px;
+    color: #FFFFFF;
+    font-family: Roboto;
+    font-size: 30px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    line-height: 35px;
+}
+
+.government-simplifi-logo {
+    width: 132px;
+    color: #FFFFFF;
+    font-family: Roboto;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 14px;
+}
+
+.homepage-hero {
+    height: 633px;
+    width: 478px;
+    float: right;
+}
+
+.government-simplifi-big-container {
+    margin-top: 100px;
+}
+
+.government-simplifi-big {
+    width: 703px;
+    color: #FAFAFA;
+    font-family: Roboto;
+    font-size: 49px;
+    line-height: 60px;
+    margin-bottom: 15px;
+    font-weight: 900;
+}
+
+.find-and-connect-with {
+    width: 613px;
+    color: #FAFAFA;
+    font-family: Roboto;
+    font-size: 20px;
+    line-height: 24px;
+}
+
+.enter-button-container {
+    margin-top: 50px;
+}
+
+.enter-button {
+    border: 2px solid #FFFFFF;
+    border-radius: 4px;
+    padding: 20px 40px;
+    text-align: center;
+    color: #FFFFFF;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    line-height: 14px;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.enter-button:hover {
+    color: #FFFFFF;
+    text-decoration: none;
+    background-color: #0B5AC3;
+}
+
+
+.clear {
+    clear: both;
+}
+
+.footer-link {
+    height: 30px;
+    opacity: 0.6;
+    color: #FFFFFF;
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    line-height: 30px;
+}
+
+.homepage-footer-links {
+    margin-top: 250px;
+}
+
+
+.homepage-footer-links a {
+    color: #fff;
+    opacity: 0.8;
+}
+
+@media only screen and (max-width: 1200px) {
+    .page-container {
+        padding: 51px 20px;
+        text-align: center;
+    }
+
+    .government-simplifi-big-container {
+        margin-top: 120px;
+    }
+
+    .government-simplifi-big {
+        width: 100%;
+        color: #FAFAFA;
+        font-family: 'Roboto', sans-serif;
+        font-size: 30px;
+        line-height: 30px;
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .homepage-left {
+        width: 100%;
+    }
+    .homepage-right {
+        display: none;
+    }
+
+    .footer-link {
+        display: inline-block;
+        text-align: center;
+        line-height: 15px;
+    }
+
+    .find-and-connect-with {
+        width: 100%;
+        color: #FAFAFA;
+        font-family: 'Roboto', sans-serif;
+        font-size: 20px;
+        line-height: 24px;
+    }
+
+    .government-simplifi-logo {
+        width: 100%;
+    }
+
+    .go-gov-go {
+        width: 100%;
+    }
+
+    .homepage-footer-links {
+        margin-top: 140px;
+    }
+
+
+}

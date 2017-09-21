@@ -1,0 +1,13 @@
+django
+mysql-python
+django-extensions
+graphene_django
+django-cors-headers
+dj.choices
+django-countries
+django-phonenumber-field
+django-filter
+django-imagefit
+Pillow
+google-cloud-language
+cloudinary
