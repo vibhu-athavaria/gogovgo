@@ -4,19 +4,19 @@
 
 import React, { Component } from 'react';
 import PoliticianWithData from "./Politician/Politician";
-import HeaderWithNav from "./Header";
+import Header from "./Header";
 import Footer from "./Footer";
 import '../assets/css/App.css'
 
 
 class Home extends Component {
 	render() {
-		let politicianTitleUrl = this.props.titleUrl;
+		const {titleUrl, country, reviewId } = this.props;
 
 		return (
 			<div>
-				<HeaderWithNav titleUrl={politicianTitleUrl} country={this.props.country}/>
-				<PoliticianWithData politicianTitleUrl={politicianTitleUrl}/>
+				<Header titleUrl={titleUrl} country={country}/>
+				<PoliticianWithData politicianTitleUrl={titleUrl} reviewId={reviewId}/>
 				<Footer/>
 			</div>
 

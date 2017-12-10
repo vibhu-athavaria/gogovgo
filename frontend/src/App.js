@@ -14,11 +14,18 @@ class App extends Component {
 			)
 		};
 
+		const PoliticianWithReview = ({ match }) => {
+			return (
+				<Home titleUrl={match.params.title_url} country={match.params.country} reviewId={match.params.review_id}/>
+			)
+		};
+
 		return (
 			<Router >
 				<div>
 					<Route exact path="/" component={Tracker(LandingPage)}/>
-					<Route path="/politician/:country/:title_url" component={Tracker(Politician)} />
+					<Route exact path="/politician/:country/:title_url" component={Tracker(Politician)} />
+					<Route path="/politician/:country/:title_url/reviews/:review_id" component={Tracker(PoliticianWithReview)} />
 				</div>
 			</Router>
 		)

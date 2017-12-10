@@ -32,7 +32,7 @@ class PoliticianBio extends Component {
 
 					</div>
 				</Row>
-				<ApprovalRating approvalRating={this.props.approvalRating}/>
+				{/*<ApprovalRating approvalRating={this.props.approvalRating}/>*/}
 				<Poll
 					approvalCount={this.props.approvalCount}
 					disapprovalCount={this.props.disapprovalCount}

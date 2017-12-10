@@ -4,6 +4,7 @@
 
 import React from 'react';
 import {Component} from "react/lib/ReactBaseClasses";
+import {Col, Row} from "react-bootstrap";
 import moment from 'moment';
 
 class Review extends Component {
@@ -63,6 +64,26 @@ class Review extends Component {
 				</div>
 				<div className="article_section_4 margin_abajo_big">
 					{ellipsify(review.body, 120)}
+				</div>
+				<div>
+					<Row>
+						<Col xs={3} sm={3} md={4} lg={2}>
+							<div className="action-icons">
+								<a href="javascript:void(0)">
+									<i className="fa fa-thumbs-o-up" aria-hidden="true"></i>
+									<span className="votes">{review.upVote}</span>
+								</a>
+							</div>
+						</Col>
+						<Col xs={9} sm={9} md={8} lg={10}>
+							<div className="action-icons">
+								<a href="javascript:void(0)" >
+									<i className="fa fa-thumbs-o-down" aria-hidden="true"></i>
+									<span className="votes">{review.downVote}</span>
+								</a>
+							</div>
+						</Col>
+					</Row>
 				</div>
 			</div>
 		);
