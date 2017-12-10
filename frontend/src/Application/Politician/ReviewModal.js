@@ -60,7 +60,6 @@ class ReviewComponent extends Component {
 			};
 			var created_moment = moment(review.created);
 			return (
-
 				<div className="divisor">
 					<div className="article_section_1 margin_abajo_big">
 						<div className={sentimentClass}>{sentimentText}</div>
@@ -100,7 +99,6 @@ class ReviewComponent extends Component {
 						</Row>
 					</div>
 				</div>
-
 			);
 		}
 	}

@@ -95,7 +95,6 @@ class Politician extends Component {
 							<ReviewModal reviewId={this.props.reviewId}/>
 						</Modal.Body>
 					</Modal>
-
 				</div>
 			);
 		}

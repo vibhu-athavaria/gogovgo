@@ -7,7 +7,6 @@ import {Component} from "react/lib/ReactBaseClasses";
 import { withCookies, Cookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import {Col, Row} from "react-bootstrap";
-import PollReview from "./PollReview";
 import PollQuestion from "./PollQuestion"
 import PropTypes from 'prop-types';
 
