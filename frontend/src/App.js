@@ -16,7 +16,7 @@ class App extends Component {
 
 		const PoliticianWithReview = ({ match }) => {
 			return (
-				<Home titleUrl={match.params.title_url} country={match.params.country} reviewId={match.params.review_id}/>
+				<Home titleUrl={match.params.title_url} country={match.params.country} decryptReviewId={match.params.review_id}/>
 			)
 		};
 

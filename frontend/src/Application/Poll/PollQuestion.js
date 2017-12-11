@@ -11,11 +11,7 @@ import PlacesAutocomplete from 'react-places-autocomplete'
 class PollQuestion extends Component {
 	constructor(props, context) {
 		super(props, context);
-		this.state = this.initializeState(props)
-	}
-
-	initializeState(props) {
-		return {
+		this.state = {
 			showKeywordModel: false,
 			approved: false,
 			showAlert: false,
@@ -23,23 +19,32 @@ class PollQuestion extends Component {
 		}
 	}
 
-	componentWillReceiveProps(nextProps) {
-		this.setState(this.initializeState(nextProps));
-	}
+	// initializeState(props) {
+	// 	return {
+	// 		showKeywordModel: false,
+	// 		approved: false,
+	// 		showAlert: false,
+	// 		location: ''
+	// 	}
+	// }
+	//
+	// componentWillReceiveProps(nextProps) {
+	// 	this.setState(this.initializeState(nextProps));
+	// }
 
 	showPollReviewModal = (isApproved) => {
-		if (this.state.location !== '') {
+		if (this.state.location === '') {
+			this.setState({showAlert: true})
+		} else {
 			this.setState({
 				showKeywordModel: true,
 				approved: isApproved
 			});
-		} else {
-			this.setState({showAlert: true})
 		}
 	};
 
 	render() {
-		const {politicianId, onHide, ...restProps} = this.props;
+		const {approvalCount, disapprovalCount, onHide, politicianId, politicianName, politicianTitle, ...restProps} = this.props;
 
 		const onChangePlaceAutoComplete = (location) => {
 			this.setState({
@@ -90,13 +95,13 @@ class PollQuestion extends Component {
 								<a className="btn btn-secondary btn_circle modal_btn" href="#" onClick={() => this.showPollReviewModal(true)}>
 									<i className="fa fa-thumbs-up align-middle" aria-hidden="true"></i>
 									<div className="box">
-										<span className="votes">{this.props.approvalCount}</span><span>Approve</span>
+										<span className="votes">{approvalCount}</span><span>Approve</span>
 									</div>
 								</a>
 								<a className="btn btn-secondary btn_circle modal_btn" href="#" onClick={() => this.showPollReviewModal(false)}>
 									<i className="fa fa-thumbs-down" aria-hidden="true"></i>
 									<div className="box">
-										<span className="votes">{this.props.disapprovalCount}</span><span>Disapprove</span>
+										<span className="votes">{disapprovalCount}</span><span>Disapprove</span>
 									</div>
 								</a>
 							</Col>
@@ -112,8 +117,8 @@ class PollQuestion extends Component {
 					approved={this.state.approved}
 					location={this.state.location}
 					politicianId={politicianId}
-					politicianName={this.props.politicianName}
-					politicianTitle={this.props.politicianTitle}
+					politicianName={politicianName}
+					politicianTitle={politicianTitle}
 				/>
 
 			</div>
