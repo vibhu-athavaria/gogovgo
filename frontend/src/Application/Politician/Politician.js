@@ -88,7 +88,6 @@ class Politician extends Component {
 						reviewId={this.props.reviewId}
 					/>
 
-
 					<Modal show={this.state.showReviewModal} dialogClassName="custom-modal" keyboard={true}>
 						<Modal.Header closeButton onHide={() => reviewModalClose()}/>
 						<Modal.Body>

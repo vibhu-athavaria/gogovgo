@@ -68,7 +68,6 @@ class ReviewComponent extends Component {
 						<div className="content_title_2_ciudad margin_abajo_mini">{review.city}, {review.state}</div>
 					</div>
 					<div className="article_section_2 margin_abajo_mini">
-
 						<div
 							className="content_title_2_ciudad margin_abajo_mini">{created_moment.format("MMMM Do, YYYY")}</div>
 					</div>
@@ -99,6 +98,7 @@ class ReviewComponent extends Component {
 						</Row>
 					</div>
 				</div>
+
 			);
 		}
 	}

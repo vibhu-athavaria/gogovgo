@@ -162,7 +162,7 @@ class PollQuestion extends Component {
 								</Col>
 							</Row>
 						</div>
-					</Modal.Body>
+	`				</Modal.Body>
 					<Modal.Footer>
 
 					</Modal.Footer>
