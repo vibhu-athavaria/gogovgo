@@ -26,7 +26,11 @@ SECRET_KEY = '8x$)j$z*&p%+ud8j!h5vg!uwjhv^ly@lk3s9!)_lwe=&3-r%c%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+<<<<<<< HEAD
 ALLOWED_HOSTS = ["35.185.91.223", "gogovgo.com", "www.gogovgo.com"]
+=======
+ALLOWED_HOSTS = ["35.197.47.146", "rateyourpolitician.com", "www.rateyourpolitician.com", "rateyourpolitician.org", "www.rateyourpolitician.org"]
+>>>>>>> Fixing CSS and adding authentication
 
 
 # Database
@@ -48,7 +52,7 @@ DATABASES = {
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.abspath(os.path.join(PROJECT_DIR, os.pardir))
-STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
+STATIC_ROOT = os.path.join(PROJECT_DIR, 'static/')
 STATIC_URL = '/static/'
 
 
@@ -59,7 +63,7 @@ STATICFILES_DIRS = [
 ]
 
 CORS_ORIGIN_WHITELIST = (
-    'gogovgo.com',
+    'rateyourpolitician.com',
     '127.0.0.1:3000',
     'localhost:3000',
 )
