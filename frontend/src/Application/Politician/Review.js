@@ -62,25 +62,25 @@ class Review extends Component {
 				<div className="article_section_3 margin_abajo_mini">
 					{reasons}
 				</div>
-				<div className="article_section_4 margin_abajo_big">
+				<div className="article_section_4 margin_abajo_mini ">
 					{ellipsify(review.body, 120)}
 				</div>
-				<div>
+				<div className="action-icons">
 					<Row>
-						<Col xs={3} sm={3} md={4} lg={2}>
-							<div className="action-icons">
-								<a href="javascript:void(0)">
-									<i className="fa fa-thumbs-o-up" aria-hidden="true"></i>
-									<span className="votes">{review.upVote}</span>
-								</a>
+						<Col xs={3} sm={3} md={2} lg={2}>
+							<a href="javascript:void(0)">
+								<i className="fa fa-thumbs-o-up fa-stack-2x" aria-hidden="true"></i>
+							</a>
+							<div className="box">
+								<span className="votes">{review.upVote}</span>
 							</div>
 						</Col>
-						<Col xs={9} sm={9} md={8} lg={10}>
-							<div className="action-icons">
-								<a href="javascript:void(0)" >
-									<i className="fa fa-thumbs-o-down" aria-hidden="true"></i>
-									<span className="votes">{review.downVote}</span>
-								</a>
+						<Col xs={4} sm={4} md={3} lg={3}>
+							<a href="javascript:void(0)" >
+								<i className="fa fa-thumbs-o-down fa-stack-2x" aria-hidden="true"></i>
+							</a>
+							<div className="box">
+								<span className="votes">{review.downVote}</span>
 							</div>
 						</Col>
 					</Row>
