@@ -32,7 +32,6 @@ class Poll extends Component {
 		const {politicianId} = this.props;
 		const {votes} = this.state;
 		const voted = votes.hasOwnProperty(politicianId) ? votes[politicianId]: '';
-		const votedClass = voted !== ''? voted === 'approved'? 'voted-approve': 'voted-disapprove': '';
 
 		const pollModelClose = () => {
 			this.setState({showPoll: false})
@@ -47,35 +46,38 @@ class Poll extends Component {
 
 		return (
 			<div>
+				<div className="emotion-icons">
 				<Row>
 					<Col xs={6} sm={3} md={4} lg={5}>
 						<Row>
-							<div className="action-icons">
-							{/*<a className={"btn btn-secondary btn_circle approve " + votedClass} href="javascript:void(0)" onClick={()=> !voted ? showPollReviewModal(true):''}>*/}
-								<i className="fa fa-thumbs-up align-middle" aria-hidden="true"></i>
-								<div className="box">
-									<span className="votes">{this.props.approvalCount}</span><span>Approve</span>
-								</div>
-							{/*</a>*/}
-							</div>
+								<Col xs={4} sm={4} md={3} lg={3}>
+									<i className="fa fa-thumbs-up fa-stack-2x" aria-hidden="true"></i>
+								</Col>
+								<Col>
+									<div className="box">
+										<span className="votes">{this.props.approvalCount}</span>
+										<span>Approve</span>
+									</div>
+								</Col>
 						</Row>
 					</Col>
 					<Col xs={6} sm={9} md={8} lg={7}>
 						<Row>
-							<div className="action-icons">
-							{/*<a className={"btn btn-secondary btn_circle disapprove " + votedClass} href="javascript:void(0)" onClick={()=> !voted ? showPollReviewModal(false):''}>*/}
-								<i className="fa fa-thumbs-down" aria-hidden="true"></i>
+							<Col xs={4} sm={4} md={3} lg={3}>
+								<i className="fa fa-thumbs-down fa-flip-horizontal fa-stack-2x" aria-hidden="true"></i>
+							</Col>
+							<Col>
 								<div className="box">
 									<span className="votes">{this.props.disapprovalCount}</span><span>Disapprove</span>
 								</div>
-							{/*</a>*/}
-							</div>
+							</Col>
 						</Row>
 					</Col>
 				</Row>
+				</div>
 				<Row>
 					<div>
-						<a className={"btn btn-secondary btn_circle disapprove " + votedClass} href="javascript:void(0)" onClick={()=> !voted ? showPollModel(false):''}>
+						<a className="btn btn-secondary poll_btn_circle" href="javascript:void(0)" onClick={()=> !voted ? showPollModel(false):''}>
 							Rate Your Politician
 						</a>
 					<div className="share-your-opinion-b">Safe. Secure. Anonymous.

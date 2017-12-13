@@ -234,13 +234,76 @@ hr{margin-top: 0}
   background-color: #D82B22;
 }
 
-.btn_circle {
+.emotion-icons {
+  margin: 25px 0 20px;
+  width: 246px;
+}
+
+.emotion-icons .fa-thumbs-up, .emotion-icons .fa-thumbs-down {
+  color: white;
+  line-height: 1.5;
+}
+
+.emotion-icons .box {
+  float: left;
+  margin-left: 10px;
+}
+
+.emotion-icons .box span {
+  color: #FAFAFA;
+  font: 300 13px/15px 'Roboto';
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  display: block;
+}
+
+.emotion-icons .box span.votes {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 21px;
+  text-align: left;
+}
+.poll_btn_circle {
   border: 2px solid #FFFFFF;
   border-radius: 31px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   background: transparent;
   color: #ffffff !important;
   padding: 0.5rem 2.5rem;
+  width: 246px;
+  height: 59px;
+}
+
+a.poll_btn_circle {
+  display: block;
+  margin-right: 0.8rem;
+  text-align: center;
+  font-size: 18px;
+  padding: 12px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+a.poll_btn_circle:hover{
+  background:transparent;
+  border: 2px solid #ffffff;
+  -webkit-box-shadow: 0 2px 20px 8px rgba(255, 255, 255, 0.4);
+  -moz-box-shadow: 0 2px 20px 8px rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.4) inset;
+}
+
+.poll_btn_circle.active{
+  border: 2px solid #ffffff;
+  border-radius: 31px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.btn_circle {
+  border: 2px solid #FFFFFF;
+  border-radius: 31px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  background: transparent;
+  color: #ffffff !important;
+  padding: 0.5rem 2.5rem !important;
 }
 
 .btn_circle.active{
@@ -257,9 +320,11 @@ a.btn_circle i {
   font-size: 22px;padding-top: 8px;
   text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
+
 a.btn_circle .box {
   float: left;
 }
+
 a.btn_circle span{
   color: #FAFAFA;
   font: 300 13px/15px 'Roboto';
@@ -313,6 +378,35 @@ a.btn_circle.approve.voted-disapprove, a.btn_circle.disapprove.voted-approve {
   box-shadow: none;
 }
 
+.action-icons {
+  margin: 10px 0;
+}
+
+.action-icons {
+  margin: 10px 0;
+}
+
+.action-icons .fa-thumbs-o-up, .action-icons .fa-thumbs-o-down {
+  color: #646464;
+  /*text-align: left;*/
+}
+
+.action-icons a {
+  color: #646464;
+  text-decoration: none;
+}
+
+.action-icons a:hover {
+  color: #646464;
+  text-decoration: none;
+}
+
+.action-icons .box span.votes {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 21px;
+  /*text-align: left;*/
+}
 
 .list-group-item{
   border: none;
@@ -320,7 +414,7 @@ a.btn_circle.approve.voted-disapprove, a.btn_circle.disapprove.voted-approve {
 
 .modal_btn{
   color: #606060 !important;
-  margin: 0 20px;
+  margin: 0 10px;
   border: 2px solid #606060;
   padding: 1rem 4rem;
 }
@@ -335,12 +429,15 @@ a.modal_btn span {
 }
 
 .share-your-opinion-b {
+  width: 246px;
+  text-align: center;
   color: #FAFAFA;
   font-family: 'Roboto';
-  font-size: 15px;
+  font-size: 12px;
+  font-weight: 300;
   line-height: 21px;
-  text-shadow: 0 1px 2px black;
-  margin-top: 20px;
+  text-shadow: 0 0 0 black;
+  margin-top: 5px;
 }
 
 .placeholder {
@@ -489,7 +586,10 @@ a.link_second_menu.active, a.link_second_menu:hover a.link_second_menu:focus {
   font-size: 12px;
   margin: 8px 3px;
 }
-.btn-tags:hover {color: #333}
+.btn-tags:active, .btn-tags:focus, .btn-tags:hover {
+  color: #ffffff;
+  text-decoration: none;
+}
 
 .review-approve {
   padding-right: 0;
@@ -636,6 +736,16 @@ footer .list-inline-item a:hover {text-decoration: none}
   text-align: center;
 }
 
+.texto_modales_center{
+  color: #666666;
+  font-family: Roboto;
+  font-size: 22px;
+  padding: 10px 50px;
+  font-weight: 500;
+  line-height: 32px;
+  text-align: center;
+}
+
 .content_circle_blue{
   height: 162px;
   width: 162px;
@@ -656,6 +766,12 @@ footer .list-inline-item a:hover {text-decoration: none}
   margin: 0 auto;
   padding-left: 5%;
 }
+
+.modal_text_small {
+  font-size: 14px;
+  color: #999999;
+}
+
 
 #Modal_open_how_works .modal-footer{
   background-color: #09499D;
