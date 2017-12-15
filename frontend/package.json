@@ -4,6 +4,7 @@
   "private": true,
   "proxy": "http://localhost:8030",
   "dependencies": {
+    "crypto-js": "^3.1.9-1",
     "humanize": "0.0.9",
     "moment": "^2.18.1",
     "prop-types": "^15.5.10",
@@ -18,7 +19,8 @@
     "react-intl": "^1.2.2",
     "react-router-bootstrap": "^0.24.3",
     "react-router-dom": "^4.1.2",
-    "react-tagsinput": "^3.17.0"
+    "react-tagsinput": "^3.17.0",
+    "react-places-autocomplete": "^5.4.3"
   },
   "devDependencies": {
     "react-scripts": "^1.0.12"

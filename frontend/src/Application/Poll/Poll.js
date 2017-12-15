@@ -8,6 +8,7 @@ import { withCookies, Cookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import {Col, Row} from "react-bootstrap";
 import PollReview from "./PollReview";
+import PollQuestion from "./PollQuestion"
 import PropTypes from 'prop-types';
 
 
@@ -16,7 +17,7 @@ class Poll extends Component {
 	constructor(props, context) {
 		super(props, context);
 		this.state = {
-			showReviewModel: false,
+			showPoll: false,
 			approved: false
 		};
 	};
@@ -31,57 +32,77 @@ class Poll extends Component {
 		const {politicianId} = this.props;
 		const {votes} = this.state;
 		const voted = votes.hasOwnProperty(politicianId) ? votes[politicianId]: '';
-		const votedClass = voted !== ''? voted === 'approved'? 'voted-approve': 'voted-disapprove': '';
 
-		const pollReviewModalClose = () => {
-			this.setState({showReviewModel: false})
+		const pollModelClose = () => {
+			this.setState({showPoll: false})
 		};
 
-		const showPollReviewModal = (isApproved) => {
+		const showPollModel = (isApproved) => {
 			this.setState({
-				showReviewModel: true,
+				showPoll: true,
 				approved: isApproved
 			})
 		};
 
 		return (
 			<div>
-			<Row>
-				<Col xs={6} sm={3} md={4} lg={5}>
-					<Row>
-						<a className={"btn btn-secondary btn_circle approve " + votedClass} href="javascript:void(0)" onClick={()=> !voted ? showPollReviewModal(true):''}>
-							<i className="fa fa-thumbs-up align-middle" aria-hidden="true"></i>
-							<div className="box">
-								<span className="votes">{this.props.approvalCount}</span><span>Approve</span>
-							</div>
-						</a>
-					</Row>
-				</Col>
-				<Col xs={6} sm={9} md={8} lg={7}>
-					<Row>
-						<a className={"btn btn-secondary btn_circle disapprove " + votedClass} href="javascript:void(0)" onClick={()=> !voted ? showPollReviewModal(false):''}>
-							<i className="fa fa-thumbs-down" aria-hidden="true"></i>
-							<div className="box">
-								<span className="votes">{this.props.disapprovalCount}</span><span>Disapprove</span>
-							</div>
-						</a>
-					</Row>
-				</Col>
-			</Row>
-			<Row>
-				<div className="share-your-opinion-b">Share your opinion by clicking one of the buttons above.
-					<br/> Reviews are safe, secure, and anonymous.
+				<div className="emotion-icons">
+				<Row>
+					<Col xs={6} sm={3} md={4} lg={5}>
+						<Row>
+								<Col xs={4} sm={4} md={3} lg={3}>
+									<i className="fa fa-thumbs-up fa-stack-2x" aria-hidden="true"></i>
+								</Col>
+								<Col>
+									<div className="box">
+										<span className="votes">{this.props.approvalCount}</span>
+										<span>Approve</span>
+									</div>
+								</Col>
+						</Row>
+					</Col>
+					<Col xs={6} sm={9} md={8} lg={7}>
+						<Row>
+							<Col xs={4} sm={4} md={3} lg={3}>
+								<i className="fa fa-thumbs-down fa-flip-horizontal fa-stack-2x" aria-hidden="true"></i>
+							</Col>
+							<Col>
+								<div className="box">
+									<span className="votes">{this.props.disapprovalCount}</span><span>Disapprove</span>
+								</div>
+							</Col>
+						</Row>
+					</Col>
+				</Row>
 				</div>
-			</Row>
+				<Row>
+					<div>
+						<a className="btn btn-secondary poll_btn_circle" href="javascript:void(0)" onClick={()=> !voted ? showPollModel(false):''}>
+							Rate Your Politician
+						</a>
+					<div className="share-your-opinion-b">Safe. Secure. Anonymous.
+					</div>
+						</div>
+				</Row>
 
-			<PollReview
-				show={this.state.showReviewModel}
-				onHide={pollReviewModalClose}
-				approved={this.state.approved}
-				politicianId={this.props.politicianId}
-				politicianTitle={this.props.politicianTitle}
-				politicianName={this.props.politicianName}
-			/>
+				<PollQuestion
+					show={this.state.showPoll}
+					onHide={pollModelClose}
+					politicianId={this.props.politicianId}
+					politicianName={this.props.politicianName}
+					politicianTitle={this.props.politicianTitle}
+					approvalCount={this.props.approvalCount}
+					disapprovalCount={this.props.disapprovalCount}
+				/>
+
+				{/*<PollReview*/}
+					{/*show={this.state.showReviewModel}*/}
+					{/*onHide={pollReviewModalClose}*/}
+					{/*approved={this.state.approved}*/}
+					{/*politicianId={this.props.politicianId}*/}
+					{/*politicianTitle={this.props.politicianTitle}*/}
+					{/*politicianName={this.props.politicianName}*/}
+				{/*/>*/}
 
 
 			</div>

@@ -22,42 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '8x$)j$z*&p%+ud8j!h5vg!uwjhv^ly@lk3s9!)_lwe=&3-r%c%'
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-
-MEDIA_URL = 'frontend/src/assets/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'frontend', 'src', 'assets')
-
-REACT_APP_DIR = os.path.join(BASE_DIR, 'frontend')
-
-STATICFILES_DIRS = [
-    os.path.join(REACT_APP_DIR, 'build', 'static'),
-]
-
-IMAGEFIT_ROOT = os.path.join(MEDIA_ROOT, 'images')
-
-
-TEMP_DIR = os.path.join(BASE_DIR, 'temp')
-
-
-# enable/disable server cache
-IMAGEFIT_CACHE_ENABLED = True
-# set the cache name specific to imagefit with the cache dict
-IMAGEFIT_CACHE_BACKEND_NAME = 'imagefit'
-
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-    },
-    'imagefit': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': os.path.join(TEMP_DIR, 'django_imagefit')
-    }
-}
 
 
 # Application definition
@@ -69,16 +34,30 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'corsheaders',
+    'graphene_django',
     'gogovgo.gogovgo_site',
     'django_countries',
     'django_extensions',
-    'graphene_django',
     'imagefit',
     'cloudinary'
 ]
 
 AUTH_PROFILE_MODULE = "gogovgo_site.UserProfile"
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+}
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -87,6 +66,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -130,6 +110,43 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/1.11/howto/static-files/
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+MEDIA_URL = 'frontend/src/assets/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'frontend', 'src', 'assets')
+
+REACT_APP_DIR = os.path.join(BASE_DIR, 'frontend')
+
+STATICFILES_DIRS = [
+    os.path.join(REACT_APP_DIR, 'build', 'static'),
+]
+
+IMAGEFIT_ROOT = os.path.join(MEDIA_ROOT, 'images')
+
+
+TEMP_DIR = os.path.join(BASE_DIR, 'temp')
+
+
+# enable/disable server cache
+IMAGEFIT_CACHE_ENABLED = True
+# set the cache name specific to imagefit with the cache dict
+IMAGEFIT_CACHE_BACKEND_NAME = 'imagefit'
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    },
+    'imagefit': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(TEMP_DIR, 'django_imagefit')
+    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/

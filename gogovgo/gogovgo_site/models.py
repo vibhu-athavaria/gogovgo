@@ -149,6 +149,8 @@ class Review(TimeStampedModel):
     tags = models.ManyToManyField('ReasonTag', through='ReviewHasReasonTag')
     status = models.CharField(choices=REVIEW_STATUS_CHOICES, default=REVIEW_PENDING, max_length=32)
     nlp_sentiment = models.CharField(choices=SENTIMENT_CHOICES, default=SENTIMENT_NEUTRAL, max_length=64)
+    up_vote = models.IntegerField(default=0)
+    down_vote = models.IntegerField(default=0)
 
     objects = ReviewManager()
     all = models.Manager()

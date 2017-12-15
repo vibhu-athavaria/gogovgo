@@ -4,19 +4,22 @@
 
 import React, { Component } from 'react';
 import PoliticianWithData from "./Politician/Politician";
-import HeaderWithNav from "./Header";
+import Header from "./Header";
 import Footer from "./Footer";
-import '../assets/css/App.css'
-
+import '../assets/css/App.css';
+import {decrypt} from "../utils/security"
 
 class Home extends Component {
 	render() {
-		let politicianTitleUrl = this.props.titleUrl;
-
+		const {titleUrl, country, decryptReviewId } = this.props;
+		let reviewId = null;
+		if (decryptReviewId) {
+			reviewId = decrypt(decryptReviewId);
+		}
 		return (
 			<div>
-				<HeaderWithNav titleUrl={politicianTitleUrl} country={this.props.country}/>
-				<PoliticianWithData politicianTitleUrl={politicianTitleUrl}/>
+				<Header titleUrl={titleUrl} country={country}/>
+				<PoliticianWithData politicianTitleUrl={titleUrl} reviewId={reviewId}/>
 				<Footer/>
 			</div>
 

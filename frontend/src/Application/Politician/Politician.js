@@ -6,11 +6,27 @@ import React from 'react';
 import {Component} from "react/lib/ReactBaseClasses";
 import PoliticianBio from "./PoliticianBio";
 import PoliticianDetail from "./PoliticianDetail";
-import {Col, Grid} from "react-bootstrap";
+import ReviewModal from "./ReviewModal"
+import {Col, Grid, Modal} from "react-bootstrap";
 import {gql, graphql} from "react-apollo";
 
 
 class Politician extends Component {
+
+	constructor(props, context) {
+		super(props, context);
+		this.state = {
+			open: false,
+			showReviewModal: false
+		}
+	}
+
+	componentDidMount() {
+		this.setState({
+			showReviewModal: !!this.props.reviewId
+		})
+	}
+
 
 	render() {
 		const {data: {loading, error, politician}} = this.props;
@@ -31,6 +47,10 @@ class Politician extends Component {
 
 			const headPoliticianStyle = {
 				backgroundImage: `url(${politician.heroUrl})`
+			};
+
+			const reviewModalClose = () => {
+				this.setState({showReviewModal: false});
 			};
 
 			return (
@@ -65,7 +85,17 @@ class Politician extends Component {
 						positiveTags={politician.positiveTags}
 						negativeTags={politician.negativeTags}
 						staff={politician.staff}
+						reviewId={this.props.reviewId}
 					/>
+
+
+					<Modal show={this.state.showReviewModal} dialogClassName="custom-modal" keyboard={true}>
+						<Modal.Header closeButton onHide={() => reviewModalClose()}/>
+						<Modal.Body>
+							<ReviewModal reviewId={this.props.reviewId}/>
+						</Modal.Body>
+					</Modal>
+
 				</div>
 			);
 		}
@@ -114,6 +144,8 @@ const getPolitician = gql`
 			  	city,
 			  	state,
 			  	body,
+			  	upVote,
+			  	downVote,
 			  	created,
 				  reasons {
 					reasonTag {

@@ -29,7 +29,7 @@ class Footer extends Component {
 						<div className="col-xs-12 col-sm-2">
 							<div className="row">
 								<span className="logo_header">
-								  GoGovGo
+								  RateYourPolitician.org
 								</span>
 							</div>
 						</div>

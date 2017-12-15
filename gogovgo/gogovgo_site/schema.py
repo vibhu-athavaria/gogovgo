@@ -179,6 +179,7 @@ class Mutations(graphene.ObjectType):
     create_review = CreateReview.Field()
     # create_reason_tag = CreateReasonTag.Field()
 
+
 class Query(graphene.AbstractType):
     users = graphene.List(UserType)
     userprofiles = graphene.List(UserProfileType)
@@ -194,7 +195,7 @@ class Query(graphene.AbstractType):
         PublicOfficeTitleType,
         country=graphene.String()
     )
-    review = graphene.Field(ReviewType)
+    review = graphene.Field(ReviewType, id=graphene.ID())
     reviews = graphene.List(ReviewType)
     reasontags = graphene.List(ReasonTagType)
     reviewhasreasontype = graphene.List(ReviewHasReasonType)

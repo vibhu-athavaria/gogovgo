@@ -12,7 +12,7 @@ class Reviews extends Component {
 	constructor(props, context) {
 		super(props, context);
 		this.state = {
-			showPollQuestions: false
+			showPoll: false
 		};
 
 	}
