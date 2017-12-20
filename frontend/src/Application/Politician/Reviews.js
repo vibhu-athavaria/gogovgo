@@ -5,16 +5,27 @@
 import React from 'react';
 import {Component} from "react/lib/ReactBaseClasses";
 import Review from "./Review";
+import { withCookies, Cookies } from 'react-cookie';
 import PollQuestion from '../Poll/PollQuestion'
 import {Col, Row} from "react-bootstrap";
+import PropTypes from 'prop-types';
+
 
 class Reviews extends Component {
 	constructor(props, context) {
 		super(props, context);
 		this.state = {
-			showPoll: false
+			showPoll: false,
+			rated: false,
 		};
+	}
 
+	componentWillMount() {
+		const {cookies, politicianId} = this.props;
+		const rated = cookies.get('rated') || {};
+		if (politicianId in rated) {
+			this.setState({rated: true});
+		}
 	}
 
 	render() {
@@ -24,8 +35,6 @@ class Reviews extends Component {
 
 		let leftReviews =0;
 		let rightReviews = 0;
-		let topNegativeTags = [];
-		let topPostiveTags = [];
 		let approvedReviews = [];
 		let disapprovedReviews = [];
 		this.props.reviews.forEach(function(review, index) {
@@ -42,16 +51,14 @@ class Reviews extends Component {
 
 		});
 
-		this.props.negativeTags.forEach(function(tag, index) {
-			topNegativeTags.push(
-				<button type="button" className="btn btn-tags" key={"ntag-"+index}>{tag}</button>
-			)
+		const topNegativeTags = this.props.negativeTags.slice(0, 5).map(tag => {
+			tag = JSON.parse(tag.replace(/'/g, '"'));
+			return	<button type="button" className="btn btn-tags" key={'tag-id-' + tag.id}>{tag.name}</button>;
 		});
 
-		this.props.positiveTags.forEach(function(tag, index) {
-			topPostiveTags.push(
-				<button type="button" className="btn btn-tags" key={"ntag-"+index}>{tag}</button>
-			)
+		const topPostiveTags = this.props.positiveTags.slice(0, 5).map(tag => {
+			tag = JSON.parse(tag.replace(/'/g, '"'));
+			return	<button type="button" className="btn btn-tags" key={'tag-id-' + tag.id}>{tag.name}</button>;
 		});
 
 		const getStyle = () => {
@@ -70,12 +77,12 @@ class Reviews extends Component {
 				<Col xs={12} lg={12} md={18}>
 					<div className="titulo_content text-center">Reviews</div>
 					<div className="go-gov-go-reviews-are">
-						GoGovGo reviews are crowdsourced reviews provided by
+						GoGovGo reviews are crowd sourced and provided by
 						citizens all over the world. Explore reviews provided by others, or submit your own to engage in politics, and connect with others around the world.
 					</div>
 				</Col>
 			</Row>
-			<Row>
+			<Row className="margin_abajo_medium">
 				<Col sm={6}>
 					<div className="content_title color_approve margin_abajo_small">Approve </div>
 					<div className="content_text margin_abajo_small">
@@ -122,8 +129,8 @@ class Reviews extends Component {
 					<button className="btn btn-default btn-see-more pull-right" type="submit">See more</button>
 				</Col>
 				<Col lg={6} sm={6}>
-					<button className="btn btn-primary btn-see-more-primary pull-left" type="submit" onClick={()=>this.setState({showPoll: true})}>
-						Submit Review
+					<button className="btn btn-primary btn-see-more-primary pull-left" type="submit" onClick={() => {this.setState({showPoll: !this.state.rated})}}>
+						{ this.state.rated? "You Already Rated!": "Rate Your Politician"}
 					</button>
 				</Col>
 			</Row>
@@ -143,4 +150,8 @@ class Reviews extends Component {
 	}
 }
 
-export default Reviews;
+Reviews.propTypes = {
+	cookies: PropTypes.instanceOf(Cookies).isRequired,
+};
+
+export default withCookies(Reviews);

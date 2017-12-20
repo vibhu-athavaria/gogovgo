@@ -7,7 +7,6 @@ import {Component} from "react/lib/ReactBaseClasses";
 import { withCookies, Cookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import {Col, Row} from "react-bootstrap";
-import PollReview from "./PollReview";
 import PollQuestion from "./PollQuestion"
 import PropTypes from 'prop-types';
 
@@ -18,20 +17,26 @@ class Poll extends Component {
 		super(props, context);
 		this.state = {
 			showPoll: false,
-			approved: false
+			approved: false,
+			rated: false,
+			ratedSentiment: ''
 		};
 	};
 
 	componentWillMount() {
-		const { cookies } = this.props;
-		this.setState({votes: cookies.get('votes') || {}});
-
+		const {cookies, politicianId} = this.props;
+		const rated = cookies.get('rated') || {};
+		if (politicianId in rated) {
+			this.setState({
+				rated: true,
+				ratedSentiment: rated[politicianId]
+			});
+		}
 	}
 
 	render() {
 		const {politicianId} = this.props;
-		const {votes} = this.state;
-		const voted = votes.hasOwnProperty(politicianId) ? votes[politicianId]: '';
+		const {rated, ratedSentiment} = this.state;
 
 		const pollModelClose = () => {
 			this.setState({showPoll: false})
@@ -77,8 +82,8 @@ class Poll extends Component {
 				</div>
 				<Row>
 					<div>
-						<a className="btn btn-secondary poll_btn_circle" href="javascript:void(0)" onClick={()=> !voted ? showPollModel(false):''}>
-							Rate Your Politician
+						<a className={("btn btn-secondary poll_btn_circle ") + (rated? "rated-"+ratedSentiment: "")} href="javascript:void(0)" onClick={()=> !rated ? showPollModel(false):''}>
+							{rated ? "You Already Rated!": "Rate Your Politician"}
 						</a>
 					<div className="share-your-opinion-b">Safe. Secure. Anonymous.
 					</div>
@@ -93,6 +98,8 @@ class Poll extends Component {
 					politicianTitle={this.props.politicianTitle}
 					approvalCount={this.props.approvalCount}
 					disapprovalCount={this.props.disapprovalCount}
+					positiveTags={this.props.positiveTags}
+					negativeTags={this.props.negativeTags}
 				/>
 
 				{/*<PollReview*/}

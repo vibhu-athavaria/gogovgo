@@ -7,20 +7,21 @@ import {Component} from "react/lib/ReactBaseClasses";
 import { withCookies, Cookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import {ControlLabel, FormControl, FormGroup, Modal} from "react-bootstrap";
-import {gql} from "react-apollo";
-import {graphql} from "react-apollo";
+import ShareReviewURLModal from './ShareReviewURLModal'
+import {graphql, gql} from "react-apollo";
 import PropTypes from 'prop-types';
 
 class SubscribeModal extends Component {
 
 	initializeState() {
 		return {
+			showSelf: true,
 			fullname: '',
 			fullnameValidation: null,
 			emailAddress: '',
 			emailValidation: null,
-			// location: '',
-			// locationValidation: null
+			showShareReviewModal: false,
+			reviewId: null
 		}
 	}
 
@@ -36,18 +37,24 @@ class SubscribeModal extends Component {
 
 	componentWillMount() {
 		const { cookies } = this.props;
-		this.setState({votes: cookies.get('votes') || {}});
+		this.setState({rated: cookies.get('rated') || {}});
 	}
 
 	render() {
-		const {politicianId, reviewText, approved, mutate, onHide, ...rest} = this.props;
-		const {votes} = this.state;
+		const {politicianId, reviewText, cookies, approved, location, mutate, onHide, tags, ...rest} = this.props;
+		const {rated} = this.state;
 		const sentiment = approved ? 'positive': 'negative';
-		const { cookies } = this.props;
 
 		const validateEmail = (email) => {
 			const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 			return re.test(email);
+		};
+
+		const subscribeModalClose = (closeParent) => {
+			this.setState({showShareReviewModal: false, showSelf: !closeParent});
+			if (closeParent === true) {
+				onHide(true);
+			}
 		};
 
 		const onSubmit = () => {
@@ -58,15 +65,20 @@ class SubscribeModal extends Component {
 					body: reviewText,
 					fullname: this.state.fullname,
 					emailAddress: this.state.emailAddress,
-					// location: this.state.location
+					tags: tags,
+					location: location
 				}
 			})
 				.then(({ data }) => {
 					onHide(true);
-					votes[politicianId] = approved ? "approved": "disapproved";
-					this.setState({votes: votes});
-					cookies.set('votes', votes, { path: '/' });
-					window.location.reload();
+					rated[politicianId] = approved ? "approved": "disapproved";
+					cookies.set('rated', rated, { path: '/' });
+					this.setState({
+						rated: rated,
+						reviewId: data.createReview.review.id,
+						showShareReviewModal: true,
+						showSelf: false
+					});
 				}).catch((error) => {
 				console.log('there was an error sending the query', error);
 			});
@@ -85,10 +97,6 @@ class SubscribeModal extends Component {
 				errorState.emailValidation = 'error';
 				validationErrors = true;
 			}
-
-			// if (this.state.location === '') {
-			// 	errorState.locationValidation = 'error'
-			// }
 
 			if (validationErrors) {
 				this.setState(errorState)
@@ -116,67 +124,49 @@ class SubscribeModal extends Component {
 			}
 		};
 
-		// const locationTextChange = (e) => {
-		// 	if (e.key !== 'Enter') {
-		// 		this.setState({
-		// 			location: e.target.value,
-		// 			locationValidation: null
-		// 		})
-		// 	}
-		// };
-
 		return (
+			<div>
+				{ this.state.showSelf && (
+					<Modal {...rest} dialogClassName="custom-modal">
+						<Modal.Header/>
+						<Modal.Body>
+							<div className="texto_modales margin_abajo_big">Get Updates from GoGovGo</div>
+							<form>
+							<FormGroup validationState={this.state.fullnameValidation}>
+								<ControlLabel>Full name</ControlLabel>
+								<FormControl
+									id="fullnametxt"
+									type="text"
+									placeholder="Enter your name"
+									onChange={fullnameTextChange}
+								/>
+							</FormGroup>
+							<FormGroup validationState={this.state.emailValidation}>
+								<ControlLabel>E-mail</ControlLabel>
+								<FormControl
+									id="emailtxt"
+									type="email"
+									placeholder="Enter your e-mail"
+									onChange={emailAddressTextChange}
+								/>
+							</FormGroup>
 
-			<Modal {...rest} dialogClassName="custom-modal">
-				<Modal.Header/>
-				<Modal.Body>
-					<div className="text-center">
-						<div className="circle centered blue">
-							<i className="fa fa-check" aria-hidden="true"></i>
-						</div>
-						<div className="your-review-has-been">
-							Your review has been submitted. We will take it from here, and make <br/>
-							sure your feedback gets to lawmakers and decision makers.
-						</div>
-					</div>
-					<div className="texto_modales margin_abajo_big">Get Updates from GoGovGo</div>
-					<form>
-					<FormGroup validationState={this.state.fullnameValidation}>
-						<ControlLabel>Full name</ControlLabel>
-						<FormControl
-							id="fullnametxt"
-							type="text"
-							placeholder="Enter your name"
-							onChange={fullnameTextChange}
-						/>
-					</FormGroup>
-					<FormGroup validationState={this.state.emailValidation}>
-						<ControlLabel>E-mail</ControlLabel>
-						<FormControl
-							id="emailtxt"
-							type="email"
-							placeholder="Enter your e-mail"
-							onChange={emailAddressTextChange}
-						/>
-					</FormGroup>
-					{/*<FormGroup  validationState={this.state.locationValidation}>*/}
-						{/*<ControlLabel>Location</ControlLabel>*/}
-						{/*<FormControl*/}
-							{/*id="locationtxt"*/}
-							{/*type="text"*/}
-							{/*placeholder="Enter your location"*/}
-							{/*onChange={locationTextChange}*/}
-						{/*/>*/}
-					{/*</FormGroup>*/}
-					</form>
-				</Modal.Body>
-				<Modal.Footer>
-					<div className="form-group text-center margin_abajo_medium">
-						<button type="button" className="btn btn-modal btn-link" onClick={onSubmit.bind(this)}>Skip</button>
-						<button type="button" className="btn btn-modal btn-primary" onClick={onSubmitWithUserValidation.bind(this)}>Submit</button>
-					</div>
-				</Modal.Footer>
-			</Modal>
+							</form>
+						</Modal.Body>
+						<Modal.Footer>
+							<div className="form-group text-center margin_abajo_medium">
+								<button type="button" className="btn btn-modal btn-link" onClick={onSubmit.bind(this)}>Skip</button>
+								<button type="button" className="btn btn-modal btn-primary" onClick={onSubmitWithUserValidation.bind(this)}>Submit</button>
+							</div>
+						</Modal.Footer>
+					</Modal>
+				)}
+				<ShareReviewURLModal
+					reviewId={this.state.reviewId}
+					show={this.state.showShareReviewModal}
+					onHide={subscribeModalClose}
+				/>
+			</div>
 
 		);
 	}
@@ -186,18 +176,24 @@ SubscribeModal.propTypes = {
 	cookies: PropTypes.instanceOf(Cookies).isRequired,
 };
 
+
 const submitQuery = gql`
+  
   mutation createReview(
   		$politicianId: ID!,
   		$sentiment: String!,  		  		
   		$body: String!,
-  		$userId: ID
+  		$userId: ID,
+  		$location: String!,
+  		$tags: [Tag]!
 	) {
     	createReview(
     		politicianId:$politicianId, 
     		sentiment:$sentiment, 
     		body:$body,
-    		userId:$userId
+    		userId:$userId,
+    		location: $location,
+    		tags: $tags
 		) {
       		review {
       			id

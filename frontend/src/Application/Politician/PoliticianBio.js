@@ -39,6 +39,8 @@ class PoliticianBio extends Component {
 					politicianId={this.props.politicianId}
 					politicianTitle={this.props.title}
 					politicianName={this.props.name}
+					positiveTags={this.props.positiveTags}
+					negativeTags={this.props.negativeTags}
 				/>
 			</div>
 		);
