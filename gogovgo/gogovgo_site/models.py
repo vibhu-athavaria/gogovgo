@@ -22,6 +22,11 @@ from gogovgo.gogovgo_site.constants import (
     US_STATES
 )
 
+SENTIMENT_CHOICES = (
+    (SENTIMENT_POSITIVE, SENTIMENT_POSITIVE),
+    (SENTIMENT_NEGATIVE, SENTIMENT_NEGATIVE),
+    (SENTIMENT_NEUTRAL, SENTIMENT_NEUTRAL)
+)
 
 class UserProfile(TimeStampedModel):
     GENDER_CHOICES = (
@@ -123,12 +128,6 @@ class Poll(TimeStampedModel):
 
 
 class Review(TimeStampedModel):
-    SENTIMENT_CHOICES = (
-        (SENTIMENT_POSITIVE, SENTIMENT_POSITIVE),
-        (SENTIMENT_NEGATIVE, SENTIMENT_NEGATIVE),
-        (SENTIMENT_NEUTRAL, SENTIMENT_NEUTRAL)
-    )
-
     REVIEW_STATUS_CHOICES = (
         (REVIEW_PENDING, REVIEW_PENDING),
         (REVIEW_APPROVED, REVIEW_APPROVED)
@@ -156,6 +155,7 @@ class Review(TimeStampedModel):
     all = models.Manager()
 
     class Meta:
+        ordering = ['-created']
         unique_together = ('user', 'politician')
         app_label = 'gogovgo_site'
 
@@ -163,6 +163,7 @@ class Review(TimeStampedModel):
 class ReasonTag(TimeStampedModel):
     value = models.CharField(blank=True, max_length=255, unique=True)
     weight = models.FloatField(blank=True, default=0.0)
+    sentiment = models.CharField(choices=SENTIMENT_CHOICES, default=SENTIMENT_NEUTRAL, max_length=64)
 
     def __str__(self):
         return '%s' % self.value

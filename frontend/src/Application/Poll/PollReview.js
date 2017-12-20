@@ -5,7 +5,7 @@
 import React from 'react';
 import {Component} from "react/lib/ReactBaseClasses";
 import { FormControl, FormGroup, Modal } from "react-bootstrap";
-import SubscribeModalWithMutation from "../SubscribeModal";
+import SubscribeModalWithMutation from "./SubscribeModal";
 import ReCAPTCHA from "react-google-recaptcha";
 
 
@@ -17,6 +17,7 @@ class PollReview extends Component {
 
 	initializeState(props) {
 		return {
+			showSelf: true,
 			politicianId: props.politicianId,
 			reviewText: '',
 			reviewTextValidation: null,
@@ -30,28 +31,23 @@ class PollReview extends Component {
 	}
 
 	render() {
-		const {approved, onHide, politicianName, ...rest} = this.props;
-		let pollQuestion;
+		const {approved, onHide, location, tags, ...rest} = this.props;
 
-		if (approved === true) {
-			pollQuestion = <div className="texto_modales margin_abajo_medium">
-				What are the primary reasons that you are <br/> <span className="color_approve">satisfied</span> with {politicianName}’s performance?
-			</div>
-		} else {
-			pollQuestion = <div className="texto_modales margin_abajo_medium">
-				What are the primary reasons that you are <br/> <span className="color_disapprove">dissatisfied</span> with {politicianName}’s performance?
-			</div>
-		}
+		let reviewTags = [];
+		tags.forEach(function(tag, index) {
+			reviewTags.push(
+				<button className="reason-tags">{tag.name}</button>
+			)
+		});
 
 		// specifying verify callback function for recatcha
 		const onChangeCaptcha = (value) => {
-			console.log(value);
 			this.setState({isHuman: !!value});
 		};
 
 
 		const closeSubscribeModal = (closeParent) => {
-			this.setState({showSubscribeModal: false});
+			this.setState({showSubscribeModal: false, showSelf: !closeParent});
 			if (closeParent === true) {
 				onHide(closeParent)
 			}
@@ -63,6 +59,7 @@ class PollReview extends Component {
 			} else {
 				this.setState({
 					showSubscribeModal: true,
+					showSelf: false
 				});
 			}
 		};
@@ -76,47 +73,50 @@ class PollReview extends Component {
 			}
 		};
 
-
 		return (
 			<div>
-				<Modal {...rest} dialogClassName="custom-modal" keyboard={true}>
-					<Modal.Header closeButton onHide={() => onHide(true)}>
-					</Modal.Header>
+				{ this.state.showSelf && (
+					<Modal {...rest} dialogClassName="custom-modal" keyboard={true}>
+						<Modal.Header closeButton onHide={() => onHide(true)}>
+						</Modal.Header>
 
-					<Modal.Body>
-						{pollQuestion}
-
-						<div className="texto_modales_rg margin_abajo_big">
-							Please explain your answer in more detail (optional):
-						</div>
-						<FormGroup className="margin_abajo_big" validationState={this.state.reviewTextValidation}>
-							<FormControl
-								componentClass="textarea"
-								placeholder="Please explain your answer in more detail..."
-								onChange={handleReviewTextChange}
-								bsSize="large"
-							/>
-						</FormGroup>
-						<div className="margin_abajo_medium text-center recaptcha">
-								<ReCAPTCHA
-									ref="recaptcha"
-									sitekey="6LeLIi8UAAAAAJ_kXlghvCfyava-bYboEEGT0nvj"
-									onChange={onChangeCaptcha}
+						<Modal.Body>
+							<div className="texto_modales margin_abajo_medium">
+								Please explain your selection in more detail:
+							</div>
+							<div className="margin_abajo_medium text-center">
+								{reviewTags}
+							</div>
+							<FormGroup className="margin_abajo_big" validationState={this.state.reviewTextValidation}>
+								<FormControl
+									componentClass="textarea"
+									placeholder="Please explain your answer in more detail..."
+									onChange={handleReviewTextChange}
+									bsSize="large"
 								/>
-						</div>
-					</Modal.Body>
-					<Modal.Footer>
-						<div className="form-group text-center margin_abajo_medium">
-							<button type="button" className="btn btn-modal btn-link" onClick={() => onHide(false)}>Back</button>
-							<button type="button" className="btn btn-modal btn-primary" onClick={onSubmit} disabled={!this.state.isHuman}>Next</button>
-						</div>
-					</Modal.Footer>
-				</Modal>
-
+							</FormGroup>
+							<div className="margin_abajo_medium text-center recaptcha">
+									<ReCAPTCHA
+										ref="recaptcha"
+										sitekey="6LeLIi8UAAAAAJ_kXlghvCfyava-bYboEEGT0nvj"
+										onChange={onChangeCaptcha}
+									/>
+							</div>
+						</Modal.Body>
+						<Modal.Footer>
+							<div className="form-group text-center margin_abajo_medium">
+								<button type="button" className="btn btn-modal btn-link" onClick={() => onHide(false)}>Back</button>
+								<button type="button" className="btn btn-modal btn-primary" onClick={onSubmit} disabled={!this.state.isHuman}>Next</button>
+							</div>
+						</Modal.Footer>
+					</Modal>
+				)}
 				<SubscribeModalWithMutation
 					show={this.state.showSubscribeModal}
+					tags={tags}
+					location={location}
 					politicianId={this.props.politicianId}
-					approved={this.props.approved}
+					approved={approved}
 					reviewText={this.state.reviewText}
 					onHide={() => closeSubscribeModal(true)}
 				/>

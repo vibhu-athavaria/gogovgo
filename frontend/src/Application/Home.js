@@ -9,6 +9,7 @@ import Footer from "./Footer";
 import '../assets/css/App.css';
 import {decrypt} from "../utils/security"
 
+
 class Home extends Component {
 	render() {
 		const {titleUrl, country, decryptReviewId } = this.props;

@@ -68,6 +68,8 @@ class Politician extends Component {
 									approvalCount={approvalCount}
 									disapprovalCount={disapprovalCount}
 									politicianId={politician.id}
+									positiveTags={politician.positiveTags}
+									negativeTags={politician.negativeTags}
 								/>
 							</Col>
 						</Grid>
@@ -89,9 +91,9 @@ class Politician extends Component {
 					/>
 
 					<Modal show={this.state.showReviewModal} dialogClassName="custom-modal" keyboard={true}>
-						<Modal.Header closeButton onHide={() => reviewModalClose()}/>
+						<Modal.Header bsClass="margin_abajo_mini" closeButton onHide={() => reviewModalClose()}/>
 						<Modal.Body>
-							<ReviewModal reviewId={this.props.reviewId}/>
+							<ReviewModal reviewId={this.props.reviewId} showShareURL={true} />
 						</Modal.Body>
 					</Modal>
 				</div>
@@ -116,23 +118,12 @@ const getPolitician = gql`
 			negativeTags,
 			publicOfficeTitle {
 				displayName
-			},		
-			staff {
-				member {
-					firstName,
-					lastName,  
-					thumbnailTag,
-					publicOfficeTitle {
-					  displayName,
-					  url,
-					  country
-					}
-			  	}
-			},
+			},					
 			mailingAddress,
 			website,
 			phoneNumber,
 			reviews {
+				id,
 			  	user {
 					firstName,
 					lastName

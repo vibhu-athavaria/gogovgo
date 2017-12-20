@@ -290,11 +290,27 @@ a.poll_btn_circle:hover{
   box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.4) inset;
 }
 
-.poll_btn_circle.active{
+a.poll_btn_circle.active{
   border: 2px solid #ffffff;
   border-radius: 31px;
   background-color: #ffffff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+a.poll_btn_circle.rated-approved{
+  background: #6dd867;
+  border: 2px solid #6dd867;
+  -webkit-box-shadow: 0 2px 20px 8px rgba(56, 216, 59, 0.4);
+  -moz-box-shadow: 0 2px 20px 8px rgba(56, 216, 59, 0.4);
+  box-shadow: 0 2px 20px 8px rgba(56, 216, 59, 0.4);
+}
+
+a.poll_btn_circle.rated-disapproved{
+  background:#D82B22;
+  border: 2px solid #D82B22;
+  -webkit-box-shadow: 0 2px 20px 8px rgba(216,43,34,0.4);
+  -moz-box-shadow: 0 2px 20px 8px rgba(216,43,34,0.4);
+  box-shadow: 0 2px 20px 8px rgba(216,43,34,0.4);
 }
 
 .btn_circle {
@@ -379,16 +395,16 @@ a.btn_circle.approve.voted-disapprove, a.btn_circle.disapprove.voted-approve {
 }
 
 .action-icons {
-  margin: 10px 0;
+  margin-top: 10px;
 }
 
 .action-icons {
   margin: 10px 0;
+  font-size: 22px;
 }
 
 .action-icons .fa-thumbs-o-up, .action-icons .fa-thumbs-o-down {
   color: #646464;
-  /*text-align: left;*/
 }
 
 .action-icons a {
@@ -399,6 +415,26 @@ a.btn_circle.approve.voted-disapprove, a.btn_circle.disapprove.voted-approve {
 .action-icons a:hover {
   color: #646464;
   text-decoration: none;
+}
+
+.action-icons .votes-approve.reacted-up:before {
+  color: #4cae4c;
+}
+
+.action-icons .votes-approve:before {
+  content: "\f087";
+  font-family: FontAwesome;
+  padding-right: 10px;
+}
+
+.action-icons .votes-disapprove.reacted-down:before {
+  color:#D82B22;
+}
+
+.action-icons .votes-disapprove:before {
+  content: "\f088";
+  font-family: FontAwesome;
+  padding-right: 10px;
 }
 
 .action-icons .box span.votes {
@@ -414,7 +450,7 @@ a.btn_circle.approve.voted-disapprove, a.btn_circle.disapprove.voted-approve {
 
 .modal_btn{
   color: #606060 !important;
-  margin: 0 10px;
+  /*margin: 0 10px;*/
   border: 2px solid #606060;
   padding: 1rem 4rem;
 }
@@ -604,7 +640,7 @@ a.link_second_menu.active, a.link_second_menu:hover a.link_second_menu:focus {
   border-bottom: 1px solid #efefef;
 }
 .contenedor_articulos .row .divisor {
-  padding:40px;
+  padding: 20px 40px;
   border-bottom: 1px solid #efefef;
 }
 .contenedor_articulos .row .divisor:last-of-type{
@@ -832,12 +868,22 @@ footer .list-inline-item a:hover {text-decoration: none}
   font: 500 14px/14px 'Roboto';
   border: 2px solid #F5F5F5;
   border-radius: 4px;
-  padding: 24px 22px;
+  padding: 24px 14px;
   box-shadow: none;
 }
 
+.modal-content .input-group-btn button {
+  background-color: #09499D;
+  color: #fff;
+  border: 1px solid #555;
+  padding: 15px;
+  font-size: 14px;
+  border-radius: 0 4px 4px 0;
+  font-family: 'Roboto';
+}
 .modal-content .btn-full {width: 100%}
 .modal-content {
+  padding: 20px;
   border-radius: 6px;
   box-shadow: 0 5px 30px 0 rgba(0,0,0,0.07);
 }
@@ -1004,6 +1050,8 @@ footer .list-inline-item a:hover {text-decoration: none}
 .modal-content .btn-link {
   color: #b3b3b3;
   margin-right: 30px;
+  border: 2px solid #666666;
+  border-radius: 4px;
 }
 .modal-content .btn-link:focus, .modal-content .btn-link:hover {text-decoration: none}
 .tiulo_nav{
@@ -1049,6 +1097,60 @@ footer .list-inline-item a:hover {text-decoration: none}
 .btn-default, .btn-primary {
   font-weight: 700;
 }
+
+/* tag input css */
+
+.react-tags__selected {
+  margin: 10px 0 20px;
+  text-align: center;
+}
+
+.reason-tags, .react-tags__selected .react-tags__selected-tag {
+  background-color: #868686;
+  color: #fff;
+  margin: 2px;
+  height: 28px;
+  border-radius: 4px;
+  font-weight: 300;
+  font-size: 12px;
+}
+
+.react-tags__selected .react-tags__selected-tag:after{
+  content: "\f00d";
+  font-family: FontAwesome;
+  font-weight: 300;
+  margin-left: 4px;
+}
+
+.react-tags__search-input input {
+  width: 100% !important;
+  height: 52px;
+  color: #444;
+  font-weight: 400;
+  border: 2px solid #999;
+}
+.react-tags__suggestions {
+
+  width: 95% !important;
+  background-color: #ffffff;
+  position: absolute;
+  /*top: 100%;*/
+  border: 1px solid #555555;
+  z-index: 100
+}
+
+.react-tags__suggestions ul {
+  font-weight: 400;
+  color: #868686;
+  list-style: none;
+  padding: 0 .5em;
+}
+
+.react-tags__suggestions ul li {
+  margin: 10px;
+}
+/* end tag input css */
+
 
 /* Responsive  */
 @media only screen and (min-width: 768px) and (max-width: 992px) {
