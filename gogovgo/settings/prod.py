@@ -26,11 +26,7 @@ SECRET_KEY = '8x$)j$z*&p%+ud8j!h5vg!uwjhv^ly@lk3s9!)_lwe=&3-r%c%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-<<<<<<< HEAD
-ALLOWED_HOSTS = ["35.185.91.223", "gogovgo.com", "www.gogovgo.com"]
-=======
-ALLOWED_HOSTS = ["35.197.47.146", "rateyourpolitician.com", "www.rateyourpolitician.com", "rateyourpolitician.org", "www.rateyourpolitician.org"]
->>>>>>> Fixing CSS and adding authentication
+ALLOWED_HOSTS = ["35.190.185.171", "gogovgo.com", "www.gogovgo.com"]
 
 
 # Database
