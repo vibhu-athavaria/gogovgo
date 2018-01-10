@@ -26,7 +26,7 @@ SECRET_KEY = '8x$)j$z*&p%+ud8j!h5vg!uwjhv^ly@lk3s9!)_lwe=&3-r%c%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["35.190.185.171", "gogovgo.com", "www.gogovgo.com"]
+ALLOWED_HOSTS = ["35.190.185.171", "gogovgo.com", "www.gogovgo.com", "35.185.63.59"]
 
 
 # Database
