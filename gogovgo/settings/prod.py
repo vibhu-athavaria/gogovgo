@@ -79,5 +79,5 @@ LOGGING = {
             'class': 'django.utils.log.AdminEmailHandler',
             'include_html': True,
         }
-    },
+    }
 }
