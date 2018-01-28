@@ -2,11 +2,42 @@
  * Created by vathavaria on 7/13/17.
  */
 
-import React from 'react';
-import {Component} from "react/lib/ReactBaseClasses";
-import {Alert, Col, Modal, Row} from "react-bootstrap";
+import React from "react";
+import { Component } from "react/lib/ReactBaseClasses";
+import { Alert, Col, Modal, Row } from "react-bootstrap";
 import PollKeywords from "./PollKeywords";
-import PlacesAutocomplete from 'react-places-autocomplete'
+import PlacesAutocomplete, { geocodeByAddress } from "react-places-autocomplete";
+
+/**
+ * Get city, state & country information from geocode API results
+ * @param {array} results - Array of results from Geocode API
+ * @returns {object}
+ *
+ * Note: see the link below for example of `results` param
+ * https://maps.googleapis.com/maps/api/geocode/json?address=Mountain+View,+CA
+ *
+ */
+const processGeocodeResult = results => {
+	let data = { city: null, state: null, country: null }
+	if (!results.length) return data;
+
+	const addressData = results[0].address_components;
+	for (let i = 0; i < addressData.length; i++) {
+
+		const entry = addressData[i];
+		if (entry.types.indexOf('locality') !== -1) {
+			data.city = entry.long_name;
+		} else if (entry.types.indexOf('administrative_area_level_1') !== -1) {
+			data.state = entry.short_name ? entry.short_name : entry.long_name;
+		} else if (entry.types.indexOf('country') !== -1) {
+			data.country = entry.short_name;
+		}
+
+	}
+
+	return data;
+}
+
 
 class PollQuestion extends Component {
 	constructor(props, context) {
@@ -16,24 +47,35 @@ class PollQuestion extends Component {
 			showKeywordModel: false,
 			approved: false,
 			showAlert: false,
-			location: ''
+			location: '',
 		}
+		this._locationObject = {};
 	}
 
 	showPollKeywordModal = (isApproved) => {
-		if (this.state.location === '') {
-			this.setState({showAlert: true})
+		const { location } = this.state;
+
+		if (location === '') {
+			this.setState({ showAlert: true })
 		} else {
-			this.setState({
-				showSelf: false,
-				showKeywordModel: true,
-				approved: isApproved
-			});
+			geocodeByAddress(location).then(results => {
+				const locationData = processGeocodeResult(results);
+				if (!locationData.country) {
+					this.setState({ showAlert: true })
+				} else {
+					this._locationObject = locationData;
+					this.setState({
+						showSelf: false,
+						showKeywordModel: true,
+						approved: isApproved,
+					});
+				}
+			})
 		}
 	};
 
 	render() {
-		const {approvalCount, disapprovalCount, onHide, politicianId, politicianName, politicianTitle, positiveTags, negativeTags, ...restProps} = this.props;
+		const { approvalCount, disapprovalCount, onHide, politicianId, politicianName, politicianTitle, positiveTags, negativeTags, ...restProps } = this.props;
 
 		const onChangePlaceAutoComplete = (location) => {
 			this.setState({
@@ -50,7 +92,7 @@ class PollQuestion extends Component {
 		};
 
 		const pollKeywordModalClose = (closeParent) => {
-			this.setState({showKeywordModel: false, showSelf: !closeParent});
+			this.setState({ showKeywordModel: false, showSelf: !closeParent });
 			if (closeParent === true) {
 				onHide();
 			}
@@ -104,22 +146,22 @@ class PollQuestion extends Component {
 		};
 
 		const placeOptions = {
-			types: ['(cities)']
+			types: ['(regions)']
 		};
 
 		return (
 			<div>
-				{ this.state.showSelf && (
+				{this.state.showSelf && (
 					<Modal {...restProps} dialogClassName="custom-modal">
-						<Modal.Header closeButton onHide={() => onHide()}/>
+						<Modal.Header closeButton onHide={() => onHide()} />
 						<Modal.Body>
 							<div className="texto_modales_center">
 								<div className="margin_abajo_big">
 									Do you <span className="color_approve">approve</span> or <span className="color_disapprove">disapprove</span> of the way {this.props.politicianName} is handling his job as {this.props.politicianTitle}?
-									<br/><span className="modal_text_small">Reviews are published publicly, organized by topic, and sent directly to politicians.</span>
+									<br /><span className="modal_text_small">Reviews are published publicly, organized by topic, and sent directly to politicians.</span>
 								</div>
 
-								{ this.state.showAlert && (
+								{this.state.showAlert && (
 									<Alert bsStyle="danger">
 										<h4>Please enter a valid location!</h4>
 									</Alert>
@@ -154,18 +196,18 @@ class PollQuestion extends Component {
 								</Row>
 							</div>
 						</Modal.Body>
-						<Modal.Footer/>
+						<Modal.Footer />
 					</Modal>
 				)}
 				<PollKeywords
 					show={this.state.showKeywordModel}
 					onHide={pollKeywordModalClose}
 					approved={this.state.approved}
-					location={this.state.location}
+					location={this._locationObject}
 					politicianId={politicianId}
 					politicianName={politicianName}
 					politicianTitle={politicianTitle}
-					suggestedTags={this.state.approved? positiveTags : negativeTags}
+					suggestedTags={this.state.approved ? positiveTags : negativeTags}
 				/>
 			</div>
 		);
