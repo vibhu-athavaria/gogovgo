@@ -2,174 +2,217 @@
  * Created by vathavaria on 7/13/17.
  */
 
-import React from 'react';
-import {Component} from "react/lib/ReactBaseClasses";
-import {Alert, Col, Modal, Row} from "react-bootstrap";
+import React from "react";
+import ReactGA from "react-ga";
+import { Component } from "react/lib/ReactBaseClasses";
+import { Alert, Col, Modal, Row } from "react-bootstrap";
 import PollKeywords from "./PollKeywords";
-import PlacesAutocomplete from 'react-places-autocomplete'
 
 class PollQuestion extends Component {
-	constructor(props, context) {
-		super(props, context);
-		this.state = {
-			showSelf: true,
-			showKeywordModel: false,
-			approved: false,
-			showAlert: false,
-			location: ''
-		}
-	}
+    constructor(props, context) {
+        super(props, context);
+        this.state = {
+            showSelf: true,
+            showKeywordModel: false,
+            approved: false,
+            showAlert: false,
+            location: { state: "", country: "US" },
+            locationOptions: { countries: [], states: [] }
+        };
+    }
 
-	showPollKeywordModal = (isApproved) => {
-		if (this.state.location === '') {
-			this.setState({showAlert: true})
-		} else {
-			this.setState({
-				showSelf: false,
-				showKeywordModel: true,
-				approved: isApproved
-			});
-		}
-	};
+    /**
+     * Load list of available countries and state from API
+     */
+    componentDidMount() {
+        fetch("http://localhost:8030/api/countries/")
+            .then(res => res.json())
+            .then(data => this.setState({ locationOptions: data }));
+    }
 
-	render() {
-		const {approvalCount, disapprovalCount, onHide, politicianId, politicianName, politicianTitle, positiveTags, negativeTags, ...restProps} = this.props;
+    /**
+     * Handle update on select element
+     * @param {string} field - name of location field to change - `country` or `state`
+     * @param {object} event - JS onchange event
+     */
+    handleChange(field, event) {
+        let { location } = this.state;
+        location[field] = event.target.value;
+        if (field == "country") location.state = "";
+        this.setState({ location: location });
+    }
 
-		const onChangePlaceAutoComplete = (location) => {
-			this.setState({
-				location: location,
-				showAlert: false
-			});
-		};
+    /**
+     * Handle click on Approve or Disapprove button
+     * @param {boolean} isApproved - approve if this is true else disapprove
+     */
+    showPollKeywordModal(isApproved) {
+        //	track event
+        ReactGA.event({
+            category: "User",
+            action: "Modal_Approve_or_Disapprove",
+            label: isApproved ? "approve" : "disapprove"
+        });
+        //  Go to next modal
+        this.setState({
+            showSelf: false,
+            showKeywordModel: true,
+            approved: isApproved
+        });
+    }
 
-		const onSelectPlaceAutoComplete = (location) => {
-			this.setState({
-				location: location,
-				showAlert: false
-			});
-		};
+    /**
+     * Component layout
+     * @returns JSX
+     */
+    render() {
+        const {
+            approvalCount,
+            disapprovalCount,
+            onHide,
+            politicianId,
+            politicianName,
+            politicianTitle,
+            positiveTags,
+            negativeTags,
+            ...restProps
+        } = this.props;
 
-		const pollKeywordModalClose = (closeParent) => {
-			this.setState({showKeywordModel: false, showSelf: !closeParent});
-			if (closeParent === true) {
-				onHide();
-			}
-		};
+        const { location, locationOptions, approved } = this.state;
 
-		const locationInputStyles = {
-			root: {
-				position: 'relative',
-				paddingBottom: '0px',
-			},
-			input: {
-				display: 'inline-block',
-				width: '100%',
-				padding: '10px',
-				color: '#464646'
-			},
-			autocompleteContainer: {
-				position: 'absolute',
-				top: '100%',
-				backgroundColor: 'white',
-				border: '1px solid #555555',
-				width: '100%',
-				zIndex: '100'
-			},
-			autocompleteItem: {
-				backgroundColor: '#ffffff',
-				padding: '10px',
-				color: '#555555',
-				cursor: 'pointer',
-				fontSize: '12px',
-				textAlign: 'left'
-			},
-			autocompleteItemActive: {
-				backgroundColor: '#fafafa'
-			},
-			googleLogoContainer: {
-				textAlign: 'right',
-				padding: '1px',
-				backgroundColor: '#fafafa'
-			},
-			googleLogoImage: {
-				width: 50
-			}
-		};
+        /**
+         * Country & state select elements
+         */
+        const countrySelector = (
+            <select
+                className="form-control location-selector"
+                value={location.country}
+                onChange={e => this.handleChange("country", e)}
+            >
+                {locationOptions.countries.map((country, i) => (
+                    <option key={i} value={country.short}>
+                        {country.long}
+                    </option>
+                ))}
+            </select>
+        );
 
+        let stateSelector;
+        if (location.country === "US") {
+            stateSelector = (
+                <select
+                    className="form-control location-selector"
+                    value={location.state}
+                    onChange={e => this.handleChange("state", e)}
+                >
+                    <option value="">Select your state (optional)</option>
+                    {locationOptions.states.map((state, i) => (
+                        <option key={i} value={state.short}>
+                            {state.long}
+                        </option>
+                    ))}
+                </select>
+            );
+        }
 
-		const inputProps = {
-			value: this.state.location,
-			onChange: onChangePlaceAutoComplete,
-			placeholder: "Enter your location..."
-		};
+        const pollKeywordModalClose = closeParent => {
+            this.setState({ showKeywordModel: false, showSelf: !closeParent });
+            if (closeParent === true) {
+                onHide();
+            }
+        };
 
-		const placeOptions = {
-			types: ['(cities)']
-		};
+        return (
+            <div>
+                {this.state.showSelf && (
+                    <Modal {...restProps} dialogClassName="custom-modal">
+                        <Modal.Header closeButton onHide={() => onHide()} />
+                        <Modal.Body>
+                            <div className="texto_modales_center">
+                                <div className="margin_abajo_big">
+                                    Do you <span className="color_approve">approve</span> or{" "}
+                                    <span className="color_disapprove">disapprove</span> of the way{" "}
+                                    {this.props.politicianName} is handling his job as{" "}
+                                    {this.props.politicianTitle}?
+                                    <br />
+                                    <span className="modal_text_small">
+                                        Reviews are published publicly, organized by topic, and sent
+                                        directly to politicians.
+                                    </span>
+                                </div>
 
-		return (
-			<div>
-				{ this.state.showSelf && (
-					<Modal {...restProps} dialogClassName="custom-modal">
-						<Modal.Header closeButton onHide={() => onHide()}/>
-						<Modal.Body>
-							<div className="texto_modales_center">
-								<div className="margin_abajo_big">
-									Do you <span className="color_approve">approve</span> or <span className="color_disapprove">disapprove</span> of the way {this.props.politicianName} is handling his job as {this.props.politicianTitle}?
-									<br/><span className="modal_text_small">Reviews are published publicly, organized by topic, and sent directly to politicians.</span>
-								</div>
+                                {this.state.showAlert && (
+                                    <Alert bsStyle="danger">
+                                        <h4>Please enter a valid location!</h4>
+                                    </Alert>
+                                )}
 
-								{ this.state.showAlert && (
-									<Alert bsStyle="danger">
-										<h4>Please enter a valid location!</h4>
-									</Alert>
-								)}
+                                <div className="margin_abajo_big">
+                                    {countrySelector}
+                                    {stateSelector}
+                                </div>
 
-								<div className="margin_abajo_big">
-									<PlacesAutocomplete
-										inputProps={inputProps}
-										onSelect={onSelectPlaceAutoComplete}
-										styles={locationInputStyles}
-										options={placeOptions}
-									/>
-								</div>
-
-								<Row className="justify-content-center margin_abajo_big">
-									<Col xsOffset={1} xs={5} mdOffset={1} md={5} className="text-center">
-										<a className="btn btn-secondary btn_circle modal_btn approve" href="#" onClick={() => this.showPollKeywordModal(true)}>
-											<i className="fa fa-thumbs-up align-middle" aria-hidden="true"></i>
-											<div className="box">
-												<span className="votes">{approvalCount}</span><span>Approve</span>
-											</div>
-										</a>
-									</Col>
-									<Col xs={5} xsPull={1} md={5} mdPull={1} className="text-center">
-										<a className="btn btn-secondary btn_circle modal_btn disapprove" href="#" onClick={() => this.showPollKeywordModal(false)}>
-											<i className="fa fa-thumbs-down" aria-hidden="true"></i>
-											<div className="box">
-												<span className="votes">{disapprovalCount}</span><span>Disapprove</span>
-											</div>
-										</a>
-									</Col>
-								</Row>
-							</div>
-						</Modal.Body>
-						<Modal.Footer/>
-					</Modal>
-				)}
-				<PollKeywords
-					show={this.state.showKeywordModel}
-					onHide={pollKeywordModalClose}
-					approved={this.state.approved}
-					location={this.state.location}
-					politicianId={politicianId}
-					politicianName={politicianName}
-					politicianTitle={politicianTitle}
-					suggestedTags={this.state.approved? positiveTags : negativeTags}
-				/>
-			</div>
-		);
-	}
+                                <Row className="justify-content-center margin_abajo_big">
+                                    <Col
+                                        xsOffset={1}
+                                        xs={5}
+                                        mdOffset={1}
+                                        md={5}
+                                        className="text-center"
+                                    >
+                                        <a
+                                            className="btn btn-secondary btn_circle modal_btn approve"
+                                            href="#"
+                                            onClick={() => this.showPollKeywordModal(true)}
+                                        >
+                                            <i
+                                                className="fa fa-thumbs-up align-middle"
+                                                aria-hidden="true"
+                                            />
+                                            <div className="box">
+                                                <span className="votes">{approvalCount}</span>
+                                                <span>Approve</span>
+                                            </div>
+                                        </a>
+                                    </Col>
+                                    <Col
+                                        xs={5}
+                                        xsPull={1}
+                                        md={5}
+                                        mdPull={1}
+                                        className="text-center"
+                                    >
+                                        <a
+                                            className="btn btn-secondary btn_circle modal_btn disapprove"
+                                            href="#"
+                                            onClick={() => this.showPollKeywordModal(false)}
+                                        >
+                                            <i className="fa fa-thumbs-down" aria-hidden="true" />
+                                            <div className="box">
+                                                <span className="votes">{disapprovalCount}</span>
+                                                <span>Disapprove</span>
+                                            </div>
+                                        </a>
+                                    </Col>
+                                </Row>
+                            </div>
+                        </Modal.Body>
+                        <Modal.Footer />
+                    </Modal>
+                )}
+                <PollKeywords
+                    show={this.state.showKeywordModel}
+                    onHide={pollKeywordModalClose}
+                    approved={approved}
+                    location={location}
+                    politicianId={politicianId}
+                    politicianName={politicianName}
+                    politicianTitle={politicianTitle}
+                    suggestedTags={approved ? positiveTags : negativeTags}
+                />
+            </div>
+        );
+    }
 }
 
 export default PollQuestion;

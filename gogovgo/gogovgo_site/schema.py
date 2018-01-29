@@ -41,6 +41,8 @@ def connection_for_type(_type):
 class UserType(DjangoObjectType):
     class Meta:
         model = User
+
+
 UserType.Connection = connection_for_type(UserType)
 
 
@@ -48,12 +50,15 @@ class UserProfileType(DjangoObjectType):
     class Meta:
         model = models.UserProfile
 
+
 UserProfileType.Connection = connection_for_type(UserProfileType)
 
 
 class PollType(DjangoObjectType):
     class Meta:
         model = models.Poll
+
+
 PollType.Connection = connection_for_type(PollType)
 
 
@@ -100,12 +105,15 @@ class ReviewType(DjangoObjectType):
     class Meta:
         model = models.Review
 
+
 ReviewType.Connection = connection_for_type(ReviewType)
 
 
 class ReasonTagType(DjangoObjectType):
     class Meta:
         model = models.ReasonTag
+
+
 ReasonTagType.Connection = connection_for_type(ReasonTagType)
 
 
@@ -157,13 +165,12 @@ class CreateReview(graphene.Mutation):
             del args['emailAddress']
 
         location = args['location']
-        (city, state, country) = location.split(',')
+        state, country = location.split(',')
 
         review = models.Review.objects.create(
             politician_id=args['politician_id'],
             user=user,
-            city=city.strip(),
-            state=state.strip(),
+            state=state.strip() or None,
             country=country.strip(),
             sentiment=args['sentiment'],
             body=args['body']
@@ -238,7 +245,6 @@ class Mutations(graphene.ObjectType):
     create_review = CreateReview.Field()
     update_review = UpdateReview.Field()
     create_reason_tag = CreateReasonTag.Field()
-
 
 
 class Query(graphene.AbstractType):

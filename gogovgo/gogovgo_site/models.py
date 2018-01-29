@@ -28,6 +28,7 @@ SENTIMENT_CHOICES = (
     (SENTIMENT_NEUTRAL, SENTIMENT_NEUTRAL)
 )
 
+
 class UserProfile(TimeStampedModel):
     GENDER_CHOICES = (
         (GENDER_MALE, GENDER_MALE),
@@ -61,7 +62,8 @@ class PublicOfficeTitle(TimeStampedModel):
 
     url = models.SlugField(max_length=100)
     display_name = models.CharField(max_length=255)
-    office_type = models.CharField(choices=OFFICE_TYPE_CHOICES, default=OFFICE_TYPE_FEDERAL, max_length=64)
+    office_type = models.CharField(choices=OFFICE_TYPE_CHOICES,
+                                   default=OFFICE_TYPE_FEDERAL, max_length=64)
     department = models.ForeignKey(GovernmentDepartment, on_delete=models.DO_NOTHING)
     city = models.CharField(null=True, blank=True, max_length=255)
     country = CountryField(default='US')
@@ -140,14 +142,16 @@ class Review(TimeStampedModel):
         db_constraint=False
     )
     politician = models.ForeignKey(Politician, db_constraint=False, related_name='reviews')
-    sentiment = models.CharField(choices=SENTIMENT_CHOICES, default=SENTIMENT_NEUTRAL, max_length=64)
+    sentiment = models.CharField(choices=SENTIMENT_CHOICES,
+                                 default=SENTIMENT_NEUTRAL, max_length=64)
     city = models.CharField(null=True, blank=True, max_length=255)
-    state = models.CharField(choices=US_STATES, default='CA', max_length=120)
+    state = models.CharField(choices=US_STATES, default='CA', max_length=120, null=True)
     country = CountryField(default='US')
     body = models.TextField(null=True)
     tags = models.ManyToManyField('ReasonTag', through='ReviewHasReasonTag')
     status = models.CharField(choices=REVIEW_STATUS_CHOICES, default=REVIEW_PENDING, max_length=32)
-    nlp_sentiment = models.CharField(choices=SENTIMENT_CHOICES, default=SENTIMENT_NEUTRAL, max_length=64)
+    nlp_sentiment = models.CharField(choices=SENTIMENT_CHOICES,
+                                     default=SENTIMENT_NEUTRAL, max_length=64)
     up_vote = models.IntegerField(default=0)
     down_vote = models.IntegerField(default=0)
 
@@ -163,7 +167,8 @@ class Review(TimeStampedModel):
 class ReasonTag(TimeStampedModel):
     value = models.CharField(blank=True, max_length=255, unique=True)
     weight = models.FloatField(blank=True, default=0.0)
-    sentiment = models.CharField(choices=SENTIMENT_CHOICES, default=SENTIMENT_NEUTRAL, max_length=64)
+    sentiment = models.CharField(choices=SENTIMENT_CHOICES,
+                                 default=SENTIMENT_NEUTRAL, max_length=64)
 
     def __str__(self):
         return '%s' % self.value
