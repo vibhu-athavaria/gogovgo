@@ -170,7 +170,7 @@ class CreateReview(graphene.Mutation):
         review = models.Review.objects.create(
             politician_id=args['politician_id'],
             user=user,
-            state=state.strip(),
+            state=state.strip() or None,
             country=country.strip(),
             sentiment=args['sentiment'],
             body=args['body']
