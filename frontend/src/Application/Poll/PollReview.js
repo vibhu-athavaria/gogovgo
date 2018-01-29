@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import {Component} from "react/lib/ReactBaseClasses";
+import { Component } from "react/lib/ReactBaseClasses";
 import { FormControl, FormGroup, Modal } from "react-bootstrap";
 import SubscribeModalWithMutation from "./SubscribeModal";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -12,7 +12,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 class PollReview extends Component {
 	constructor(props, context) {
 		super(props, context);
-		this.state = this.initializeState(props)
+		this.state = this.initializeState(props);
 	}
 
 	initializeState(props) {
@@ -21,8 +21,7 @@ class PollReview extends Component {
 			politicianId: props.politicianId,
 			reviewText: '',
 			reviewTextValidation: null,
-			showSubscribeModal: false,
-			isHuman: false
+			showSubscribeModal: false
 		}
 	}
 
@@ -31,10 +30,10 @@ class PollReview extends Component {
 	}
 
 	render() {
-		const {approved, onHide, location, tags, ...rest} = this.props;
+		const { approved, onHide, location, tags, ...rest } = this.props;
 
 		let reviewTags = [];
-		tags.forEach(function(tag, index) {
+		tags.forEach(function (tag, index) {
 			reviewTags.push(
 				<button className="reason-tags">{tag.name}</button>
 			)
@@ -42,12 +41,12 @@ class PollReview extends Component {
 
 		// specifying verify callback function for recatcha
 		const onChangeCaptcha = (value) => {
-			this.setState({isHuman: !!value});
+			if (!!value) this.setState({ showSubscribeModal: true, showSelf: false });
 		};
 
 
 		const closeSubscribeModal = (closeParent) => {
-			this.setState({showSubscribeModal: false, showSelf: !closeParent});
+			this.setState({ showSubscribeModal: false, showSelf: !closeParent });
 			if (closeParent === true) {
 				onHide(closeParent)
 			}
@@ -55,12 +54,9 @@ class PollReview extends Component {
 
 		const onSubmit = () => {
 			if (this.state.reviewText === '') {
-				this.setState({reviewTextValidation: 'error'})
+				this.setState({ reviewTextValidation: 'error' })
 			} else {
-				this.setState({
-					showSubscribeModal: true,
-					showSelf: false
-				});
+				this.refs.recaptcha.execute();
 			}
 		};
 
@@ -75,7 +71,7 @@ class PollReview extends Component {
 
 		return (
 			<div>
-				{ this.state.showSelf && (
+				{this.state.showSelf && (
 					<Modal {...rest} dialogClassName="custom-modal" keyboard={true}>
 						<Modal.Header closeButton onHide={() => onHide(true)}>
 						</Modal.Header>
@@ -96,17 +92,18 @@ class PollReview extends Component {
 								/>
 							</FormGroup>
 							<div className="margin_abajo_medium text-center recaptcha">
-									<ReCAPTCHA
-										ref="recaptcha"
-										sitekey="6LeLIi8UAAAAAJ_kXlghvCfyava-bYboEEGT0nvj"
-										onChange={onChangeCaptcha}
-									/>
+								<ReCAPTCHA
+									ref="recaptcha"
+									sitekey="6Leo7EIUAAAAAHkkXEBgYEfl77K2-iuYGbn9AmAR"
+									size="invisible"
+									onChange={onChangeCaptcha}
+								/>
 							</div>
 						</Modal.Body>
 						<Modal.Footer>
 							<div className="form-group text-center margin_abajo_medium">
 								<button type="button" className="btn btn-modal btn-link" onClick={() => onHide(false)}>Back</button>
-								<button type="button" className="btn btn-modal btn-primary" onClick={onSubmit} disabled={!this.state.isHuman}>Next</button>
+								<button type="button" className="btn btn-modal btn-primary" onClick={onSubmit}>Next</button>
 							</div>
 						</Modal.Footer>
 					</Modal>
