@@ -23,7 +23,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 from rest_framework_jwt.views import refresh_jwt_token
 from rest_framework_jwt.views import verify_jwt_token
 
-from views import FrontendAppView
+from views import FrontendAppView, LocationData
 # from . import views
 
 urlpatterns = [
@@ -32,8 +32,8 @@ urlpatterns = [
     url(r'^imagefit/', include('imagefit.urls')),
     url(r'^$', FrontendAppView.as_view()),
     url(r'^politician/', FrontendAppView.as_view()),
+    url(r'^api/countries/', LocationData.as_view()),
     url(r'^api-token-auth/', obtain_jwt_token),
     url(r'^api-token-refresh/', refresh_jwt_token),
     url(r'^api-token-verify/', verify_jwt_token),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
