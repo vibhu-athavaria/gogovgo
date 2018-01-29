@@ -80,7 +80,7 @@ class SubscribeModal extends Component {
                     fullname: this.state.fullname,
                     emailAddress: this.state.emailAddress,
                     tags: tags,
-                    location: `${location.city || ""},${location.state || ""},${location.country}`
+                    location: `${location.state || ""},${location.country}`
                 }
             })
                 .then(({ data }) => {

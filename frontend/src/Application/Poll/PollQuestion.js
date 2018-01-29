@@ -3,39 +3,10 @@
  */
 
 import React from "react";
+import ReactGA from "react-ga";
 import { Component } from "react/lib/ReactBaseClasses";
 import { Alert, Col, Modal, Row } from "react-bootstrap";
 import PollKeywords from "./PollKeywords";
-import PlacesAutocomplete, { geocodeByAddress } from "react-places-autocomplete";
-import ReactGA from "react-ga";
-
-/**
- * Get city, state & country information from geocode API results
- * @param {array} results - Array of results from Geocode API
- * @returns {object}
- *
- * Note: see the link below for example of `results` param
- * https://maps.googleapis.com/maps/api/geocode/json?address=Mountain+View,+CA
- *
- */
-const processGeocodeResult = results => {
-    let data = { city: null, state: null, country: null };
-    if (!results.length) return data;
-
-    const addressData = results[0].address_components;
-    for (let i = 0; i < addressData.length; i++) {
-        const entry = addressData[i];
-        if (entry.types.indexOf("locality") !== -1) {
-            data.city = entry.long_name;
-        } else if (entry.types.indexOf("administrative_area_level_1") !== -1) {
-            data.state = entry.short_name ? entry.short_name : entry.long_name;
-        } else if (entry.types.indexOf("country") !== -1) {
-            data.country = entry.short_name;
-        }
-    }
-
-    return data;
-};
 
 class PollQuestion extends Component {
     constructor(props, context) {
@@ -45,41 +16,55 @@ class PollQuestion extends Component {
             showKeywordModel: false,
             approved: false,
             showAlert: false,
-            location: ""
+            location: { state: "", country: "US" },
+            locationOptions: { countries: [], states: [] }
         };
-        this._locationObject = {};
     }
 
-    showPollKeywordModal = isApproved => {
-        const { location } = this.state;
+    /**
+     * Load list of available countries and state from API
+     */
+    componentDidMount() {
+        fetch("http://localhost:8030/api/countries/")
+            .then(res => res.json())
+            .then(data => this.setState({ locationOptions: data }));
+    }
 
-        if (location === "") {
-            this.setState({ showAlert: true });
-        } else {
-            //	track event
-            ReactGA.event({
-                category: "User",
-                action: "Modal_Approve_or_Disapprove",
-                label: isApproved ? "approve" : "disapprove"
-            });
-            //	Validate location
-            //	convert location to city, state, country
-            geocodeByAddress(location).then(results => {
-                const locationData = processGeocodeResult(results);
-                if (!locationData.country) {
-                    this.setState({ showAlert: true });
-                } else {
-                    this._locationObject = locationData;
-                    this.setState({
-                        showSelf: false,
-                        showKeywordModel: true,
-                        approved: isApproved
-                    });
-                }
-            });
-        }
-    };
+    /**
+     * Handle update on select element
+     * @param {string} field - name of location field to change - `country` or `state`
+     * @param {object} event - JS onchange event
+     */
+    handleChange(field, event) {
+        let { location } = this.state;
+        location[field] = event.target.value;
+        if (field == "country") location.state = "";
+        this.setState({ location: location });
+    }
 
+    /**
+     * Handle click on Approve or Disapprove button
+     * @param {boolean} isApproved - approve if this is true else disapprove
+     */
+    showPollKeywordModal(isApproved) {
+        //	track event
+        ReactGA.event({
+            category: "User",
+            action: "Modal_Approve_or_Disapprove",
+            label: isApproved ? "approve" : "disapprove"
+        });
+        //  Go to next modal
+        this.setState({
+            showSelf: false,
+            showKeywordModel: true,
+            approved: isApproved
+        });
+    }
+
+    /**
+     * Component layout
+     * @returns JSX
+     */
     render() {
         const {
             approvalCount,
@@ -93,75 +78,48 @@ class PollQuestion extends Component {
             ...restProps
         } = this.props;
 
-        const onChangePlaceAutoComplete = location => {
-            this.setState({
-                location: location,
-                showAlert: false
-            });
-        };
+        const { location, locationOptions, approved } = this.state;
 
-        const onSelectPlaceAutoComplete = location => {
-            this.setState({
-                location: location,
-                showAlert: false
-            });
-        };
+        /**
+         * Country & state select elements
+         */
+        const countrySelector = (
+            <select
+                className="form-control location-selector"
+                value={location.country}
+                onChange={e => this.handleChange("country", e)}
+            >
+                {locationOptions.countries.map((country, i) => (
+                    <option key={i} value={country.short}>
+                        {country.long}
+                    </option>
+                ))}
+            </select>
+        );
+
+        let stateSelector;
+        if (location.country === "US") {
+            stateSelector = (
+                <select
+                    className="form-control location-selector"
+                    value={location.state}
+                    onChange={e => this.handleChange("state", e)}
+                >
+                    <option value="">Select your state (optional)</option>
+                    {locationOptions.states.map((state, i) => (
+                        <option key={i} value={state.short}>
+                            {state.long}
+                        </option>
+                    ))}
+                </select>
+            );
+        }
 
         const pollKeywordModalClose = closeParent => {
             this.setState({ showKeywordModel: false, showSelf: !closeParent });
             if (closeParent === true) {
                 onHide();
             }
-        };
-
-        const locationInputStyles = {
-            root: {
-                position: "relative",
-                paddingBottom: "0px"
-            },
-            input: {
-                display: "inline-block",
-                width: "100%",
-                padding: "10px",
-                color: "#464646"
-            },
-            autocompleteContainer: {
-                position: "absolute",
-                top: "100%",
-                backgroundColor: "white",
-                border: "1px solid #555555",
-                width: "100%",
-                zIndex: "100"
-            },
-            autocompleteItem: {
-                backgroundColor: "#ffffff",
-                padding: "10px",
-                color: "#555555",
-                cursor: "pointer",
-                fontSize: "12px",
-                textAlign: "left"
-            },
-            autocompleteItemActive: {
-                backgroundColor: "#fafafa"
-            },
-            googleLogoContainer: {
-                textAlign: "right",
-                padding: "1px",
-                backgroundColor: "#fafafa"
-            },
-            googleLogoImage: {
-                width: 50
-            }
-        };
-
-        const inputProps = {
-            value: this.state.location,
-            onChange: onChangePlaceAutoComplete,
-            placeholder: "Enter your location..."
-        };
-
-        const placeOptions = {
-            types: ["(regions)"]
         };
 
         return (
@@ -190,12 +148,8 @@ class PollQuestion extends Component {
                                 )}
 
                                 <div className="margin_abajo_big">
-                                    <PlacesAutocomplete
-                                        inputProps={inputProps}
-                                        onSelect={onSelectPlaceAutoComplete}
-                                        styles={locationInputStyles}
-                                        options={placeOptions}
-                                    />
+                                    {countrySelector}
+                                    {stateSelector}
                                 </div>
 
                                 <Row className="justify-content-center margin_abajo_big">
@@ -249,12 +203,12 @@ class PollQuestion extends Component {
                 <PollKeywords
                     show={this.state.showKeywordModel}
                     onHide={pollKeywordModalClose}
-                    approved={this.state.approved}
-                    location={this._locationObject}
+                    approved={approved}
+                    location={location}
                     politicianId={politicianId}
                     politicianName={politicianName}
                     politicianTitle={politicianTitle}
-                    suggestedTags={this.state.approved ? positiveTags : negativeTags}
+                    suggestedTags={approved ? positiveTags : negativeTags}
                 />
             </div>
         );

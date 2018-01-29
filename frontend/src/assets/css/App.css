@@ -1099,6 +1099,13 @@ footer .list-inline-item a:hover {text-decoration: none}
   box-shadow: none !important;
 }
 
+/*  */
+select.location-selector {
+  margin-bottom: 10px;
+  color: #777;
+  height: 40px;
+}
+
 .btn-default, .btn-primary {
   font-weight: 700;
 }
