@@ -97,7 +97,7 @@ class Poll extends Component {
                             href="javascript:void(0)"
                             onClick={() => (!rated ? showPollModel(false) : "")}
                         >
-                            {rated ? "You Already Rated!" : "Rate Your Politician"}
+                            {rated ? "You Already Rated!" : "Submit Review"}
                         </a>
                         <div className="share-your-opinion-b">Safe. Secure. Anonymous.</div>
                     </div>
