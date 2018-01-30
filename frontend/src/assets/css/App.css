@@ -588,6 +588,7 @@ a.link_second_menu.active, a.link_second_menu:hover a.link_second_menu:focus {
   font-size: 14px;
   font-weight: bold;
   line-height: 16px;
+  text-transform: uppercase;
 }
 .content_title_2_sub {
   color: #666666;
@@ -629,7 +630,7 @@ a.link_second_menu.active, a.link_second_menu:hover a.link_second_menu:focus {
   color: #FFFFFF;
   font-family: 'Roboto';
   font-size: 12px;
-  margin: 8px 3px;
+  margin: 8px 6px 8px 0;
 }
 .btn-tags:active, .btn-tags:focus, .btn-tags:hover {
   color: #ffffff;
