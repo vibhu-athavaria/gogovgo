@@ -285,6 +285,8 @@ a.poll_btn_circle {
   font-size: 18px;
   padding: 15px;
   text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  box-shadow: 0 0 0 transparent inset;
+  transition: box-shadow .5s;
 }
 
 a.poll_btn_circle:hover{
@@ -357,6 +359,13 @@ a.btn_circle span.votes {
   font-weight: 700;
   line-height: 21px;
   text-align: left;
+}
+
+a.btn_circle.approve, a.btn_circle.disapprove {
+  -webkit-box-shadow: 0 0 0 0 transparent;
+  -moz-box-shadow: 0 0 0 0 transparent;
+  box-shadow: 0 0 0 0 transparent;
+  transition: box-shadow .5s;
 }
 
 a.btn_circle.approve:hover{
