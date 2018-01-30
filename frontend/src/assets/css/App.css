@@ -47,9 +47,10 @@ hr{margin-top: 0}
   color: #4D4D4D;
   font-family: 'Roboto';
   font-weight: 900;
-  font-size: 24px;
+  font-size: 20px;
   letter-spacing: 1px;
-  line-height: 35px;
+  line-height: 24px;
+  margin-top: 6px;
 }
 .logo .slogan{
   display: block;
@@ -125,6 +126,10 @@ hr{margin-top: 0}
 .margin_abajo_big{ margin-bottom: 30px;  }
 .margin_abajo_tobig{ margin-bottom: 50px;  }
 .margin_abajo_toobig{ margin-bottom: 70px;  }
+
+.marg_top_small {margin-top: 10px;}
+.marg_top_medium {margin-top: 16px;}
+.marg_top_large {margin-top: 25px;}
 
 .container_text_banner{
   padding: 20px 0;
@@ -278,7 +283,7 @@ a.poll_btn_circle {
   margin-right: 0.8rem;
   text-align: center;
   font-size: 18px;
-  padding: 12px;
+  padding: 15px;
   text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
@@ -480,7 +485,6 @@ a.modal_btn span {
   border-radius: 6px;
   background-color: #FFFFFF;
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  margin-top:  -84px;
   padding-top: 1rem;
   margin-bottom: 100px;
 }
@@ -556,6 +560,11 @@ a.link_second_menu.active, a.link_second_menu:hover a.link_second_menu:focus {
   margin: 0 auto;
   margin-bottom: 40px;
 }
+
+.title-approve-disapprove .col-sm-6 > * {
+  padding: 0 50px;
+}
+
 .color_approve{color: #2FA543}
 .color_disapprove{color: #D92D24}
 .content_title{
