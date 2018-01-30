@@ -923,6 +923,21 @@ footer .list-inline-item a:hover {text-decoration: none}
   color: #333333;
 }
 
+/* How it works modal */
+#hiw-modal .modal-content {
+  padding: 10px 0 0;
+}
+
+#hiw-modal .modal-header {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+#hiw-modal .margin_abajo_medium {
+  padding: 0 20px;
+}
+
 /* Modal 4 */
 .published {padding: 100px 0 130px}
 .circle {
