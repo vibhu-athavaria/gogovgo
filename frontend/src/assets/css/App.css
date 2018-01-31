@@ -115,7 +115,8 @@ hr{margin-top: 0}
 #head_politician{
   background-position: 60% center;
   background-size:cover;
-  height: 650px;
+  height: auto;
+  min-height: 512px;
   width: 100%;
 }
 
@@ -1237,7 +1238,6 @@ select.location-selector {
   }
   #head_politician{
     background-position: 62% center;
-    min-height: 740px;
   }
   .container .nav .nav-item {margin: 0 }
   .container .nav .nav-item a {
@@ -1248,6 +1248,14 @@ select.location-selector {
     padding: 0 25px;
   }
   .modal-content form {padding: 0}
+}
+
+.navbar {
+  height: 80px;
+}
+
+.navbar .navbar-toggle {
+  margin-top: 20px;
 }
 
 @media only screen and (max-width: 480px) {
