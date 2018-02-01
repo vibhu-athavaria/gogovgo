@@ -1282,10 +1282,6 @@ select.location-selector {
     border-radius: 0;
   }
 
-  .navbar-header {
-    padding-bottom: 20px;
-  }
-
   .navbar-collapse.collapse.in {
     padding-bottom: 0;
   }
@@ -1326,6 +1322,15 @@ select.location-selector {
     width: 200px;
   }
 
+}
+
+@media only screen and (max-width: 320px) {
+  .main-menu .navbar-brand .main {
+    font-size: 12px;
+  }
+  .main-menu .navbar-brand .logo {
+    width: auto;
+  }
 }
 
 @media only screen and (max-width: 420px) {
@@ -1411,6 +1416,24 @@ select.location-selector {
 }
 
 @media screen and (max-width: 768px) {
+
+  .main-menu.navbar {
+    height: auto;
+  }
+
+  .main-menu .slogan {
+    display: none;
+  }
+
+  .navbar-default .navbar-toggle {
+    border: none;
+    margin-top: 7px;
+  }
+
+  .navbar-default .navbar-brand {
+    padding-top: 7px;
+  }
+
   #head_politician {
     background-color: #f9f9f9;
   }
