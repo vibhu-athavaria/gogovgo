@@ -84,14 +84,17 @@ class Reviews extends Component {
                         <div className="titulo_content text-center marg_top_large">Reviews</div>
                     </Col>
                 </Row>
-                <Row className="margin_abajo_medium title-approve-disapprove">
+                <Row className="margin_abajo_medium text-center title-approve-disapprove">
                     <Col sm={6}>
-                        <div className="content_title color_approve margin_abajo_small">
-                            Approve{" "}
+                        <div className="content_title  color_approve margin_abajo_small">
+                            Approve
+                        </div>
+                        <div className="content_title color_disapprove margin_abajo_small">
+                            Disapprove
                         </div>
                         <div className="content_text margin_abajo_small">
                             Top reasons why people <span className="color_approve">approve </span>
-                            of the way {this.props.politicianName} is handling his job as{" "}
+                            of the way {this.props.politicianName} is handling his job as
                             {this.props.politicianTitle}:
                         </div>
                         <div className="content_tag">
@@ -102,10 +105,7 @@ class Reviews extends Component {
                     </Col>
 
                     <Col sm={6}>
-                        <div className="content_title color_disapprove margin_abajo_small">
-                            Disapprove{" "}
-                        </div>
-                        <div className="content_text margin_abajo_small">
+                        <div className="content_text margin_abajo_small hidden ">
                             Top reasons why people{" "}
                             <span className="color_disapprove">disapprove </span> of the way{" "}
                             {this.props.politicianName} is handling his job as{" "}

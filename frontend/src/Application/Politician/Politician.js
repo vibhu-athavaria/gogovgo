@@ -42,9 +42,12 @@ class Politician extends Component {
                 }
             });
 
-            const headPoliticianStyle = {
-                backgroundImage: `url(${politician.heroUrl})`
-            };
+            const headPoliticianStyle =
+                window.innerWidth > 768
+                    ? {
+                          backgroundImage: `url(${politician.heroUrl})`
+                      }
+                    : {};
 
             const reviewModalClose = () => {
                 this.setState({ showReviewModal: false });
@@ -58,6 +61,7 @@ class Politician extends Component {
                                 <PoliticianBio
                                     title={politician.publicOfficeTitle.displayName}
                                     bio={politician.bio}
+                                    avatarUrl={politician.avatarUrl}
                                     jobDescription={politician.jobDescription}
                                     name={politician.firstName + " " + politician.lastName}
                                     politicalParty={politician.politicalParty}
