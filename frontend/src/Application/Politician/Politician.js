@@ -15,14 +15,40 @@ class Politician extends Component {
         super(props, context);
         this.state = {
             open: false,
-            showReviewModal: false
+            showReviewModal: false,
+            bgStyle: null
         };
+        this.updateStyle(null, props);
     }
 
     componentDidMount() {
+        this.updateStyle(null);
+        window.addEventListener("resize", this.updateStyle.bind(this));
         this.setState({
             showReviewModal: !!this.props.reviewId
         });
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.updateStyle(null, nextProps);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.updateStyle.bind(this));
+    }
+
+    /**
+     * Logic to show and hide politicians hero banner
+     * based on current screen resolution
+     */
+    updateStyle(event, props) {
+        if (!props) props = this.props;
+        if (!props.data || !props.data.politician) return;
+        const { politician } = props.data;
+        if (!politician) return;
+        const style =
+            window.innerWidth > 768 ? { backgroundImage: `url(${politician.heroUrl})` } : null;
+        if (style !== this.state.bgStyle) this.setState({ bgStyle: style });
     }
 
     render() {
@@ -42,20 +68,13 @@ class Politician extends Component {
                 }
             });
 
-            const headPoliticianStyle =
-                window.innerWidth > 768
-                    ? {
-                          backgroundImage: `url(${politician.heroUrl})`
-                      }
-                    : {};
-
             const reviewModalClose = () => {
                 this.setState({ showReviewModal: false });
             };
 
             return (
                 <div>
-                    <div id="head_politician" style={headPoliticianStyle}>
+                    <div id="head_politician" style={this.state.bgStyle}>
                         <Grid>
                             <Col lg={5} md={7}>
                                 <PoliticianBio
