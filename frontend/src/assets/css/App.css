@@ -1376,6 +1376,40 @@ select.location-selector {
 /**
  * Mobile responsive design for jumbotron
  */
+
+.r-tabs {
+  margin: 0 20px 28px;
+  border-bottom: 1px solid #ddd;
+}
+
+.r-item {
+  display: inline-block;
+  position: relative;
+  top: 1px;
+  color: #999;
+  font-weight: 500;
+  margin: 0 5px;
+  padding: 8px;
+}
+
+.r-item:hover {
+  color: #000;
+}
+
+.r-item:hover, .r-item:focus {
+  text-decoration: none;
+}
+
+.r-item.approve.active {
+  color: #2FA543;
+  border-bottom: 2px solid #2FA543;
+}
+
+.r-item.disapprove.active {
+  color: #D92D24;
+  border-bottom: 2px solid #D92D24;
+}
+
 @media screen and (max-width: 768px) {
   #head_politician {
     background-color: #f9f9f9;
@@ -1449,10 +1483,39 @@ select.location-selector {
     text-align: center;
   }
 
+  .title-approve-disapprove.tab-approve .heading-disapprove,
+  .title-approve-disapprove.tab-disapprove .heading-approve {
+    display: none;
+  }
+
+  .contenedor_articulos.tab-approve .review-disapprove,
+  .contenedor_articulos.tab-disapprove .review-approve {
+    display: none;
+  }
+
+  .contenedor_articulos {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .title-approve-disapprove .content_title {
+    display: none;
+  }
+
+  .btn-see-more,
+  .btn-see-more-primary {
+    width: 90%;
+    margin: 20px auto;
+    float: none !important;
+  }
+
+
 }
 
 @media screen and (min-width: 768px) {
+  .r-tabs,
   .container_text_banner .avatar-image {
     display: none;
   }
+
 }
