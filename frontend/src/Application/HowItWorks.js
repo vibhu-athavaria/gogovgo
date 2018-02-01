@@ -22,12 +22,12 @@ class HowItWorks extends Component {
         };
 
         return (
-            <Modal {...this.props} aria-labelledby="contained-modal-title-lg">
+            <Modal id="hiw-modal" {...this.props} aria-labelledby="contained-modal-title-lg">
                 <Modal.Header closeButton />
                 <Modal.Body>
                     <div className="texto_modales margin_abajo_big">How it Works</div>
 
-                    <Row className="margin_abajo_toobig">
+                    <Row className="margin_abajo_medium">
                         <Col xs={4} className="text-center ">
                             <div className="content_circle_blue">
                                 <a>

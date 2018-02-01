@@ -47,9 +47,10 @@ hr{margin-top: 0}
   color: #4D4D4D;
   font-family: 'Roboto';
   font-weight: 900;
-  font-size: 24px;
+  font-size: 20px;
   letter-spacing: 1px;
-  line-height: 35px;
+  line-height: 24px;
+  margin-top: 6px;
 }
 .logo .slogan{
   display: block;
@@ -114,7 +115,8 @@ hr{margin-top: 0}
 #head_politician{
   background-position: 60% center;
   background-size:cover;
-  height: 650px;
+  height: auto;
+  min-height: 512px;
   width: 100%;
 }
 
@@ -125,6 +127,10 @@ hr{margin-top: 0}
 .margin_abajo_big{ margin-bottom: 30px;  }
 .margin_abajo_tobig{ margin-bottom: 50px;  }
 .margin_abajo_toobig{ margin-bottom: 70px;  }
+
+.marg_top_small {margin-top: 10px;}
+.marg_top_medium {margin-top: 16px;}
+.marg_top_large {margin-top: 25px;}
 
 .container_text_banner{
   padding: 20px 0;
@@ -278,8 +284,10 @@ a.poll_btn_circle {
   margin-right: 0.8rem;
   text-align: center;
   font-size: 18px;
-  padding: 12px;
+  padding: 15px;
   text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  box-shadow: 0 0 0 transparent inset;
+  transition: box-shadow .5s;
 }
 
 a.poll_btn_circle:hover{
@@ -352,6 +360,13 @@ a.btn_circle span.votes {
   font-weight: 700;
   line-height: 21px;
   text-align: left;
+}
+
+a.btn_circle.approve, a.btn_circle.disapprove {
+  -webkit-box-shadow: 0 0 0 0 transparent;
+  -moz-box-shadow: 0 0 0 0 transparent;
+  box-shadow: 0 0 0 0 transparent;
+  transition: box-shadow .5s;
 }
 
 a.btn_circle.approve:hover{
@@ -480,7 +495,6 @@ a.modal_btn span {
   border-radius: 6px;
   background-color: #FFFFFF;
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  margin-top:  -84px;
   padding-top: 1rem;
   margin-bottom: 100px;
 }
@@ -556,6 +570,11 @@ a.link_second_menu.active, a.link_second_menu:hover a.link_second_menu:focus {
   margin: 0 auto;
   margin-bottom: 40px;
 }
+
+.title-approve-disapprove .col-sm-6 > * {
+  padding: 0 50px;
+}
+
 .color_approve{color: #2FA543}
 .color_disapprove{color: #D92D24}
 .content_title{
@@ -579,6 +598,7 @@ a.link_second_menu.active, a.link_second_menu:hover a.link_second_menu:focus {
   font-size: 14px;
   font-weight: bold;
   line-height: 16px;
+  text-transform: uppercase;
 }
 .content_title_2_sub {
   color: #666666;
@@ -620,7 +640,7 @@ a.link_second_menu.active, a.link_second_menu:hover a.link_second_menu:focus {
   color: #FFFFFF;
   font-family: 'Roboto';
   font-size: 12px;
-  margin: 8px 3px;
+  margin: 8px 6px 8px 0;
 }
 .btn-tags:active, .btn-tags:focus, .btn-tags:hover {
   color: #ffffff;
@@ -913,6 +933,21 @@ footer .list-inline-item a:hover {text-decoration: none}
   color: #333333;
 }
 
+/* How it works modal */
+#hiw-modal .modal-content {
+  padding: 10px 0 0;
+}
+
+#hiw-modal .modal-header {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+#hiw-modal .margin_abajo_medium {
+  padding: 0 20px;
+}
+
 /* Modal 4 */
 .published {padding: 100px 0 130px}
 .circle {
@@ -1203,7 +1238,6 @@ select.location-selector {
   }
   #head_politician{
     background-position: 62% center;
-    min-height: 740px;
   }
   .container .nav .nav-item {margin: 0 }
   .container .nav .nav-item a {
@@ -1214,6 +1248,14 @@ select.location-selector {
     padding: 0 25px;
   }
   .modal-content form {padding: 0}
+}
+
+.navbar {
+  height: 80px;
+}
+
+.navbar .navbar-toggle {
+  margin-top: 20px;
 }
 
 @media only screen and (max-width: 480px) {

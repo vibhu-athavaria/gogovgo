@@ -15,7 +15,6 @@ class PollQuestion extends Component {
             showSelf: true,
             showKeywordModel: false,
             approved: false,
-            showAlert: false,
             location: { state: "", country: "US" },
             locationOptions: { countries: [], states: [] }
         };
@@ -140,12 +139,6 @@ class PollQuestion extends Component {
                                         directly to politicians.
                                     </span>
                                 </div>
-
-                                {this.state.showAlert && (
-                                    <Alert bsStyle="danger">
-                                        <h4>Please enter a valid location!</h4>
-                                    </Alert>
-                                )}
 
                                 <div className="margin_abajo_big">
                                     {countrySelector}
