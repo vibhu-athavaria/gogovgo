@@ -108,7 +108,7 @@ class Review extends Component {
                 return <div className="content_title_2_text">{str}</div>;
             }
         };
-        console.log("review is\n", review);
+
         const created_moment = moment(review.created);
         let location = review.state;
         if (review.city) location = review.city + ", " + location;
