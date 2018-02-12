@@ -136,6 +136,20 @@ hr{margin-top: 0}
   padding: 20px 0;
   width: 100%;
 }
+
+.container_text_banner .avatar-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 100px;
+  margin-right: 18px;
+  overflow: hidden;
+}
+
+.container_text_banner .avatar-image img {
+  width: 100%;
+  height: 100%;
+}
+
 .cabecera_1_banner{
   color: #FAFAFA;
   font: 500 0.9em/30px 'Roboto';
@@ -1268,10 +1282,6 @@ select.location-selector {
     border-radius: 0;
   }
 
-  .navbar-header {
-    padding-bottom: 20px;
-  }
-
   .navbar-collapse.collapse.in {
     padding-bottom: 0;
   }
@@ -1314,6 +1324,15 @@ select.location-selector {
 
 }
 
+@media only screen and (max-width: 320px) {
+  .main-menu .navbar-brand .main {
+    font-size: 12px;
+  }
+  .main-menu .navbar-brand .logo {
+    width: auto;
+  }
+}
+
 @media only screen and (max-width: 420px) {
 
   .info .nav {
@@ -1354,6 +1373,172 @@ select.location-selector {
 
   #politician-detail img {
     width: 150px;
+  }
+
+}
+
+
+/**
+ * Mobile responsive design for jumbotron
+ */
+
+.r-tabs {
+  margin: 0 20px 28px;
+  border-bottom: 1px solid #ddd;
+}
+
+.r-item {
+  display: inline-block;
+  position: relative;
+  top: 1px;
+  color: #999;
+  font-weight: 500;
+  margin: 0 5px;
+  padding: 8px;
+}
+
+.r-item:hover {
+  color: #000;
+}
+
+.r-item:hover, .r-item:focus {
+  text-decoration: none;
+}
+
+.r-item.approve.active {
+  color: #2FA543;
+  border-bottom: 2px solid #2FA543;
+}
+
+.r-item.disapprove.active {
+  color: #D92D24;
+  border-bottom: 2px solid #D92D24;
+}
+
+@media screen and (max-width: 768px) {
+
+  .main-menu.navbar {
+    height: auto;
+  }
+
+  .main-menu .slogan {
+    display: none;
+  }
+
+  .navbar-default .navbar-toggle {
+    border: none;
+    margin-top: 7px;
+  }
+
+  .navbar-default .navbar-brand {
+    padding-top: 7px;
+  }
+
+  #head_politician {
+    background-color: #f9f9f9;
+  }
+
+  #head_politician * {
+    text-shadow: none !important;
+    color: #999;
+  }
+
+  #head_politician > .container {
+    padding: 0;
+  }
+
+  #head_politician .container_text_banner {
+    padding: 20px;
+  }
+
+  .cabecera_1_banner {
+    margin-top: 5px;
+  }
+
+  .cabecera_1_banner, .cabecera_3_banner {
+    font-weight: 500;
+    line-height: 13px;
+    font-size: 12px;
+  }
+  #head_politician .cabecera_2_banner {
+    color: #222;
+    font-size: 20px;;
+    line-height: 1.6;
+  }
+
+  #head_politician .politician-bio-and-job .nav.nav-tabs li.active {
+    border-bottom: 2px solid #000;
+  }
+  #head_politician .politician-bio-and-job .nav.nav-tabs li.active a {
+    color: #000;
+  }
+  #head_politician .politician-bio-and-job .nav.nav-tabs li a {
+    color: #999;
+  }
+
+  .approval-wrapper {
+    margin-left: -15px;
+    margin-right: -15px;
+    background-color: #fff;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 4em;
+    text-align: center;
+  }
+
+  .emotion-icons {
+    margin: 20px auto;
+  }
+
+  a.poll_btn_circle {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    background-color: #09499D;
+  }
+
+  a.poll_btn_circle:hover {
+    background-color: #09499D;
+  }
+
+  .share-your-opinion-b {
+    width: auto;
+    text-align: center;
+  }
+
+  .title-approve-disapprove.tab-approve .heading-disapprove,
+  .title-approve-disapprove.tab-disapprove .heading-approve {
+    display: none;
+  }
+
+  .contenedor_articulos.tab-approve .review-disapprove,
+  .contenedor_articulos.tab-disapprove .review-approve {
+    display: none;
+  }
+
+  .contenedor_articulos {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .title-approve-disapprove .content_title {
+    display: none;
+  }
+
+  .btn-see-more,
+  .btn-see-more-primary {
+    width: 90%;
+    margin: 20px auto;
+    float: none !important;
+  }
+
+
+}
+
+@media screen and (min-width: 768px) {
+  .r-tabs,
+  .container_text_banner .avatar-image {
+    display: none;
   }
 
 }

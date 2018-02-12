@@ -53,9 +53,12 @@ class Poll extends Component {
         };
 
         return (
-            <div>
+            <div className="approval-wrapper">
                 <div className="emotion-icons">
                     <Row>
+                        <div className="titulo_content text-center marg_top_large visible-xs">
+                            Approval Rating
+                        </div>
                         <Col xs={6} sm={3} md={4} lg={5}>
                             <Row>
                                 <Col xs={4} sm={4} md={3} lg={3}>

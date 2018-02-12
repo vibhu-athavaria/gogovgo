@@ -15,7 +15,8 @@ class Reviews extends Component {
         super(props, context);
         this.state = {
             showPoll: false,
-            rated: false
+            rated: false,
+            reviewTab: "Approve"
         };
     }
 
@@ -26,6 +27,13 @@ class Reviews extends Component {
             this.setState({ rated: true });
         }
     }
+
+
+    reviewTabChange(event, item) {
+        event.preventDefault();
+        this.setState({ reviewTab: item });
+    }
+
 
     render() {
         // Event handlers
@@ -77,6 +85,29 @@ class Reviews extends Component {
             }
         };
 
+        const getItemClass = item => {
+            let className = "r-item " + item.toLowerCase();
+            if (item === this.state.reviewTab) className += " active";
+            return className;
+        };
+
+        const mobileReviewTabs = ["Approve", "Disapprove"].map((item, i) => (
+            <a
+                key={i}
+                href="#"
+                onClick={e => this.reviewTabChange(e, item)}
+                className={getItemClass(item)}
+            >
+                {item}
+            </a>
+        ));
+
+        const reviewNav = <div className="r-tabs">{mobileReviewTabs}</div>;
+
+        const getMobileClass = classNames => {
+            return classNames + " tab-" + this.state.reviewTab.toLowerCase();
+        };
+
         return (
             <Col>
                 <Row>
@@ -84,14 +115,23 @@ class Reviews extends Component {
                         <div className="titulo_content text-center marg_top_large">Reviews</div>
                     </Col>
                 </Row>
-                <Row className="margin_abajo_medium title-approve-disapprove">
-                    <Col sm={6}>
+
+                {/* selector for approved or disapproved reviews on mobile devices */}
+                {reviewNav}
+
+                <Row
+                    className={getMobileClass(
+                        "margin_abajo_medium text-center title-approve-disapprove"
+                    )}
+                >
+                    <Col sm={6} className="heading heading-approve">
                         <div className="content_title color_approve margin_abajo_small">
-                            Approve{" "}
+                            Approve
                         </div>
+
                         <div className="content_text margin_abajo_small">
                             Top reasons why people <span className="color_approve">approve </span>
-                            of the way {this.props.politicianName} is handling his job as{" "}
+                            of the way {this.props.politicianName} is handling his job as
                             {this.props.politicianTitle}:
                         </div>
                         <div className="content_tag">
@@ -101,11 +141,11 @@ class Reviews extends Component {
                         </div>
                     </Col>
 
-                    <Col sm={6}>
+                    <Col sm={6} className="heading heading-disapprove">
                         <div className="content_title color_disapprove margin_abajo_small">
-                            Disapprove{" "}
+                            Disapprove
                         </div>
-                        <div className="content_text margin_abajo_small">
+                        <div className="content_text margin_abajo_small ">
                             Top reasons why people{" "}
                             <span className="color_disapprove">disapprove </span> of the way{" "}
                             {this.props.politicianName} is handling his job as{" "}
@@ -119,7 +159,7 @@ class Reviews extends Component {
                     </Col>
                 </Row>
 
-                <div className="contenedor_articulos text-left">
+                <div className={getMobileClass("contenedor_articulos text-left")}>
                     <Row>
                         <Col lg={6} sm={6} className="review-approve" style={getStyle()}>
                             {approvedReviews}
@@ -131,12 +171,12 @@ class Reviews extends Component {
                 </div>
 
                 <Row>
-                    <Col lg={6} sm={6}>
+                    <Col sm={6}>
                         <button className="btn btn-default btn-see-more pull-right" type="submit">
                             See more
                         </button>
                     </Col>
-                    <Col lg={6} sm={6}>
+                    <Col sm={6}>
                         <button
                             className="btn btn-primary btn-see-more-primary pull-left"
                             type="submit"

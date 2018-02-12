@@ -66,6 +66,7 @@ class PoliticianType(DjangoObjectType):
     positive_tags = graphene.List(graphene.String)
     negative_tags = graphene.List(graphene.String)
     hero_url = graphene.String()
+    avatar_url = graphene.String()
     thumbnail_tag = graphene.String()
 
     class Meta:
@@ -81,6 +82,13 @@ class PoliticianType(DjangoObjectType):
     def resolve_hero_url(self, *args):
         if self.hero_banner:
             src = CloudinaryImage(str(self.hero_banner)).build_url()
+            return src
+        else:
+            return ""
+
+    def resolve_avatar_url(self, *args):
+        if self.avatar:
+            src = CloudinaryImage(str(self.avatar)).build_url()
             return src
         else:
             return ""
