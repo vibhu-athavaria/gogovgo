@@ -28,10 +28,12 @@ class Reviews extends Component {
         }
     }
 
+
     reviewTabChange(event, item) {
         event.preventDefault();
         this.setState({ reviewTab: item });
     }
+
 
     render() {
         // Event handlers
