@@ -493,6 +493,11 @@ a.modal_btn span {
   color: #606060;
 }
 
+.modal button.close {
+  position: relative;
+  z-index: 2;
+}
+
 .share-your-opinion-b {
   width: 246px;
   text-align: center;
@@ -503,6 +508,7 @@ a.modal_btn span {
   line-height: 21px;
   text-shadow: 0 0 0 black;
   margin-top: 5px;
+  margin-bottom: 10px;
 }
 
 .placeholder {
@@ -1220,6 +1226,7 @@ select.location-selector {
   }
   .modal-content form {padding: 0}
   footer .list-inline-item:not(:last-child) {margin-right: 50px}
+
 }
 
 @media only screen and (max-width: 767px) {
@@ -1230,8 +1237,10 @@ select.location-selector {
     width: 100%;
   }
   footer .list-inline-item:not(:last-child) {margin-right: 50px}
+  footer .col-xs-12 .row {text-align: center !important;}
   .piter_footer,.item_footer {
     float: none; text-align: center; width: 100%; margin: 0;
+    margin-bottom: 8px;
   }
 }
 

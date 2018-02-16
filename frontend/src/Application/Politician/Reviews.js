@@ -28,12 +28,10 @@ class Reviews extends Component {
         }
     }
 
-
     reviewTabChange(event, item) {
         event.preventDefault();
         this.setState({ reviewTab: item });
     }
-
 
     render() {
         // Event handlers
@@ -184,7 +182,7 @@ class Reviews extends Component {
                                 this.setState({ showPoll: !this.state.rated });
                             }}
                         >
-                            {this.state.rated ? "You Already Rated!" : "Rate Your Politician"}
+                            {this.state.rated ? "You Already Rated!" : "Submit Review"}
                         </button>
                     </Col>
                 </Row>

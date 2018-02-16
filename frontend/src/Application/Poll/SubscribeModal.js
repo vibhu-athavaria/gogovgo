@@ -147,7 +147,7 @@ class SubscribeModal extends Component {
             <div>
                 {this.state.showSelf && (
                     <Modal {...rest} dialogClassName="custom-modal">
-                        <Modal.Header />
+                        <Modal.Header closeButton />
                         <Modal.Body>
                             <div className="texto_modales margin_abajo_big">
                                 Get Updates from RateYourPolitician
@@ -175,13 +175,6 @@ class SubscribeModal extends Component {
                         </Modal.Body>
                         <Modal.Footer>
                             <div className="form-group text-center margin_abajo_medium">
-                                <button
-                                    type="button"
-                                    className="btn btn-modal btn-link"
-                                    onClick={onSubmit.bind(this)}
-                                >
-                                    Skip
-                                </button>
                                 <button
                                     type="button"
                                     className="btn btn-modal btn-primary"
