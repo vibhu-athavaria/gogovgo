@@ -45,7 +45,6 @@ class PollKeywords extends Component {
             onHide,
             politicianId,
             politicianName,
-            location,
             suggestedTags,
             ...rest
         } = this.props;
@@ -173,7 +172,6 @@ class PollKeywords extends Component {
                     tags={this.state.tags}
                     approved={approved}
                     politicianId={politicianId}
-                    location={location}
                 />
             </div>
         );

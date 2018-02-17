@@ -5,7 +5,7 @@
 import React from "react";
 import { Component } from "react/lib/ReactBaseClasses";
 import { FormControl, FormGroup, Modal } from "react-bootstrap";
-import SubscribeModalWithMutation from "./SubscribeModal";
+import PollLocation from "./PollLocation";
 import ReCAPTCHA from "react-google-recaptcha";
 import ReactGA from "react-ga";
 
@@ -30,7 +30,7 @@ class PollReview extends Component {
     }
 
     render() {
-        const { approved, onHide, location, tags, ...rest } = this.props;
+        const { approved, onHide, tags, ...rest } = this.props;
 
         let reviewTags = [];
         tags.forEach(function(tag, index) {
@@ -48,7 +48,7 @@ class PollReview extends Component {
             this.setState({ showSubscribeModal: true, showSelf: false });
         };
 
-        const closeSubscribeModal = closeParent => {
+        const closeModal = closeParent => {
             this.setState({ showSubscribeModal: false, showSelf: !closeParent });
             if (closeParent === true) {
                 onHide(closeParent);
@@ -125,14 +125,13 @@ class PollReview extends Component {
                         </Modal.Footer>
                     </Modal>
                 )}
-                <SubscribeModalWithMutation
+                <PollLocation
                     show={this.state.showSubscribeModal}
                     tags={tags}
-                    location={location}
                     politicianId={this.props.politicianId}
                     approved={approved}
                     reviewText={this.state.reviewText}
-                    onHide={() => closeSubscribeModal(true)}
+                    onHide={closeModal}
                 />
             </div>
         );

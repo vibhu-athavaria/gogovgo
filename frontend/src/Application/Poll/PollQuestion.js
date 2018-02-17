@@ -14,33 +14,8 @@ class PollQuestion extends Component {
         this.state = {
             showSelf: true,
             showKeywordModel: false,
-            approved: false,
-            location: { state: "", country: "US" },
-            locationOptions: { countries: [], states: [] }
+            approved: false
         };
-    }
-
-    /**
-     * Load list of available countries and state from API
-     */
-    componentDidMount() {
-        let { origin } = window.location;
-        if (origin.indexOf("localhost") !== -1) origin = "http://localhost:8030";
-        fetch(origin + "/api/countries/")
-            .then(res => res.json())
-            .then(data => this.setState({ locationOptions: data }));
-    }
-
-    /**
-     * Handle update on select element
-     * @param {string} field - name of location field to change - `country` or `state`
-     * @param {object} event - JS onchange event
-     */
-    handleChange(field, event) {
-        let { location } = this.state;
-        location[field] = event.target.value;
-        if (field == "country") location.state = "";
-        this.setState({ location: location });
     }
 
     /**
@@ -79,42 +54,7 @@ class PollQuestion extends Component {
             ...restProps
         } = this.props;
 
-        const { location, locationOptions, approved } = this.state;
-
-        /**
-         * Country & state select elements
-         */
-        const countrySelector = (
-            <select
-                className="form-control location-selector"
-                value={location.country}
-                onChange={e => this.handleChange("country", e)}
-            >
-                {locationOptions.countries.map((country, i) => (
-                    <option key={i} value={country.short}>
-                        {country.long}
-                    </option>
-                ))}
-            </select>
-        );
-
-        let stateSelector;
-        if (location.country === "US") {
-            stateSelector = (
-                <select
-                    className="form-control location-selector"
-                    value={location.state}
-                    onChange={e => this.handleChange("state", e)}
-                >
-                    <option value="">Select your state (optional)</option>
-                    {locationOptions.states.map((state, i) => (
-                        <option key={i} value={state.short}>
-                            {state.long}
-                        </option>
-                    ))}
-                </select>
-            );
-        }
+        const { approved } = this.state;
 
         const pollKeywordModalClose = closeParent => {
             this.setState({ showKeywordModel: false, showSelf: !closeParent });
@@ -140,11 +80,6 @@ class PollQuestion extends Component {
                                         Reviews are published publicly, organized by topic, and sent
                                         directly to politicians.
                                     </span>
-                                </div>
-
-                                <div className="margin_abajo_big">
-                                    {countrySelector}
-                                    {stateSelector}
                                 </div>
 
                                 <Row className="justify-content-center margin_abajo_big">
@@ -199,7 +134,6 @@ class PollQuestion extends Component {
                     show={this.state.showKeywordModel}
                     onHide={pollKeywordModalClose}
                     approved={approved}
-                    location={location}
                     politicianId={politicianId}
                     politicianName={politicianName}
                     politicianTitle={politicianTitle}
