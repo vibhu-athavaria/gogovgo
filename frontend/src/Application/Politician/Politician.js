@@ -61,10 +61,12 @@ class Politician extends Component {
             let approvalCount = 0;
             let disapprovalCount = 0;
             politician.reviews.forEach(function(review, index) {
-                if (review.sentiment === "POSITIVE") {
-                    approvalCount += 1;
-                } else {
-                    disapprovalCount += 1;
+                if (review.status === "APPROVED") {
+                    if (review.sentiment === "POSITIVE") {
+                        approvalCount += 1;
+                    } else {
+                        disapprovalCount += 1;
+                    }
                 }
             });
 
