@@ -24,7 +24,9 @@ class PollQuestion extends Component {
      * Load list of available countries and state from API
      */
     componentDidMount() {
-        fetch("http://localhost:8030/api/countries/")
+        let { origin } = window.location;
+        if (origin.indexOf("localhost") !== -1) origin = "http://localhost:8030";
+        fetch(origin + "/api/countries/")
             .then(res => res.json())
             .then(data => this.setState({ locationOptions: data }));
     }
