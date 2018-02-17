@@ -56,11 +56,13 @@ class PollReview extends Component {
         };
 
         const onSubmit = () => {
-            if (this.state.reviewText === "") {
-                this.setState({ reviewTextValidation: "error" });
-            } else {
-                this.refs.recaptcha.execute();
-            }
+            //  Note: uncomment lines under to enable validation for field
+            // if (this.state.reviewText === "") {
+            //     this.setState({ reviewTextValidation: "error" });
+            // } else {
+            // this.refs.recaptcha.execute();
+            // }
+            this.refs.recaptcha.execute();
         };
 
         const handleReviewTextChange = e => {

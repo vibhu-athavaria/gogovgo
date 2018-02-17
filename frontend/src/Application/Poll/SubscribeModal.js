@@ -146,7 +146,11 @@ class SubscribeModal extends Component {
         return (
             <div>
                 {this.state.showSelf && (
-                    <Modal {...rest} dialogClassName="custom-modal">
+                    <Modal
+                        {...rest}
+                        onHide={this.props.onHide.bind(this)}
+                        dialogClassName="custom-modal"
+                    >
                         <Modal.Header closeButton />
                         <Modal.Body>
                             <div className="texto_modales margin_abajo_big">

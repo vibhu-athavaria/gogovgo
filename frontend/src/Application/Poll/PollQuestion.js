@@ -124,8 +124,8 @@ class PollQuestion extends Component {
         return (
             <div>
                 {this.state.showSelf && (
-                    <Modal {...restProps} dialogClassName="custom-modal">
-                        <Modal.Header closeButton onHide={() => onHide()} />
+                    <Modal {...restProps} onHide={() => onHide()} dialogClassName="custom-modal">
+                        <Modal.Header closeButton />
                         <Modal.Body>
                             <div className="texto_modales_center">
                                 <div className="margin_abajo_big">

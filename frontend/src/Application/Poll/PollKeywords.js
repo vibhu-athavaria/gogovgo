@@ -113,13 +113,8 @@ class PollKeywords extends Component {
         return (
             <div>
                 {this.state.showSelf && (
-                    <Modal {...rest} dialogClassName="custom-modal">
-                        <Modal.Header
-                            closeButton
-                            onHide={() => {
-                                onHide(true);
-                            }}
-                        />
+                    <Modal {...rest} onHide={() => onHide()} dialogClassName="custom-modal">
+                        <Modal.Header closeButton />
                         <Modal.Body>
                             <Grid fluid>
                                 <Row>
