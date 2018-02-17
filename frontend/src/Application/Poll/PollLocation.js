@@ -99,6 +99,11 @@ class PollLocation extends Component {
             );
         }
 
+        const closeModal = () => {
+            this.setState({ showSelf: true, showSubscribeModal: false });
+            onHide(true);
+        };
+
         return (
             <div>
                 {this.state.showSelf && (
@@ -144,7 +149,7 @@ class PollLocation extends Component {
                     politicianId={politicianId}
                     approved={approved}
                     reviewText={reviewText}
-                    onHide={onHide}
+                    onHide={closeModal}
                 />
             </div>
         );

@@ -21,7 +21,7 @@ class PollReview extends Component {
             politicianId: props.politicianId,
             reviewText: "",
             reviewTextValidation: null,
-            showSubscribeModal: false
+            showLocationModal: false
         };
     }
 
@@ -45,11 +45,11 @@ class PollReview extends Component {
                 action: "Modal_ReviewDescription",
                 label: "Submit"
             });
-            this.setState({ showSubscribeModal: true, showSelf: false });
+            this.setState({ showLocationModal: true, showSelf: false });
         };
 
         const closeModal = closeParent => {
-            this.setState({ showSubscribeModal: false, showSelf: !closeParent });
+            this.setState({ showLocationModal: false, showSelf: !closeParent });
             if (closeParent === true) {
                 onHide(closeParent);
             }
@@ -77,9 +77,13 @@ class PollReview extends Component {
         return (
             <div>
                 {this.state.showSelf && (
-                    <Modal {...rest} dialogClassName="custom-modal" keyboard={true}>
-                        <Modal.Header closeButton onHide={() => onHide(true)} />
-
+                    <Modal
+                        {...rest}
+                        onHide={() => onHide(true)}
+                        dialogClassName="custom-modal"
+                        keyboard={true}
+                    >
+                        <Modal.Header closeButton />
                         <Modal.Body>
                             <div className="texto_modales margin_abajo_medium">
                                 Please explain your selection in more detail:
@@ -126,7 +130,7 @@ class PollReview extends Component {
                     </Modal>
                 )}
                 <PollLocation
-                    show={this.state.showSubscribeModal}
+                    show={this.state.showLocationModal}
                     tags={tags}
                     politicianId={this.props.politicianId}
                     approved={approved}

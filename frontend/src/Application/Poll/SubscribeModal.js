@@ -61,9 +61,7 @@ class SubscribeModal extends Component {
 
         const subscribeModalClose = closeParent => {
             this.setState({ showShareReviewModal: false, showSelf: !closeParent });
-            if (closeParent === true) {
-                onHide(true);
-            }
+            if (closeParent) onHide(true);
         };
 
         const onSubmit = () => {
@@ -148,7 +146,7 @@ class SubscribeModal extends Component {
                 {this.state.showSelf && (
                     <Modal
                         {...rest}
-                        onHide={this.props.onHide.bind(this)}
+                        onHide={() => subscribeModalClose(true)}
                         dialogClassName="custom-modal"
                     >
                         <Modal.Header closeButton />
