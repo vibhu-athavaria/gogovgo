@@ -1260,7 +1260,7 @@ select.location-selector {
     width: 100%;
   }
   .btn_circle{
-    padding: 0.5rem 1.5rem;
+    padding: 0.5rem 1.5rem !important;
   }
   #head_politician{
     background-position: 62% center;
@@ -1552,5 +1552,26 @@ select.location-selector {
   .container_text_banner .avatar-image {
     display: none;
   }
+
+}
+
+@media screen and (max-width: 500px) {
+  .custom-modal {
+    width: 92%;
+    margin: 5px auto;
+  }
+
+  .custom-modal .modal-content {
+    padding: 5px;
+  }
+
+  .custom-modal .modal-body {
+    padding: 8px;
+  }
+
+  .custom-modal .texto_modales_center {
+    padding: 0;
+  }
+
 
 }
