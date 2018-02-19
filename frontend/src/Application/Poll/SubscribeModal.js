@@ -7,7 +7,6 @@ import { Component } from "react/lib/ReactBaseClasses";
 import { withCookies, Cookies } from "react-cookie";
 import { instanceOf } from "prop-types";
 import { ControlLabel, FormControl, FormGroup, Modal } from "react-bootstrap";
-import ShareReviewURLModal from "./ShareReviewURLModal";
 import { graphql, gql } from "react-apollo";
 import PropTypes from "prop-types";
 import ReactGA from "react-ga";
@@ -49,7 +48,7 @@ class SubscribeModal extends Component {
             mutate,
             onHide,
             tags,
-            ...rest
+            next
         } = this.props;
         const { rated } = this.state;
         const sentiment = approved ? "positive" : "negative";
@@ -57,11 +56,6 @@ class SubscribeModal extends Component {
         const validateEmail = email => {
             const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return re.test(email);
-        };
-
-        const subscribeModalClose = closeParent => {
-            this.setState({ showShareReviewModal: false, showSelf: !closeParent });
-            if (closeParent) onHide(true);
         };
 
         const onSubmit = () => {
@@ -82,15 +76,9 @@ class SubscribeModal extends Component {
                 }
             })
                 .then(({ data }) => {
-                    onHide(true);
                     rated[politicianId] = approved ? "approved" : "disapproved";
                     cookies.set("rated", rated, { path: "/" });
-                    this.setState({
-                        rated: rated,
-                        reviewId: data.createReview.review.id,
-                        showShareReviewModal: true,
-                        showSelf: false
-                    });
+                    next({ reviewId: data.createReview.review.id });
                 })
                 .catch(error => {
                     console.log("there was an error sending the query", error);
@@ -142,58 +130,45 @@ class SubscribeModal extends Component {
         };
 
         return (
-            <div>
-                {this.state.showSelf && (
-                    <Modal
-                        {...rest}
-                        onHide={() => subscribeModalClose(true)}
-                        dialogClassName="custom-modal"
-                    >
-                        <Modal.Header closeButton />
-                        <Modal.Body>
-                            <div className="texto_modales margin_abajo_big">
-                                Get Updates from RateYourPolitician
-                            </div>
-                            <form>
-                                <FormGroup validationState={this.state.fullnameValidation}>
-                                    <ControlLabel>Full name</ControlLabel>
-                                    <FormControl
-                                        id="fullnametxt"
-                                        type="text"
-                                        placeholder="Enter your name"
-                                        onChange={fullnameTextChange}
-                                    />
-                                </FormGroup>
-                                <FormGroup validationState={this.state.emailValidation}>
-                                    <ControlLabel>E-mail</ControlLabel>
-                                    <FormControl
-                                        id="emailtxt"
-                                        type="email"
-                                        placeholder="Enter your e-mail"
-                                        onChange={emailAddressTextChange}
-                                    />
-                                </FormGroup>
-                            </form>
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <div className="form-group text-center margin_abajo_medium">
-                                <button
-                                    type="button"
-                                    className="btn btn-modal btn-primary"
-                                    onClick={onSubmitWithUserValidation.bind(this)}
-                                >
-                                    Submit
-                                </button>
-                            </div>
-                        </Modal.Footer>
-                    </Modal>
-                )}
-                <ShareReviewURLModal
-                    reviewId={this.state.reviewId}
-                    show={this.state.showShareReviewModal}
-                    onHide={subscribeModalClose}
-                />
-            </div>
+            <Modal show={true} onHide={() => onHide()} dialogClassName="custom-modal">
+                <Modal.Header closeButton />
+                <Modal.Body>
+                    <div className="texto_modales margin_abajo_big">
+                        Get Updates from RateYourPolitician
+                    </div>
+                    <form>
+                        <FormGroup validationState={this.state.fullnameValidation}>
+                            <ControlLabel>Full name</ControlLabel>
+                            <FormControl
+                                id="fullnametxt"
+                                type="text"
+                                placeholder="Enter your name"
+                                onChange={fullnameTextChange}
+                            />
+                        </FormGroup>
+                        <FormGroup validationState={this.state.emailValidation}>
+                            <ControlLabel>E-mail</ControlLabel>
+                            <FormControl
+                                id="emailtxt"
+                                type="email"
+                                placeholder="Enter your e-mail"
+                                onChange={emailAddressTextChange}
+                            />
+                        </FormGroup>
+                    </form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <div className="form-group text-center margin_abajo_medium">
+                        <button
+                            type="button"
+                            className="btn btn-modal btn-primary"
+                            onClick={onSubmitWithUserValidation.bind(this)}
+                        >
+                            Submit
+                        </button>
+                    </div>
+                </Modal.Footer>
+            </Modal>
         );
     }
 }

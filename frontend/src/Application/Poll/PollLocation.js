@@ -6,14 +6,11 @@ import React from "react";
 import ReactGA from "react-ga";
 import { Component } from "react/lib/ReactBaseClasses";
 import { Modal } from "react-bootstrap";
-import SubscribeModalWithMutation from "./SubscribeModal";
 
 class PollLocation extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            showSelf: true,
-            showSubscribeModal: false,
             location: { state: "", country: "US" },
             locationOptions: { countries: [], states: [] }
         };
@@ -52,7 +49,7 @@ class PollLocation extends Component {
             action: "Modal_Location_Next"
         });
         //  go to next page
-        this.setState({ showSelf: false, showSubscribeModal: true });
+        this.props.next({ location: this.state.location });
     };
 
     /**
@@ -60,8 +57,7 @@ class PollLocation extends Component {
      * @returns JSX
      */
     render() {
-        const { onHide, politicianId, approved, tags, reviewText, ...restProps } = this.props;
-
+        const { onHide, prev } = this.props;
         const { location, locationOptions } = this.state;
 
         /**
@@ -99,59 +95,37 @@ class PollLocation extends Component {
             );
         }
 
-        const closeModal = () => {
-            this.setState({ showSelf: true, showSubscribeModal: false });
-            onHide(true);
-        };
-
         return (
-            <div>
-                {this.state.showSelf && (
-                    <Modal
-                        {...restProps}
-                        onHide={() => onHide(true)}
-                        dialogClassName="custom-modal"
-                    >
-                        <Modal.Header closeButton />
-                        <Modal.Body>
-                            <div className="texto_modales_center">
-                                <div className="margin_abajo_big">Your location</div>
-                                <div className="margin_abajo_big">
-                                    {countrySelector}
-                                    {stateSelector}
-                                </div>
-                            </div>
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <div className="form-group text-center margin_abajo_medium">
-                                <button
-                                    type="button"
-                                    className="btn btn-modal btn-link"
-                                    onClick={() => onHide(false)}
-                                >
-                                    Back
-                                </button>
-                                <button
-                                    type="button"
-                                    className="btn btn-modal btn-primary"
-                                    onClick={this.submit}
-                                >
-                                    Next
-                                </button>
-                            </div>
-                        </Modal.Footer>
-                    </Modal>
-                )}
-                <SubscribeModalWithMutation
-                    show={this.state.showSubscribeModal}
-                    tags={tags}
-                    location={location}
-                    politicianId={politicianId}
-                    approved={approved}
-                    reviewText={reviewText}
-                    onHide={closeModal}
-                />
-            </div>
+            <Modal show={true} onHide={() => onHide(true)} dialogClassName="custom-modal">
+                <Modal.Header closeButton />
+                <Modal.Body>
+                    <div className="texto_modales_center">
+                        <div className="margin_abajo_big">Your location</div>
+                        <div className="margin_abajo_big">
+                            {countrySelector}
+                            {stateSelector}
+                        </div>
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <div className="form-group text-center margin_abajo_medium">
+                        <button
+                            type="button"
+                            className="btn btn-modal btn-link"
+                            onClick={() => prev()}
+                        >
+                            Back
+                        </button>
+                        <button
+                            type="button"
+                            className="btn btn-modal btn-primary"
+                            onClick={this.submit}
+                        >
+                            Next
+                        </button>
+                    </div>
+                </Modal.Footer>
+            </Modal>
         );
     }
 }

@@ -5,32 +5,20 @@
 import React from "react";
 import { Component } from "react/lib/ReactBaseClasses";
 import { FormControl, FormGroup, Modal } from "react-bootstrap";
-import PollLocation from "./PollLocation";
 import ReCAPTCHA from "react-google-recaptcha";
 import ReactGA from "react-ga";
 
 class PollReview extends Component {
     constructor(props, context) {
         super(props, context);
-        this.state = this.initializeState(props);
-    }
-
-    initializeState(props) {
-        return {
-            showSelf: true,
-            politicianId: props.politicianId,
+        this.state = {
             reviewText: "",
-            reviewTextValidation: null,
-            showLocationModal: false
+            reviewTextValidation: null
         };
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState(this.initializeState(nextProps));
-    }
-
     render() {
-        const { approved, onHide, tags, ...rest } = this.props;
+        const { onHide, tags, prev, next } = this.props;
 
         let reviewTags = [];
         tags.forEach(function(tag, index) {
@@ -45,23 +33,10 @@ class PollReview extends Component {
                 action: "Modal_ReviewDescription",
                 label: "Submit"
             });
-            this.setState({ showLocationModal: true, showSelf: false });
-        };
-
-        const closeModal = closeParent => {
-            this.setState({ showLocationModal: false, showSelf: !closeParent });
-            if (closeParent === true) {
-                onHide(closeParent);
-            }
+            next({ reviewText: this.state.reviewText });
         };
 
         const onSubmit = () => {
-            //  Note: uncomment lines under to enable validation for field
-            // if (this.state.reviewText === "") {
-            //     this.setState({ reviewTextValidation: "error" });
-            // } else {
-            // this.refs.recaptcha.execute();
-            // }
             this.refs.recaptcha.execute();
         };
 
@@ -75,69 +50,48 @@ class PollReview extends Component {
         };
 
         return (
-            <div>
-                {this.state.showSelf && (
-                    <Modal
-                        {...rest}
-                        onHide={() => onHide(true)}
-                        dialogClassName="custom-modal"
-                        keyboard={true}
+            <Modal show={true} onHide={onHide} dialogClassName="custom-modal" keyboard={true}>
+                <Modal.Header closeButton />
+                <Modal.Body>
+                    <div className="texto_modales margin_abajo_medium">
+                        Please explain your selection in more detail:
+                    </div>
+                    <div className="margin_abajo_medium text-center">{reviewTags}</div>
+                    <FormGroup
+                        className="margin_abajo_big"
+                        validationState={this.state.reviewTextValidation}
                     >
-                        <Modal.Header closeButton />
-                        <Modal.Body>
-                            <div className="texto_modales margin_abajo_medium">
-                                Please explain your selection in more detail:
-                            </div>
-                            <div className="margin_abajo_medium text-center">{reviewTags}</div>
-                            <FormGroup
-                                className="margin_abajo_big"
-                                validationState={this.state.reviewTextValidation}
-                            >
-                                <FormControl
-                                    componentClass="textarea"
-                                    placeholder="Please explain your answer in more detail..."
-                                    onChange={handleReviewTextChange}
-                                    bsSize="large"
-                                />
-                            </FormGroup>
-                            <div className="margin_abajo_medium text-center recaptcha">
-                                <ReCAPTCHA
-                                    ref="recaptcha"
-                                    sitekey="6Leo7EIUAAAAAHkkXEBgYEfl77K2-iuYGbn9AmAR"
-                                    size="invisible"
-                                    onChange={onChangeCaptcha}
-                                />
-                            </div>
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <div className="form-group text-center margin_abajo_medium">
-                                <button
-                                    type="button"
-                                    className="btn btn-modal btn-link"
-                                    onClick={() => onHide(false)}
-                                >
-                                    Back
-                                </button>
-                                <button
-                                    type="button"
-                                    className="btn btn-modal btn-primary"
-                                    onClick={onSubmit}
-                                >
-                                    Next
-                                </button>
-                            </div>
-                        </Modal.Footer>
-                    </Modal>
-                )}
-                <PollLocation
-                    show={this.state.showLocationModal}
-                    tags={tags}
-                    politicianId={this.props.politicianId}
-                    approved={approved}
-                    reviewText={this.state.reviewText}
-                    onHide={closeModal}
-                />
-            </div>
+                        <FormControl
+                            componentClass="textarea"
+                            placeholder="Please explain your answer in more detail..."
+                            onChange={handleReviewTextChange}
+                            bsSize="large"
+                        />
+                    </FormGroup>
+                    <div className="margin_abajo_medium text-center recaptcha">
+                        <ReCAPTCHA
+                            ref="recaptcha"
+                            sitekey="6Leo7EIUAAAAAHkkXEBgYEfl77K2-iuYGbn9AmAR"
+                            size="invisible"
+                            onChange={onChangeCaptcha}
+                        />
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <div className="form-group text-center margin_abajo_medium">
+                        <button type="button" className="btn btn-modal btn-link" onClick={prev}>
+                            Back
+                        </button>
+                        <button
+                            type="button"
+                            className="btn btn-modal btn-primary"
+                            onClick={onSubmit}
+                        >
+                            Next
+                        </button>
+                    </div>
+                </Modal.Footer>
+            </Modal>
         );
     }
 }
