@@ -12,7 +12,7 @@ class PollReview extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            reviewText: "",
+            reviewText: props.reviewText,
             reviewTextValidation: null
         };
     }
@@ -20,10 +20,11 @@ class PollReview extends Component {
     render() {
         const { onHide, tags, prev, next } = this.props;
 
-        let reviewTags = [];
-        tags.forEach(function(tag, index) {
-            reviewTags.push(<button className="reason-tags">{tag.name}</button>);
-        });
+        const reviewTags = tags.map(tag => (
+            <button className="reason-tags" key={tag.id}>
+                {tag.name}
+            </button>
+        ));
 
         // specifying verify callback function for recatcha
         const onChangeCaptcha = value => {
@@ -66,6 +67,7 @@ class PollReview extends Component {
                             placeholder="Please explain your answer in more detail..."
                             onChange={handleReviewTextChange}
                             bsSize="large"
+                            value={this.state.reviewText}
                         />
                     </FormGroup>
                     <div className="margin_abajo_medium text-center recaptcha">

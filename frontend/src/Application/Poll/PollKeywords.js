@@ -15,19 +15,20 @@ class PollKeywords extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            reasonTags: [],
-            showReviewModel: false,
             reasonInputValue: "",
-            tags: [],
+            tags: props.tags,
             suggestions: []
         };
     }
 
     componentWillMount() {
-        const _sg = this.props.approved ? this.props.positiveTags : this.props.negativeTags;
-        const suggestions = _sg.map((tag, index) => {
-            return { id: index + 1, name: tag };
-        });
+        const sg = this.props.approved ? this.props.positiveTags : this.props.negativeTags;
+        const selectedTags = this.props.tags.map(tag => tag.name);
+        let suggestions = [];
+        for (let i = 0; i < sg.length; i++) {
+            console.log(sg[i], i);
+            if (selectedTags.indexOf(sg[i]) === -1) suggestions.push({ id: i + 1, name: sg[i] });
+        }
         this.setState({ suggestions: suggestions });
     }
 
@@ -43,7 +44,6 @@ class PollKeywords extends Component {
             reasons.push(<Label key={"reason:" + index}>{reason}</Label>);
         });
 
-        console.log("suggestions are\n", this.state.suggestions);
         const reasonInputPlaceholder = this.state.suggestions
             .slice(0, 3)
             .map(tag => {
@@ -62,14 +62,6 @@ class PollKeywords extends Component {
                 performance?
             </div>
         );
-
-        // Event handlers
-        const pollReviewModelClose = closeParent => {
-            this.setState({ showReviewModel: false, showSelf: !closeParent });
-            if (closeParent === true) {
-                onHide(closeParent);
-            }
-        };
 
         const reviewModelShow = () => {
             ReactGA.event({
@@ -148,13 +140,6 @@ class PollKeywords extends Component {
                         </button>
                     </div>
                 </Modal.Footer>
-                {/*  <PollReview
-                    show={this.state.showReviewModel}
-                    onHide={pollReviewModelClose}
-                    tags={this.state.tags}
-                    approved={approved}
-                    politicianId={politicianId}
-                /> */}
             </Modal>
         );
     }
