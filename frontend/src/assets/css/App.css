@@ -1170,6 +1170,22 @@ select.location-selector {
 
 /* tag input css */
 
+#r-tag-outer {
+  position: relative;
+}
+
+#r-tag-outer > button {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  background-color: #0B4092;
+  color: #fff;
+  border: 0;
+  height: 52px;
+  padding: 0 25px;
+  border-radius: 5px;
+}
+
 .react-tags__selected {
   margin: 10px 0 20px;
   text-align: center;

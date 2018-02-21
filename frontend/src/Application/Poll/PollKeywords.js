@@ -17,7 +17,8 @@ class PollKeywords extends Component {
         this.state = {
             reasonInputValue: "",
             tags: props.tags,
-            suggestions: []
+            suggestions: [],
+            showTags: true
         };
     }
 
@@ -26,7 +27,6 @@ class PollKeywords extends Component {
         const selectedTags = this.props.tags.map(tag => tag.name);
         let suggestions = [];
         for (let i = 0; i < sg.length; i++) {
-            console.log(sg[i], i);
             if (selectedTags.indexOf(sg[i]) === -1) suggestions.push({ id: i + 1, name: sg[i] });
         }
         this.setState({ suggestions: suggestions });
@@ -88,6 +88,23 @@ class PollKeywords extends Component {
             this.setState({ tags: tags, suggestions: suggestions });
         };
 
+        /**
+         * Logic to execute when add button is clicked
+         * This is a custom button and has nothing to do directly with react-tags component
+         */
+        const forceAdd = () => {
+            const elm = document.querySelector(".react-tags__search-input input");
+            const tag = elm.value;
+            if (tag.length) {
+                handleAddition({ id: 40, name: tag });
+                // the code under is needed to force rerender of ReactTags component
+                // so that it sets the value of input field to default empty
+                this.setState({ showTags: false }, () => {
+                    this.setState({ showTags: true });
+                });
+            }
+        };
+
         return (
             <Modal show={true} onHide={() => onHide()} dialogClassName="custom-modal">
                 <Modal.Header closeButton />
@@ -102,17 +119,20 @@ class PollKeywords extends Component {
                             <FormGroup className="margin_abajo_big">
                                 <Row>
                                     <Col sm={12} md={12} lg={12}>
-                                        <div className="form-group">
-                                            <ReactTags
-                                                tags={this.state.tags}
-                                                suggestions={this.state.suggestions}
-                                                handleDelete={handleDelete}
-                                                handleAddition={handleAddition}
-                                                autoResize={false}
-                                                placeholder={reasonInputPlaceholder + "..."}
-                                                allowNew={true}
-                                            />
-                                        </div>
+                                        {this.state.showTags && (
+                                            <div className="form-group" id="r-tag-outer">
+                                                <button onClick={forceAdd}>Add</button>
+                                                <ReactTags
+                                                    tags={this.state.tags}
+                                                    suggestions={this.state.suggestions}
+                                                    handleDelete={handleDelete}
+                                                    handleAddition={handleAddition}
+                                                    autoResize={false}
+                                                    placeholder={reasonInputPlaceholder + "..."}
+                                                    allowNew={true}
+                                                />
+                                            </div>
+                                        )}
                                     </Col>
                                 </Row>
                                 <Row>
