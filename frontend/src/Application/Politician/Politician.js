@@ -61,10 +61,12 @@ class Politician extends Component {
             let approvalCount = 0;
             let disapprovalCount = 0;
             politician.reviews.forEach(function(review, index) {
-                if (review.sentiment === "POSITIVE") {
-                    approvalCount += 1;
-                } else {
-                    disapprovalCount += 1;
+                if (review.status === "APPROVED") {
+                    if (review.sentiment === "POSITIVE") {
+                        approvalCount += 1;
+                    } else {
+                        disapprovalCount += 1;
+                    }
                 }
             });
 
@@ -94,36 +96,38 @@ class Politician extends Component {
                             </Col>
                         </Grid>
                     </div>
-                    <PoliticianDetail
-                        reviews={politician.reviews}
-                        website={politician.website}
-                        phoneNumber={politician.phoneNumber}
-                        mailingAddress={politician.mailingAddress}
-                        approvalCount={approvalCount}
-                        disapprovalCount={disapprovalCount}
-                        politicianId={politician.id}
-                        politicianName={politician.firstName + " " + politician.lastName}
-                        politicianTitle={politician.publicOfficeTitle.displayName}
-                        positiveTags={politician.positiveTags}
-                        negativeTags={politician.negativeTags}
-                        staff={politician.staff}
-                        reviewId={this.props.reviewId}
-                    />
-
-                    <Modal
-                        show={this.state.showReviewModal}
-                        dialogClassName="custom-modal"
-                        keyboard={true}
-                    >
-                        <Modal.Header
-                            bsClass="margin_abajo_mini"
-                            closeButton
-                            onHide={() => reviewModalClose()}
+                    <div id="politician-content">
+                        <PoliticianDetail
+                            reviews={politician.reviews}
+                            website={politician.website}
+                            phoneNumber={politician.phoneNumber}
+                            mailingAddress={politician.mailingAddress}
+                            approvalCount={approvalCount}
+                            disapprovalCount={disapprovalCount}
+                            politicianId={politician.id}
+                            politicianName={politician.firstName + " " + politician.lastName}
+                            politicianTitle={politician.publicOfficeTitle.displayName}
+                            positiveTags={politician.positiveTags}
+                            negativeTags={politician.negativeTags}
+                            staff={politician.staff}
+                            reviewId={this.props.reviewId}
                         />
-                        <Modal.Body>
-                            <ReviewModal reviewId={this.props.reviewId} showShareURL={true} />
-                        </Modal.Body>
-                    </Modal>
+
+                        <Modal
+                            show={this.state.showReviewModal}
+                            dialogClassName="custom-modal"
+                            keyboard={true}
+                        >
+                            <Modal.Header
+                                bsClass="margin_abajo_mini"
+                                closeButton
+                                onHide={() => reviewModalClose()}
+                            />
+                            <Modal.Body>
+                                <ReviewModal reviewId={this.props.reviewId} showShareURL={true} />
+                            </Modal.Body>
+                        </Modal>
+                    </div>
                 </div>
             );
         }

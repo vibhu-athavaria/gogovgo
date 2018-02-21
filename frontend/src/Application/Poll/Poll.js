@@ -7,9 +7,11 @@ import { Component } from "react/lib/ReactBaseClasses";
 import { withCookies, Cookies } from "react-cookie";
 import { instanceOf } from "prop-types";
 import { Col, Row } from "react-bootstrap";
-import PollQuestion from "./PollQuestion";
 import PropTypes from "prop-types";
 import ReactGA from "react-ga";
+
+import PollQuestion from "./PollQuestion";
+import BaseModal from "./Modal";
 
 class Poll extends Component {
     constructor(props, context) {
@@ -50,6 +52,17 @@ class Poll extends Component {
                 showPoll: true,
                 approved: isApproved
             });
+        };
+
+        const modalProps = {
+            onHide: pollModelClose,
+            politicianId: this.props.politicianId,
+            politicianName: this.props.politicianName,
+            politicianTitle: this.props.politicianTitle,
+            approvalCount: this.props.approvalCount,
+            disapprovalCount: this.props.disapprovalCount,
+            positiveTags: this.props.positiveTags,
+            negativeTags: this.props.negativeTags
         };
 
         return (
@@ -106,26 +119,7 @@ class Poll extends Component {
                     </div>
                 </Row>
 
-                <PollQuestion
-                    show={this.state.showPoll}
-                    onHide={pollModelClose}
-                    politicianId={this.props.politicianId}
-                    politicianName={this.props.politicianName}
-                    politicianTitle={this.props.politicianTitle}
-                    approvalCount={this.props.approvalCount}
-                    disapprovalCount={this.props.disapprovalCount}
-                    positiveTags={this.props.positiveTags}
-                    negativeTags={this.props.negativeTags}
-                />
-
-                {/*<PollReview*/}
-                {/*show={this.state.showReviewModel}*/}
-                {/*onHide={pollReviewModalClose}*/}
-                {/*approved={this.state.approved}*/}
-                {/*politicianId={this.props.politicianId}*/}
-                {/*politicianTitle={this.props.politicianTitle}*/}
-                {/*politicianName={this.props.politicianName}*/}
-                {/*/>*/}
+                {this.state.showPoll && <BaseModal {...modalProps} />}
             </div>
         );
     }

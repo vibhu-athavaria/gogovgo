@@ -9,6 +9,13 @@ from gogovgo.gogovgo_site import models
 from gogovgo.gogovgo_site.constants import SENTIMENT_NEGATIVE, SENTIMENT_POSITIVE
 
 
+def get_tags(reviews, sentiment):
+    tags = reviews.filter(sentiment=sentiment).prefetch_related('tags')
+    tags = tags.order_by('-tags__weight').values_list('tags__id', 'tags__value')
+    tags = tags.distinct().all()
+    return [str(tag[1]) for tag in tags if tag[1]]
+
+
 @convert_django_field.register(CloudinaryField)
 def my_convert_function(field, registry=None):
     return graphene.String()
@@ -94,16 +101,10 @@ class PoliticianType(DjangoObjectType):
             return ""
 
     def resolve_positive_tags(self, *args):
-        tags = self.reviews.filter(
-            sentiment=SENTIMENT_POSITIVE
-        ).prefetch_related('tags').order_by('-tags__weight').values_list('tags__id', 'tags__value').distinct().all()
-        return [{'id': int(tag[0]), 'name': str(tag[1])} for tag in tags if tag[0]]
+        return get_tags(reviews=self.reviews, sentiment=SENTIMENT_POSITIVE)
 
     def resolve_negative_tags(self, *args):
-        tags = self.reviews.filter(
-            sentiment=SENTIMENT_NEGATIVE
-        ).prefetch_related('tags').order_by('-tags__weight').values_list('tags__id', 'tags__value').distinct().all()
-        return [{'id': int(tag[0]), 'name': str(tag[1])} for tag in tags if tag[0]]
+        return get_tags(reviews=self.reviews, sentiment=SENTIMENT_NEGATIVE)
 
 
 PoliticianType.Connection = connection_for_type(PoliticianType)

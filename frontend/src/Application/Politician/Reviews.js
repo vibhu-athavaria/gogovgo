@@ -28,12 +28,10 @@ class Reviews extends Component {
         }
     }
 
-
     reviewTabChange(event, item) {
         event.preventDefault();
         this.setState({ reviewTab: item });
     }
-
 
     render() {
         // Event handlers
@@ -59,23 +57,17 @@ class Reviews extends Component {
             }
         });
 
-        const topNegativeTags = this.props.negativeTags.slice(0, 5).map(tag => {
-            tag = JSON.parse(tag.replace(/'/g, '"'));
-            return (
-                <button type="button" className="btn btn-tags" key={"tag-id-" + tag.id}>
-                    {tag.name}
-                </button>
-            );
-        });
+        const topNegativeTags = this.props.negativeTags.slice(0, 5).map((tag, index) => (
+            <button type="button" className="btn btn-tags" key={index}>
+                {tag}
+            </button>
+        ));
 
-        const topPostiveTags = this.props.positiveTags.slice(0, 5).map(tag => {
-            tag = JSON.parse(tag.replace(/'/g, '"'));
-            return (
-                <button type="button" className="btn btn-tags" key={"tag-id-" + tag.id}>
-                    {tag.name}
-                </button>
-            );
-        });
+        const topPostiveTags = this.props.positiveTags.slice(0, 5).map((tag, index) => (
+            <button type="button" className="btn btn-tags" key={index}>
+                {tag}
+            </button>
+        ));
 
         const getStyle = () => {
             if (leftReviews >= rightReviews) {
@@ -184,7 +176,7 @@ class Reviews extends Component {
                                 this.setState({ showPoll: !this.state.rated });
                             }}
                         >
-                            {this.state.rated ? "You Already Rated!" : "Rate Your Politician"}
+                            {this.state.rated ? "You Already Rated!" : "Submit Review"}
                         </button>
                     </Col>
                 </Row>

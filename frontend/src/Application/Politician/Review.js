@@ -130,42 +130,17 @@ class Review extends Component {
                     {ellipsify(review.body, 120)}
                 </div>
                 <div className="action-icons">
-                    <Row>
-                        <Col xs={3} sm={3} md={2} lg={2}>
-                            <a
-                                href="javascript:void(0)"
-                                onClick={() => {
-                                    if (!(reactedUp || reactedDown)) {
-                                        actionIconHandler(true);
-                                    }
-                                }}
-                            >
-                                <span
-                                    className={"votes-approve " + (reactedUp ? "reacted-up" : "")}
-                                >
-                                    {upVoteCount}
-                                </span>
-                            </a>
-                        </Col>
-                        <Col xs={4} sm={4} md={3} lg={3}>
-                            <a
-                                href="javascript:void(0)"
-                                onClick={() => {
-                                    if (!(reactedUp || reactedDown)) {
-                                        actionIconHandler(false);
-                                    }
-                                }}
-                            >
-                                <span
-                                    className={
-                                        "votes-disapprove " + (reactedDown ? "reacted-down" : "")
-                                    }
-                                >
-                                    {downVoteCount}
-                                </span>
-                            </a>
-                        </Col>
-                    </Row>
+                    <button
+                        className={"voter " + (reactedUp ? "upvoted" : "")}
+                        onClick={() => {
+                            if (!(reactedUp || reactedDown)) {
+                                actionIconHandler(true);
+                            }
+                        }}
+                    >
+                        <span className="vote-text">{reactedUp ? "Upvoted" : "Upvote"}</span>
+                        <span className="vote-count">{upVoteCount}</span>
+                    </button>
                 </div>
 
                 {this.state.showShareURL && (

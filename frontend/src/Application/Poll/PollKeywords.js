@@ -8,8 +8,6 @@ import { Button, Col, FormGroup, Grid, Label, Modal, Row } from "react-bootstrap
 import ReactTags from "react-tag-autocomplete";
 import ReactGA from "react-ga";
 
-import PollReview from "./PollReview";
-
 // import TagsInput from 'react-tagsinput'
 // import 'react-tagsinput/react-tagsinput.css'
 
@@ -17,39 +15,27 @@ class PollKeywords extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            showSelf: true,
-            reasonTags: [],
-            showReviewModel: false,
             reasonInputValue: "",
-            tags: [],
-            suggestions: []
+            tags: props.tags,
+            suggestions: [],
+            showTags: true
         };
     }
 
     componentWillMount() {
-        const suggestedTags = this.props.suggestedTags;
+        const sg = this.props.approved ? this.props.positiveTags : this.props.negativeTags;
+        const selectedTags = this.props.tags.map(tag => tag.name);
         let suggestions = [];
-        if (suggestedTags) {
-            suggestedTags.forEach(function(tag, index) {
-                tag = JSON.parse(tag.replace(/'/g, '"'));
-                suggestions.push(tag);
-            });
+        for (let i = 0; i < sg.length; i++) {
+            if (selectedTags.indexOf(sg[i]) === -1) suggestions.push({ id: i + 1, name: sg[i] });
         }
         this.setState({ suggestions: suggestions });
     }
 
     render() {
         // Local variables
-        const {
-            approved,
-            onHide,
-            politicianId,
-            politicianName,
-            location,
-            suggestedTags,
-            ...rest
-        } = this.props;
-        const tags = this.state.tags;
+        const { approved, onHide, politicianId, politicianName, suggestedTags, prev } = this.props;
+        const { tags } = this.state;
 
         let reasons = [];
         let emotionTag = "";
@@ -77,28 +63,20 @@ class PollKeywords extends Component {
             </div>
         );
 
-        // Event handlers
-        const pollReviewModelClose = closeParent => {
-            this.setState({ showReviewModel: false, showSelf: !closeParent });
-            if (closeParent === true) {
-                onHide(closeParent);
-            }
-        };
-
         const reviewModelShow = () => {
             ReactGA.event({
                 category: "User",
                 action: "Modal_PrimaryReasons",
                 label: "Next"
             });
-            this.setState({ showReviewModel: true, showSelf: false });
+            this.props.next({ tags: this.state.tags });
         };
 
-        const handleDelete = i => {
+        const handleDelete = index => {
             const tags = this.state.tags.slice(0);
-            const tag = tags.splice(i, 1);
+            const tag = tags.splice(index, 1);
             const suggestions = this.state.suggestions;
-            suggestions.push(tags[0]);
+            suggestions.push(tag[0]);
             this.setState({ suggestions: suggestions, tags: tags });
         };
 
@@ -110,77 +88,79 @@ class PollKeywords extends Component {
             this.setState({ tags: tags, suggestions: suggestions });
         };
 
+        /**
+         * Logic to execute when add button is clicked
+         * This is a custom button and has nothing to do directly with react-tags component
+         */
+        const forceAdd = () => {
+            const elm = document.querySelector(".react-tags__search-input input");
+            const tag = elm.value;
+            if (tag.length) {
+                handleAddition({ id: 40, name: tag });
+                // the code under is needed to force rerender of ReactTags component
+                // so that it sets the value of input field to default empty
+                this.setState({ showTags: false }, () => {
+                    this.setState({ showTags: true });
+                });
+            }
+        };
+
         return (
-            <div>
-                {this.state.showSelf && (
-                    <Modal {...rest} dialogClassName="custom-modal">
-                        <Modal.Header
-                            closeButton
-                            onHide={() => {
-                                onHide(true);
-                            }}
-                        />
-                        <Modal.Body>
-                            <Grid fluid>
+            <Modal show={true} onHide={() => onHide()} dialogClassName="custom-modal">
+                <Modal.Header closeButton />
+                <Modal.Body>
+                    <Grid fluid>
+                        <Row>
+                            <Col sm={24} md={12}>
+                                {pollQuestion}
+                            </Col>
+                        </Row>
+                        <Row>
+                            <FormGroup className="margin_abajo_big">
                                 <Row>
-                                    <Col sm={24} md={12}>
-                                        {pollQuestion}
+                                    <Col sm={12} md={12} lg={12}>
+                                        {this.state.showTags && (
+                                            <div className="form-group" id="r-tag-outer">
+                                                <button onClick={forceAdd}>Add</button>
+                                                <ReactTags
+                                                    tags={this.state.tags}
+                                                    suggestions={this.state.suggestions}
+                                                    handleDelete={handleDelete}
+                                                    handleAddition={handleAddition}
+                                                    autoResize={false}
+                                                    placeholder={reasonInputPlaceholder + "..."}
+                                                    allowNew={true}
+                                                />
+                                            </div>
+                                        )}
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <FormGroup className="margin_abajo_big">
-                                        <Row>
-                                            <Col sm={12} md={12} lg={12}>
-                                                <div className="form-group">
-                                                    <ReactTags
-                                                        tags={this.state.tags}
-                                                        suggestions={this.state.suggestions}
-                                                        handleDelete={handleDelete}
-                                                        handleAddition={handleAddition}
-                                                        autoResize={false}
-                                                        placeholder={reasonInputPlaceholder + "..."}
-                                                        allowNew={true}
-                                                    />
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col xs={12} className="text-center margin_abajo_big" />
-                                        </Row>
-                                    </FormGroup>
+                                    <Col xs={12} className="text-center margin_abajo_big" />
                                 </Row>
-                            </Grid>
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <div className="form-group text-center margin_abajo_medium">
-                                <button
-                                    type="button"
-                                    className="btn btn-modal btn-link"
-                                    onClick={() => onHide(false)}
-                                >
-                                    Back
-                                </button>
-                                <button
-                                    type="button"
-                                    className="btn btn-modal btn-primary"
-                                    onClick={reviewModelShow}
-                                >
-                                    Next
-                                </button>
-                            </div>
-                        </Modal.Footer>
-                    </Modal>
-                )}
-
-                <PollReview
-                    show={this.state.showReviewModel}
-                    onHide={pollReviewModelClose}
-                    tags={this.state.tags}
-                    approved={approved}
-                    politicianId={politicianId}
-                    location={location}
-                />
-            </div>
+                            </FormGroup>
+                        </Row>
+                    </Grid>
+                </Modal.Body>
+                <Modal.Footer>
+                    <div className="form-group text-center margin_abajo_medium">
+                        <button
+                            type="button"
+                            className="btn btn-modal btn-link"
+                            onClick={() => prev()}
+                        >
+                            Back
+                        </button>
+                        <button
+                            type="button"
+                            className="btn btn-modal btn-primary"
+                            onClick={reviewModelShow}
+                        >
+                            Next
+                        </button>
+                    </div>
+                </Modal.Footer>
+            </Modal>
         );
     }
 }

@@ -1,6 +1,9 @@
 body{
   font-family: 'Roboto', sans-serif;
   background: #fafafa;
+  overflow: -moz-scrollbars-vertical;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 button:focus {outline:0;}
 
@@ -112,12 +115,25 @@ hr{margin-top: 0}
   margin-right: 30px;
 }
 
-#head_politician{
+#head_politician {
   background-position: 60% center;
   background-size:cover;
   height: auto;
   min-height: 512px;
   width: 100%;
+  position: relative;
+  z-index: 46;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+#politician-content {
+  position: relative;
+  z-index: 45;
+}
+
+nav.navbar.main-menu {
+  position: relative;
+  z-index: 47;
 }
 
 
@@ -424,14 +440,33 @@ a.btn_circle.approve.voted-disapprove, a.btn_circle.disapprove.voted-approve {
 }
 
 .action-icons {
-  margin-top: 10px;
-}
-
-.action-icons {
   margin: 10px 0;
   font-size: 22px;
 }
 
+.action-icons .voter {
+  font-size: 1.4rem;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  color: #666;
+  padding: 0.3em 0.5em;
+}
+
+.action-icons .voter.upvoted {
+  background-color: #eee;
+}
+
+.action-icons .vote-text {
+  border-right: 1px solid #ddd;
+  padding-right: 4px;
+}
+
+.action-icons .vote-count {
+  padding-left: 5px;
+}
+
+/*
 .action-icons .fa-thumbs-o-up, .action-icons .fa-thumbs-o-down {
   color: #646464;
 }
@@ -470,8 +505,8 @@ a.btn_circle.approve.voted-disapprove, a.btn_circle.disapprove.voted-approve {
   font-size: 18px;
   font-weight: 700;
   line-height: 21px;
-  /*text-align: left;*/
-}
+  /*text-align: left;*/ /*
+} */
 
 .list-group-item{
   border: none;
@@ -493,6 +528,11 @@ a.modal_btn span {
   color: #606060;
 }
 
+.modal button.close {
+  position: relative;
+  z-index: 2;
+}
+
 .share-your-opinion-b {
   width: 246px;
   text-align: center;
@@ -503,6 +543,7 @@ a.modal_btn span {
   line-height: 21px;
   text-shadow: 0 0 0 black;
   margin-top: 5px;
+  margin-bottom: 20px;
 }
 
 .placeholder {
@@ -1161,6 +1202,22 @@ select.location-selector {
 
 /* tag input css */
 
+#r-tag-outer {
+  position: relative;
+}
+
+#r-tag-outer > button {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  background-color: #0B4092;
+  color: #fff;
+  border: 0;
+  height: 52px;
+  padding: 0 25px;
+  border-radius: 5px;
+}
+
 .react-tags__selected {
   margin: 10px 0 20px;
   text-align: center;
@@ -1220,6 +1277,7 @@ select.location-selector {
   }
   .modal-content form {padding: 0}
   footer .list-inline-item:not(:last-child) {margin-right: 50px}
+
 }
 
 @media only screen and (max-width: 767px) {
@@ -1230,8 +1288,10 @@ select.location-selector {
     width: 100%;
   }
   footer .list-inline-item:not(:last-child) {margin-right: 50px}
+  footer .col-xs-12 .row {text-align: center !important;}
   .piter_footer,.item_footer {
     float: none; text-align: center; width: 100%; margin: 0;
+    margin-bottom: 8px;
   }
 }
 
@@ -1248,7 +1308,7 @@ select.location-selector {
     width: 100%;
   }
   .btn_circle{
-    padding: 0.5rem 1.5rem;
+    padding: 0.5rem 1.5rem !important;
   }
   #head_politician{
     background-position: 62% center;
@@ -1540,5 +1600,26 @@ select.location-selector {
   .container_text_banner .avatar-image {
     display: none;
   }
+
+}
+
+@media screen and (max-width: 500px) {
+  .custom-modal {
+    width: 92%;
+    margin: 5px auto;
+  }
+
+  .custom-modal .modal-content {
+    padding: 5px;
+  }
+
+  .custom-modal .modal-body {
+    padding: 8px;
+  }
+
+  .custom-modal .texto_modales_center {
+    padding: 0;
+  }
+
 
 }
