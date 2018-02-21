@@ -115,12 +115,25 @@ hr{margin-top: 0}
   margin-right: 30px;
 }
 
-#head_politician{
+#head_politician {
   background-position: 60% center;
   background-size:cover;
   height: auto;
   min-height: 512px;
   width: 100%;
+  position: relative;
+  z-index: 46;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+#politician-content {
+  position: relative;
+  z-index: 45;
+}
+
+nav.navbar.main-menu {
+  position: relative;
+  z-index: 47;
 }
 
 
