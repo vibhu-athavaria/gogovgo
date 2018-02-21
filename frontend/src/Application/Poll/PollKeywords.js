@@ -24,23 +24,17 @@ class PollKeywords extends Component {
     }
 
     componentWillMount() {
-        const suggestedTags = this.props.suggestedTags;
-        let suggestions = [];
-        console.log("tags are\n", suggestedTags);
-        if (suggestedTags) {
-            suggestedTags.forEach(function(tag, index) {
-                tag = JSON.parse(tag.replace(/'/g, '"'));
-                suggestions.push(tag);
-            });
-        }
-        console.log(suggestions);
+        const _sg = this.props.approved ? this.props.positiveTags : this.props.negativeTags;
+        const suggestions = _sg.map((tag, index) => {
+            return { id: index + 1, name: tag };
+        });
         this.setState({ suggestions: suggestions });
     }
 
     render() {
         // Local variables
         const { approved, onHide, politicianId, politicianName, suggestedTags, prev } = this.props;
-        const tags = this.state.tags;
+        const { tags } = this.state;
 
         let reasons = [];
         let emotionTag = "";
@@ -49,6 +43,7 @@ class PollKeywords extends Component {
             reasons.push(<Label key={"reason:" + index}>{reason}</Label>);
         });
 
+        console.log("suggestions are\n", this.state.suggestions);
         const reasonInputPlaceholder = this.state.suggestions
             .slice(0, 3)
             .map(tag => {
@@ -85,11 +80,11 @@ class PollKeywords extends Component {
             this.props.next({ tags: this.state.tags });
         };
 
-        const handleDelete = i => {
+        const handleDelete = index => {
             const tags = this.state.tags.slice(0);
-            const tag = tags.splice(i, 1);
+            const tag = tags.splice(index, 1);
             const suggestions = this.state.suggestions;
-            suggestions.push(tags[0]);
+            suggestions.push(tag[0]);
             this.setState({ suggestions: suggestions, tags: tags });
         };
 
