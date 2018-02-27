@@ -162,6 +162,7 @@ const getPolitician = gql`
                     lastName
                 }
                 sentiment
+                tags
                 status
                 city
                 state
@@ -169,11 +170,6 @@ const getPolitician = gql`
                 upVote
                 downVote
                 created
-                reasons {
-                    reasonTag {
-                        value
-                    }
-                }
             }
         }
     }

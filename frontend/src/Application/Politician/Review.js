@@ -58,14 +58,12 @@ class Review extends Component {
         let sentimentClass = this.props.approve ? "color_approve" : "color_disapprove";
         let sentimentText = this.props.approve ? "Approve" : "Disapprove";
         sentimentClass += " content_title_2";
-        let reasons = [];
-        review.reasons.forEach(function(reason, index) {
-            reasons.push(
-                <button key={"reason:" + index} type="button" className="btn btn-tags">
-                    {reason.reasonTag.value}
-                </button>
-            );
-        });
+
+        const reasons = review.tags.map((tag, index) => (
+            <button key={index} type="button" className="btn btn-tags">
+                {tag}
+            </button>
+        ));
 
         const actionIconHandler = thumbUp => {
             mutate({

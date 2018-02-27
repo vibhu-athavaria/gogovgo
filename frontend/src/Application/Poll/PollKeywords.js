@@ -96,7 +96,7 @@ class PollKeywords extends Component {
             const elm = document.querySelector(".react-tags__search-input input");
             const tag = elm.value;
             if (tag.length) {
-                handleAddition({ id: 40, name: tag });
+                handleAddition({ name: tag });
                 // the code under is needed to force rerender of ReactTags component
                 // so that it sets the value of input field to default empty
                 this.setState({ showTags: false }, () => {
