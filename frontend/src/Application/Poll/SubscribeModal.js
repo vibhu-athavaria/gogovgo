@@ -69,7 +69,7 @@ class SubscribeModal extends Component {
                     politicianId: politicianId,
                     sentiment: sentiment,
                     body: reviewText,
-                    fullname: this.state.fullname,
+                    fullName: this.state.fullname,
                     emailAddress: this.state.emailAddress,
                     tags: tags,
                     location: `${location.state || ""},${location.country}`
@@ -186,7 +186,8 @@ const submitQuery = gql`
         $politicianId: ID!
         $sentiment: String!
         $body: String!
-        $userId: ID
+        $fullName: String!
+        $emailAddress: String!
         $location: String!
         $tags: [Tag]!
     ) {
@@ -194,9 +195,10 @@ const submitQuery = gql`
             politicianId: $politicianId
             sentiment: $sentiment
             body: $body
-            userId: $userId
             location: $location
             tags: $tags
+            fullName: $fullName
+            emailAddress: $emailAddress
         ) {
             review {
                 id

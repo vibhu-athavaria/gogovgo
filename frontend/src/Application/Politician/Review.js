@@ -115,9 +115,7 @@ class Review extends Component {
             <div className="divisor">
                 <div className="article_section_1">
                     <div className={sentimentClass}>{sentimentText}</div>
-                    <div className="content_title_2_sub">
-                        {review.user ? review.user : "Anonymous"}
-                    </div>
+                    <div className="content_title_2_sub">Anonymous</div>
                     <div className="content_title_2_ciudad margin_abajo_small">{location}</div>
                     <div className="content_title_2_ciudad">
                         {created_moment.format("MMMM Do, YYYY")}

@@ -183,9 +183,10 @@ class Tag(graphene.InputObjectType):
 
 class CreateReview(graphene.Mutation):
     class Input:
-        user_id = graphene.ID()
         politician_id = graphene.ID()
         sentiment = graphene.String()
+        full_name = graphene.String()
+        email_address = graphene.String()
         body = graphene.String()
         location = graphene.String()
         tags = graphene.List(Tag)
@@ -197,21 +198,26 @@ class CreateReview(graphene.Mutation):
     def mutate(root, args, context, info):
         user = None
 
-        if all(key in args for key in ['fullname', 'emailAddress']):
-            fullname = args.get('fullname')
-            email_address = args.get('emailAddress')
+        if all(key in args for key in ['full_name', 'email_address']):
+            fullname = args.get('full_name', '')
+            email_address = args.get('email_address', '')
             split_name = fullname.split(' ')
             first_name = split_name[0]
             last_name = ' '.join(split_name[1:]) if len(split_name) > 1 else ''
 
-            user, _ = models.User.objects.get_or_create(
-                username=email_address,
-                email_address=email_address,
-                first_name=first_name,
-                last_name=last_name
-            )
-            del args['fullname']
-            del args['emailAddress']
+            try:
+                user = User.objects.get(email=email_address)
+            except models.User.DoesNotExist:
+                user, _ = models.User.objects.create(
+                    username=email_address,
+                    email=email_address,
+                    first_name=first_name,
+                    last_name=last_name,
+                    is_active=False
+                )
+
+            del args['full_name']
+            del args['email_address']
 
         location = args['location']
         state, country = location.split(',')
