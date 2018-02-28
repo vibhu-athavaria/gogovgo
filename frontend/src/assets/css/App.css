@@ -988,6 +988,15 @@ footer .list-inline-item a:hover {text-decoration: none}
   color: #333333;
 }
 
+.texto_modales.margin_abajo_big p {
+  font-size: 12px;
+  margin: 0;
+  padding: 0;
+  line-height: 16px;
+  color: #b7b5b5;
+}
+
+
 /* How it works modal */
 #hiw-modal .modal-content {
   padding: 10px 0 0;

@@ -9,11 +9,60 @@ from gogovgo.gogovgo_site import models
 from gogovgo.gogovgo_site.constants import SENTIMENT_NEGATIVE, SENTIMENT_POSITIVE
 
 
-def get_tags(reviews, sentiment):
-    tags = reviews.filter(sentiment=sentiment).prefetch_related('tags')
-    tags = tags.order_by('-tags__weight').values_list('tags__id', 'tags__value')
-    tags = tags.distinct().all()
-    return [str(tag[1]) for tag in tags if tag[1]]
+class TagHelper:
+    """Helper method to get, set or update tags"""
+
+    @staticmethod
+    def get_tags(politician, sentiment):
+        """
+        Get  tags for a politician
+
+        Args:
+            politician: Politician to get tags for
+            sentiment: Type of tags to selected i.e. positive or negative
+
+        Returns: list of tags
+
+        """
+        tags = models.Tag.objects.filter(politician=politician, sentiment=sentiment)
+        tags = tags.order_by('-weight').values_list('value', flat=True)
+        return tags
+
+    @staticmethod
+    def clean_tags(tags):
+        """Validate tags before inserting"""
+        if not isinstance(tags, list):
+            return
+        tags = [str(tag).strip().lower() for tag in tags if tag ]
+        return tags
+
+    @staticmethod
+    def add_tags(review, tags):
+        """Add tags to politician and review"""
+        tags = TagHelper.clean_tags(tags)
+        if not tags:
+            return
+
+        #   get existing & matching tags
+        db_tags = models.Tag.objects.filter(politician=review.politician,
+                                            sentiment=review.sentiment,
+                                            value__in=tags)
+        db_tags = {tag.value: tag for tag in db_tags}
+
+        #   logic to add new tag or increment weight if tag already exists
+        for tag in tags:
+            t = None
+            try:
+                t = db_tags[tag]
+            except KeyError:
+                t = models.Tag.objects.create(politician=review.politician,
+                                         value=tag, sentiment=review.sentiment)
+            else:
+                t.weight += 1
+                t.save()
+
+            review.tags.add(t)
+
 
 
 @convert_django_field.register(CloudinaryField)
@@ -101,34 +150,25 @@ class PoliticianType(DjangoObjectType):
             return ""
 
     def resolve_positive_tags(self, *args):
-        return get_tags(reviews=self.reviews, sentiment=SENTIMENT_POSITIVE)
+        return TagHelper.get_tags(politician=self, sentiment=SENTIMENT_POSITIVE)
 
     def resolve_negative_tags(self, *args):
-        return get_tags(reviews=self.reviews, sentiment=SENTIMENT_NEGATIVE)
+        return TagHelper.get_tags(politician=self, sentiment=SENTIMENT_NEGATIVE)
 
 
 PoliticianType.Connection = connection_for_type(PoliticianType)
 
 
 class ReviewType(DjangoObjectType):
+    tags = graphene.List(graphene.String)
+
     class Meta:
         model = models.Review
 
+    def resolve_tags(self, *args):
+        return [tag.value for tag in self.tags.all()]
 
 ReviewType.Connection = connection_for_type(ReviewType)
-
-
-class ReasonTagType(DjangoObjectType):
-    class Meta:
-        model = models.ReasonTag
-
-
-ReasonTagType.Connection = connection_for_type(ReasonTagType)
-
-
-class ReviewHasReasonType(DjangoObjectType):
-    class Meta:
-        model = models.ReviewHasReasonTag
 
 
 class CabinetType(DjangoObjectType):
@@ -143,9 +183,10 @@ class Tag(graphene.InputObjectType):
 
 class CreateReview(graphene.Mutation):
     class Input:
-        user_id = graphene.ID()
         politician_id = graphene.ID()
         sentiment = graphene.String()
+        full_name = graphene.String()
+        email_address = graphene.String()
         body = graphene.String()
         location = graphene.String()
         tags = graphene.List(Tag)
@@ -157,21 +198,26 @@ class CreateReview(graphene.Mutation):
     def mutate(root, args, context, info):
         user = None
 
-        if all(key in args for key in ['fullname', 'emailAddress']):
-            fullname = args.get('fullname')
-            email_address = args.get('emailAddress')
+        if all(key in args for key in ['full_name', 'email_address']):
+            fullname = args.get('full_name', '')
+            email_address = args.get('email_address', '')
             split_name = fullname.split(' ')
             first_name = split_name[0]
             last_name = ' '.join(split_name[1:]) if len(split_name) > 1 else ''
 
-            user, _ = models.User.objects.get_or_create(
-                username=email_address,
-                email_address=email_address,
-                first_name=first_name,
-                last_name=last_name
-            )
-            del args['fullname']
-            del args['emailAddress']
+            try:
+                user = User.objects.get(email=email_address)
+            except models.User.DoesNotExist:
+                user, _ = models.User.objects.create(
+                    username=email_address,
+                    email=email_address,
+                    first_name=first_name,
+                    last_name=last_name,
+                    is_active=False
+                )
+
+            del args['full_name']
+            del args['email_address']
 
         location = args['location']
         state, country = location.split(',')
@@ -185,23 +231,8 @@ class CreateReview(graphene.Mutation):
             body=args['body']
         )
 
-        tags = args['tags']
-        for tag in tags:
-            id = tag.get('id')
-            if id is not None:
-                reason_tag = models.ReasonTag.objects.get(pk=id)
-                reason_tag.weight += 1
-                reason_tag.save()
-            else:
-                reason_tag, _ = models.ReasonTag.objects.get_or_create(
-                    value=tag['name'],
-                    sentiment=args['sentiment']
-                )
-
-            models.ReviewHasReasonTag.objects.create(
-                review=review,
-                reason_tag=reason_tag
-            )
+        tags = [tag['name'] for tag in args['tags']]
+        TagHelper.add_tags(review, tags)
 
         ok = True
         return CreateReview(review=review, ok=ok)
@@ -229,31 +260,9 @@ class UpdateReview(graphene.Mutation):
         return CreateReview(review=review, ok=ok)
 
 
-class CreateReasonTag(graphene.Mutation):
-    class Input:
-        value = graphene.String()
-        weight = graphene.Float()
-        sentiment = graphene.String()
-
-    ok = graphene.Boolean()
-    reason_tag = graphene.Field(lambda: ReasonTagType)
-
-    @staticmethod
-    def mutate(root, args, context, info):
-        reason_tag = models.ReasonTag(
-            value=args.get('value'),
-            weight=args.get('weight'),
-            sentiment=args.get('sentiment')
-        )
-        reason_tag.save()
-        ok = True
-        return CreateReasonTag(reason_tag=reason_tag, ok=ok)
-
-
 class Mutations(graphene.ObjectType):
     create_review = CreateReview.Field()
     update_review = UpdateReview.Field()
-    create_reason_tag = CreateReasonTag.Field()
 
 
 class Query(graphene.AbstractType):
@@ -273,8 +282,6 @@ class Query(graphene.AbstractType):
     )
     review = graphene.Field(ReviewType, id=graphene.ID())
     reviews = graphene.List(ReviewType)
-    reasontags = graphene.List(ReasonTagType)
-    reviewhasreasontype = graphene.List(ReviewHasReasonType)
 
     @graphene.resolve_only_args
     def resolve_users(self):
@@ -313,13 +320,6 @@ class Query(graphene.AbstractType):
         id = args.get('id')
         return models.Review.objects.get(pk=id)
 
-    @graphene.resolve_only_args
-    def resolve_reasontags(self):
-        return models.ReasonTag.objects.all()
-
-    @graphene.resolve_only_args
-    def resolve_reviewhasreasontype(self):
-        return models.ReviewHasReasonTag.objects.all()
 
     @graphene.resolve_only_args
     def resolve_cabinet_members(self):

@@ -64,7 +64,7 @@ class PollReview extends Component {
                     >
                         <FormControl
                             componentClass="textarea"
-                            placeholder="Please explain your answer in more detail..."
+                            placeholder="Optional: please explain your answer in more detail..."
                             onChange={handleReviewTextChange}
                             bsSize="large"
                             value={this.state.reviewText}

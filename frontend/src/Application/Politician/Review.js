@@ -58,14 +58,12 @@ class Review extends Component {
         let sentimentClass = this.props.approve ? "color_approve" : "color_disapprove";
         let sentimentText = this.props.approve ? "Approve" : "Disapprove";
         sentimentClass += " content_title_2";
-        let reasons = [];
-        review.reasons.forEach(function(reason, index) {
-            reasons.push(
-                <button key={"reason:" + index} type="button" className="btn btn-tags">
-                    {reason.reasonTag.value}
-                </button>
-            );
-        });
+
+        const reasons = review.tags.map((tag, index) => (
+            <button key={index} type="button" className="btn btn-tags">
+                {tag}
+            </button>
+        ));
 
         const actionIconHandler = thumbUp => {
             mutate({
@@ -117,9 +115,7 @@ class Review extends Component {
             <div className="divisor">
                 <div className="article_section_1">
                     <div className={sentimentClass}>{sentimentText}</div>
-                    <div className="content_title_2_sub">
-                        {review.user ? review.user : "Anonymous"}
-                    </div>
+                    <div className="content_title_2_sub">Anonymous</div>
                     <div className="content_title_2_ciudad margin_abajo_small">{location}</div>
                     <div className="content_title_2_ciudad">
                         {created_moment.format("MMMM Do, YYYY")}

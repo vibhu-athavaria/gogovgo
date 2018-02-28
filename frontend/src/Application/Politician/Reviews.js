@@ -123,7 +123,7 @@ class Reviews extends Component {
 
                         <div className="content_text margin_abajo_small">
                             Top reasons why people <span className="color_approve">approve </span>
-                            of the way {this.props.politicianName} is handling his job as
+                            of the way {this.props.politicianName} is handling his job as{" "}
                             {this.props.politicianTitle}:
                         </div>
                         <div className="content_tag">

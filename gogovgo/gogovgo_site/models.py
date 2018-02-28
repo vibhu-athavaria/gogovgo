@@ -129,6 +129,21 @@ class Poll(TimeStampedModel):
         app_label = 'gogovgo_site'
 
 
+class Tag(TimeStampedModel):
+    politician = models.ForeignKey(Politician)
+    value = models.CharField(max_length=100)
+    weight = models.IntegerField(default=1)
+    sentiment = models.CharField(choices=SENTIMENT_CHOICES,
+                                 default=SENTIMENT_NEUTRAL, max_length=64)
+
+    def __str__(self):
+        return '%s' % self.value
+
+    class Meta:
+        app_label = 'gogovgo_site'
+        verbose_name = 'Tag'
+
+
 class Review(TimeStampedModel):
     REVIEW_STATUS_CHOICES = (
         (REVIEW_PENDING, REVIEW_PENDING),
@@ -148,7 +163,7 @@ class Review(TimeStampedModel):
     state = models.CharField(choices=US_STATES, default='CA', max_length=120, null=True)
     country = CountryField(default='US')
     body = models.TextField(null=True)
-    tags = models.ManyToManyField('ReasonTag', through='ReviewHasReasonTag')
+    tags = models.ManyToManyField(Tag)
     status = models.CharField(choices=REVIEW_STATUS_CHOICES, default=REVIEW_PENDING, max_length=32)
     nlp_sentiment = models.CharField(choices=SENTIMENT_CHOICES,
                                      default=SENTIMENT_NEUTRAL, max_length=64)
@@ -163,25 +178,3 @@ class Review(TimeStampedModel):
         unique_together = ('user', 'politician')
         app_label = 'gogovgo_site'
 
-
-class ReasonTag(TimeStampedModel):
-    value = models.CharField(blank=True, max_length=255, unique=True)
-    weight = models.FloatField(blank=True, default=0.0)
-    sentiment = models.CharField(choices=SENTIMENT_CHOICES,
-                                 default=SENTIMENT_NEUTRAL, max_length=64)
-
-    def __str__(self):
-        return '%s' % self.value
-
-    class Meta:
-        app_label = 'gogovgo_site'
-        verbose_name = 'Tag'
-
-
-class ReviewHasReasonTag(TimeStampedModel):
-    review = models.ForeignKey(Review, db_constraint=False, related_name='reasons')
-    reason_tag = models.ForeignKey(ReasonTag, db_constraint=False)
-
-    class Meta:
-        app_label = 'gogovgo_site'
-        verbose_name = "Review has Tag"
