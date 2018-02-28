@@ -135,6 +135,10 @@ class SubscribeModal extends Component {
                 <Modal.Body>
                     <div className="texto_modales margin_abajo_big">
                         Get Updates from RateYourPolitician
+                        <p>
+                            Your name and contact information will NOT be displayed publicly.<br />
+                            Your review will remain anonymous.
+                        </p>
                     </div>
                     <form>
                         <FormGroup validationState={this.state.fullnameValidation}>

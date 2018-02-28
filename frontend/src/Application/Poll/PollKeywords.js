@@ -58,7 +58,7 @@ class PollKeywords extends Component {
         }
         const pollQuestion = (
             <div className="texto_modales margin_abajo_medium">
-                What are the primary reason that you are {emotionTag} with {politicianName}'s
+                What are the primary reasons that you are {emotionTag} with {politicianName}'s
                 performance?
             </div>
         );
