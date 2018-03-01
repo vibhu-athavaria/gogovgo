@@ -392,6 +392,10 @@ a.btn_circle span.votes {
   text-align: left;
 }
 
+.a_or_d .btn_circle.approve {
+  margin-right: 1em;
+}
+
 a.btn_circle.approve, a.btn_circle.disapprove {
   -webkit-box-shadow: 0 0 0 0 transparent;
   -moz-box-shadow: 0 0 0 0 transparent;

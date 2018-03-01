@@ -47,33 +47,29 @@ const PollQuestion = props => {
                         </span>
                     </div>
 
-                    <Row className="justify-content-center margin_abajo_big">
-                        <Col xsOffset={1} xs={5} mdOffset={1} md={5} className="text-center">
-                            <a
-                                className="btn btn-secondary btn_circle modal_btn approve"
-                                href="#"
-                                onClick={() => next(true)}
-                            >
-                                <i className="fa fa-thumbs-up align-middle" aria-hidden="true" />
-                                <div className="box">
-                                    <span className="votes">{approvalCount}</span>
-                                    <span>Approve</span>
-                                </div>
-                            </a>
-                        </Col>
-                        <Col xs={5} xsPull={1} md={5} mdPull={1} className="text-center">
-                            <a
-                                className="btn btn-secondary btn_circle modal_btn disapprove"
-                                href="#"
-                                onClick={() => next(false)}
-                            >
-                                <i className="fa fa-thumbs-down" aria-hidden="true" />
-                                <div className="box">
-                                    <span className="votes">{disapprovalCount}</span>
-                                    <span>Disapprove</span>
-                                </div>
-                            </a>
-                        </Col>
+                    <Row className="justify-content-center margin_abajo_big a_or_d">
+                        <a
+                            className="btn btn-secondary btn_circle modal_btn approve"
+                            href="#"
+                            onClick={() => next(true)}
+                        >
+                            <i className="fa fa-thumbs-up align-middle" aria-hidden="true" />
+                            <div className="box">
+                                <span className="votes">{approvalCount}</span>
+                                <span>Approve</span>
+                            </div>
+                        </a>
+                        <a
+                            className="btn btn-secondary btn_circle modal_btn disapprove"
+                            href="#"
+                            onClick={() => next(false)}
+                        >
+                            <i className="fa fa-thumbs-down" aria-hidden="true" />
+                            <div className="box">
+                                <span className="votes">{disapprovalCount}</span>
+                                <span>Disapprove</span>
+                            </div>
+                        </a>
                     </Row>
                 </div>
             </Modal.Body>
