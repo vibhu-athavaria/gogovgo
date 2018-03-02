@@ -6,9 +6,10 @@ import React from "react";
 import { Component } from "react/lib/ReactBaseClasses";
 import Review from "./Review";
 import { withCookies, Cookies } from "react-cookie";
-import PollQuestion from "../Poll/PollQuestion";
 import { Col, Row } from "react-bootstrap";
 import PropTypes from "prop-types";
+
+import PollModal from "../Poll/Modal";
 
 class Reviews extends Component {
     constructor(props, context) {
@@ -181,15 +182,9 @@ class Reviews extends Component {
                     </Col>
                 </Row>
 
-                <PollQuestion
-                    show={this.state.showPoll}
-                    onHide={pollModelClose}
-                    politicianId={this.props.politicianId}
-                    politicianName={this.props.politicianName}
-                    politicianTitle={this.props.politicianTitle}
-                    approvalCount={this.props.approvalCount}
-                    disapprovalCount={this.props.disapprovalCount}
-                />
+                {this.state.showPoll && (
+                    <PollModal {...this.props} show={true} onHide={pollModelClose} />
+                )}
             </Col>
         );
     }
