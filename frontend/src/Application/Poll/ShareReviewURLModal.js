@@ -4,7 +4,6 @@
 
 import React from "react";
 import { Component } from "react/lib/ReactBaseClasses";
-import { instanceOf } from "prop-types";
 import { ControlLabel, FormControl, FormGroup, InputGroup, Modal } from "react-bootstrap";
 import { encrypt } from "../../utils/security";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -25,10 +24,8 @@ class ShareReviewURLModal extends Component {
     }
 
     render() {
-        const { reviewId, onHide } = this.props;
-
         const onClose = () => {
-            onHide(true);
+            this.props.onHide(true);
             window.location.reload();
         };
 

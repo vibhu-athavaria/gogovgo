@@ -4,7 +4,7 @@
 
 import React from "react";
 import ReactGA from "react-ga";
-import { Col, Modal, Row } from "react-bootstrap";
+import { Modal, Row } from "react-bootstrap";
 
 const PollQuestion = props => {
     const {

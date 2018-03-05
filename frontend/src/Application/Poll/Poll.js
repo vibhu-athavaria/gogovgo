@@ -5,12 +5,10 @@
 import React from "react";
 import { Component } from "react/lib/ReactBaseClasses";
 import { withCookies, Cookies } from "react-cookie";
-import { instanceOf } from "prop-types";
 import { Col, Row } from "react-bootstrap";
 import PropTypes from "prop-types";
 import ReactGA from "react-ga";
 
-import PollQuestion from "./PollQuestion";
 import BaseModal from "./Modal";
 
 class Poll extends Component {
@@ -36,7 +34,6 @@ class Poll extends Component {
     }
 
     render() {
-        const { politicianId } = this.props;
         const { rated, ratedSentiment } = this.state;
 
         const pollModelClose = () => {

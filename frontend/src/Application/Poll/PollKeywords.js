@@ -4,7 +4,7 @@
 
 import React from "react";
 import { Component } from "react/lib/ReactBaseClasses";
-import { Button, Col, FormGroup, Grid, Label, Modal, Row } from "react-bootstrap";
+import { Col, FormGroup, Grid, Label, Modal, Row } from "react-bootstrap";
 import ReactTags from "react-tag-autocomplete";
 import ReactGA from "react-ga";
 
@@ -34,7 +34,7 @@ class PollKeywords extends Component {
 
     render() {
         // Local variables
-        const { approved, onHide, politicianId, politicianName, suggestedTags, prev } = this.props;
+        const { approved, onHide, politicianName, prev } = this.props;
         const { tags } = this.state;
 
         let reasons = [];
