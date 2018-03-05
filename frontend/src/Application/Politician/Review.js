@@ -4,7 +4,6 @@
 
 import React from "react";
 import { Component } from "react/lib/ReactBaseClasses";
-import { Col, Row } from "react-bootstrap";
 import { withCookies, Cookies } from "react-cookie";
 import moment from "moment";
 import { ControlLabel, FormControl, FormGroup, InputGroup } from "react-bootstrap";
@@ -51,7 +50,7 @@ class Review extends Component {
     }
 
     render() {
-        const { data, cookies, mutate, ...rest } = this.props;
+        const { data, cookies, mutate } = this.props;
         const review = data;
         const { reactedUp, reactedDown, upVoteCount, downVoteCount } = this.state;
 
@@ -90,8 +89,7 @@ class Review extends Component {
                         <div className="content_title_2_text">
                             {str.substring(0, length) + "..."}
                         </div>
-                        <a
-                            href="javascript:void(0)"
+                        <button
                             className="read-more"
                             onClick={e => {
                                 e.stopPropagation();
@@ -99,7 +97,7 @@ class Review extends Component {
                             }}
                         >
                             Read More <i className="fa fa-angle-down" aria-hidden="true" />
-                        </a>
+                        </button>
                     </div>
                 );
             } else {

@@ -83,18 +83,15 @@ class Reviews extends Component {
             if (item === this.state.reviewTab) className += " active";
             return className;
         };
-
         const mobileReviewTabs = ["Approve", "Disapprove"].map((item, i) => (
-            <a
+            <button
                 key={i}
-                href="#"
                 onClick={e => this.reviewTabChange(e, item)}
                 className={getItemClass(item)}
             >
                 {item}
-            </a>
+            </button>
         ));
-
         const reviewNav = <div className="r-tabs">{mobileReviewTabs}</div>;
 
         const getMobileClass = classNames => {

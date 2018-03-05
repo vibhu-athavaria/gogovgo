@@ -742,6 +742,12 @@ a.link_second_menu.active, a.link_second_menu:hover a.link_second_menu:focus {
   font-weight: 500;
   line-height: 16px;
   text-align: right;
+  border: 0;
+  padding: 0;
+}
+
+.read-more:hover {
+  text-decoration: underline;
 }
 
 .btn-see-more{
@@ -1468,6 +1474,9 @@ select.location-selector {
   font-weight: 500;
   margin: 0 5px;
   padding: 8px;
+  background: transparent;
+  outline: none;
+  border: none;
 }
 
 .r-item:hover {
