@@ -32,7 +32,6 @@ class Header extends Component {
                     <Nav pullRight>
                         <NavItem
                             className="nav-link how-it-work"
-                            href="javascript:void(0)"
                             onClick={() => this.setState({ howItWorksShow: true })}
                         >
                             How it Works

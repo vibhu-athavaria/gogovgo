@@ -102,16 +102,15 @@ class Poll extends Component {
                 </div>
                 <Row>
                     <div>
-                        <a
+                        <button
                             className={
                                 "btn btn-secondary poll_btn_circle " +
                                 (rated ? "rated-" + ratedSentiment : "")
                             }
-                            href="javascript:void(0)"
                             onClick={() => (!rated ? showPollModel(false) : "")}
                         >
                             {rated ? "You Already Rated!" : "Submit Review"}
-                        </a>
+                        </button>
                         <div className="share-your-opinion-b">Safe. Secure. Anonymous.</div>
                     </div>
                 </Row>
