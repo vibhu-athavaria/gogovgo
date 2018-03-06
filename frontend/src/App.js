@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Tracker from "./Tracker";
 import Home from "./Application/Home";
-import LandingPage from "./Application/LandingPage";
+// import LandingPage from "./Application/LandingPage";
 
 class App extends Component {
     render() {

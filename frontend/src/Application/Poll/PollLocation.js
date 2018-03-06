@@ -35,7 +35,7 @@ class PollLocation extends Component {
     handleChange(field, event) {
         let { location } = this.state;
         location[field] = event.target.value;
-        if (field == "country") location.state = "";
+        if (field === "country") location.state = "";
         this.setState({ location: location });
     }
 

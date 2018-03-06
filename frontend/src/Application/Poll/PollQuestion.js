@@ -4,7 +4,7 @@
 
 import React from "react";
 import ReactGA from "react-ga";
-import { Col, Modal, Row } from "react-bootstrap";
+import { Modal, Row } from "react-bootstrap";
 
 const PollQuestion = props => {
     const {
@@ -48,9 +48,8 @@ const PollQuestion = props => {
                     </div>
 
                     <Row className="justify-content-center margin_abajo_big a_or_d">
-                        <a
+                        <button
                             className="btn btn-secondary btn_circle modal_btn approve"
-                            href="#"
                             onClick={() => next(true)}
                         >
                             <i className="fa fa-thumbs-up align-middle" aria-hidden="true" />
@@ -58,10 +57,9 @@ const PollQuestion = props => {
                                 <span className="votes">{approvalCount}</span>
                                 <span>Approve</span>
                             </div>
-                        </a>
-                        <a
+                        </button>
+                        <button
                             className="btn btn-secondary btn_circle modal_btn disapprove"
-                            href="#"
                             onClick={() => next(false)}
                         >
                             <i className="fa fa-thumbs-down" aria-hidden="true" />
@@ -69,7 +67,7 @@ const PollQuestion = props => {
                                 <span className="votes">{disapprovalCount}</span>
                                 <span>Disapprove</span>
                             </div>
-                        </a>
+                        </button>
                     </Row>
                 </div>
             </Modal.Body>

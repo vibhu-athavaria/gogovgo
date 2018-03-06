@@ -5,12 +5,10 @@
 import React from "react";
 import { Component } from "react/lib/ReactBaseClasses";
 import { withCookies, Cookies } from "react-cookie";
-import { instanceOf } from "prop-types";
 import { Col, Row } from "react-bootstrap";
 import PropTypes from "prop-types";
 import ReactGA from "react-ga";
 
-import PollQuestion from "./PollQuestion";
 import BaseModal from "./Modal";
 
 class Poll extends Component {
@@ -36,7 +34,6 @@ class Poll extends Component {
     }
 
     render() {
-        const { politicianId } = this.props;
         const { rated, ratedSentiment } = this.state;
 
         const pollModelClose = () => {
@@ -105,16 +102,15 @@ class Poll extends Component {
                 </div>
                 <Row>
                     <div>
-                        <a
+                        <button
                             className={
                                 "btn btn-secondary poll_btn_circle " +
                                 (rated ? "rated-" + ratedSentiment : "")
                             }
-                            href="javascript:void(0)"
                             onClick={() => (!rated ? showPollModel(false) : "")}
                         >
                             {rated ? "You Already Rated!" : "Submit Review"}
-                        </a>
+                        </button>
                         <div className="share-your-opinion-b">Safe. Secure. Anonymous.</div>
                     </div>
                 </Row>

@@ -5,7 +5,6 @@
 import React from "react";
 import { Component } from "react/lib/ReactBaseClasses";
 import { withCookies, Cookies } from "react-cookie";
-import { instanceOf } from "prop-types";
 import { ControlLabel, FormControl, FormGroup, Modal } from "react-bootstrap";
 import { graphql, gql } from "react-apollo";
 import PropTypes from "prop-types";
@@ -54,7 +53,7 @@ class SubscribeModal extends Component {
         const sentiment = approved ? "positive" : "negative";
 
         const validateEmail = email => {
-            const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return re.test(email);
         };
 

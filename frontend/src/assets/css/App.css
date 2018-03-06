@@ -309,7 +309,7 @@ nav.navbar.main-menu {
   height: 59px;
 }
 
-a.poll_btn_circle {
+.poll_btn_circle {
   display: block;
   margin-right: 0.8rem;
   text-align: center;
@@ -320,7 +320,7 @@ a.poll_btn_circle {
   transition: box-shadow .5s;
 }
 
-a.poll_btn_circle:hover{
+.poll_btn_circle:hover{
   background:transparent;
   border: 2px solid #ffffff;
   -webkit-box-shadow: 0 2px 20px 8px rgba(255, 255, 255, 0.4);
@@ -328,14 +328,14 @@ a.poll_btn_circle:hover{
   box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.4) inset;
 }
 
-a.poll_btn_circle.active{
+.poll_btn_circle.active{
   border: 2px solid #ffffff;
   border-radius: 31px;
   background-color: #ffffff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-a.poll_btn_circle.rated-approved{
+.poll_btn_circle.rated-approved{
   background: #6dd867;
   border: 2px solid #6dd867;
   -webkit-box-shadow: 0 2px 20px 8px rgba(56, 216, 59, 0.4);
@@ -343,7 +343,7 @@ a.poll_btn_circle.rated-approved{
   box-shadow: 0 2px 20px 8px rgba(56, 216, 59, 0.4);
 }
 
-a.poll_btn_circle.rated-disapproved{
+.poll_btn_circle.rated-disapproved{
   background:#D82B22;
   border: 2px solid #D82B22;
   -webkit-box-shadow: 0 2px 20px 8px rgba(216,43,34,0.4);
@@ -367,7 +367,7 @@ a.poll_btn_circle.rated-disapproved{
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-a.btn_circle i {
+.btn_circle i {
   float: left;
   display: block;
   margin-right: 0.8rem;
@@ -375,17 +375,17 @@ a.btn_circle i {
   text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
-a.btn_circle .box {
+.btn_circle .box {
   float: left;
 }
 
-a.btn_circle span{
+.btn_circle span{
   color: #FAFAFA;
   font: 300 13px/15px 'Roboto';
   text-shadow: 0 2px 4px rgba(0,0,0,0.5);
   display: block;
 }
-a.btn_circle span.votes {
+.btn_circle span.votes {
   font-size: 18px;
   font-weight: 700;
   line-height: 21px;
@@ -396,14 +396,14 @@ a.btn_circle span.votes {
   margin-right: 1em;
 }
 
-a.btn_circle.approve, a.btn_circle.disapprove {
+.btn_circle.approve, .btn_circle.disapprove {
   -webkit-box-shadow: 0 0 0 0 transparent;
   -moz-box-shadow: 0 0 0 0 transparent;
   box-shadow: 0 0 0 0 transparent;
   transition: box-shadow .5s;
 }
 
-a.btn_circle.approve:hover{
+.btn_circle.approve:hover{
   background:transparent;
   border: 2px solid #6dd867;
   -webkit-box-shadow: 0 2px 20px 8px rgba(56, 216, 59, 0.4);
@@ -411,7 +411,7 @@ a.btn_circle.approve:hover{
   box-shadow: 0 2px 20px 8px rgba(56, 216, 59, 0.4);
 }
 
-a.btn_circle.disapprove:hover{
+.btn_circle.disapprove:hover{
   background:transparent;
   border: 2px solid #D82B22;
   -webkit-box-shadow: 0 2px 20px 8px rgba(216,43,34,0.4);
@@ -419,7 +419,7 @@ a.btn_circle.disapprove:hover{
   box-shadow: 0 2px 20px 8px rgba(216,43,34,0.4);
 }
 
-a.btn_circle.approve.voted-approve{
+.btn_circle.approve.voted-approve{
   background: #6dd867;
   border: 2px solid #6dd867;
   -webkit-box-shadow: 0 2px 20px 8px rgba(56, 216, 59, 0.4);
@@ -427,7 +427,7 @@ a.btn_circle.approve.voted-approve{
   box-shadow: 0 2px 20px 8px rgba(56, 216, 59, 0.4);
 }
 
-a.btn_circle.disapprove.voted-disapprove{
+.btn_circle.disapprove.voted-disapprove{
   background:#D82B22;
   border: 2px solid #D82B22;
   -webkit-box-shadow: 0 2px 20px 8px rgba(216,43,34,0.4);
@@ -435,7 +435,7 @@ a.btn_circle.disapprove.voted-disapprove{
   box-shadow: 0 2px 20px 8px rgba(216,43,34,0.4);
 }
 
-a.btn_circle.approve.voted-disapprove, a.btn_circle.disapprove.voted-approve {
+.btn_circle.approve.voted-disapprove, .btn_circle.disapprove.voted-approve {
   background: transparent;
   border: 2px solid #FFFFFF;
   -webkit-box-shadow: none;
@@ -527,7 +527,7 @@ a.btn_circle.approve.voted-disapprove, a.btn_circle.disapprove.voted-approve {
   text-shadow: none;
 }
 
-a.modal_btn span {
+.modal_btn span {
   text-shadow: none;
   color: #606060;
 }
@@ -742,6 +742,12 @@ a.link_second_menu.active, a.link_second_menu:hover a.link_second_menu:focus {
   font-weight: 500;
   line-height: 16px;
   text-align: right;
+  border: 0;
+  padding: 0;
+}
+
+.read-more:hover {
+  text-decoration: underline;
 }
 
 .btn-see-more{
@@ -1468,6 +1474,9 @@ select.location-selector {
   font-weight: 500;
   margin: 0 5px;
   padding: 8px;
+  background: transparent;
+  outline: none;
+  border: none;
 }
 
 .r-item:hover {
@@ -1563,14 +1572,14 @@ select.location-selector {
     margin: 20px auto;
   }
 
-  a.poll_btn_circle {
+  .poll_btn_circle {
     margin-left: auto;
     margin-right: auto;
     display: block;
     background-color: #09499D;
   }
 
-  a.poll_btn_circle:hover {
+  .poll_btn_circle:hover {
     background-color: #09499D;
   }
 
