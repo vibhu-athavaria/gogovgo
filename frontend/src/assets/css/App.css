@@ -820,6 +820,12 @@ footer{
   box-shadow: 0 2px 5px 0 rgba(0,0,0,0.05);
 }
 
+@media screen and (max-width: 768px) {
+  footer {
+    padding-bottom: 12px;
+  }
+}
+
 footer .logo_header{
   color: #4D4D4D;
   font: 900 22px/75px 'Roboto';
