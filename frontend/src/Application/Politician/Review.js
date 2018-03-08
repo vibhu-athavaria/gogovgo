@@ -56,6 +56,7 @@ class Review extends Component {
 
         let sentimentClass = this.props.approve ? "color_approve" : "color_disapprove";
         let sentimentText = this.props.approve ? "Approve" : "Disapprove";
+        if (review.status === "PENDING") sentimentText += " (Pending)";
         sentimentClass += " content_title_2";
 
         const reasons = review.tags.map((tag, index) => (
