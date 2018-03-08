@@ -24,7 +24,7 @@ class TagHelper:
         Returns: list of tags
 
         """
-        tags = models.Tag.objects.filter(politician=politician, sentiment=sentiment)
+        tags = models.Tag.objects.filter(politician=politician, sentiment=sentiment, active=True)
         tags = tags.order_by('-weight').values_list('value', flat=True)
         return tags
 
@@ -55,8 +55,8 @@ class TagHelper:
             try:
                 t = db_tags[tag]
             except KeyError:
-                t = models.Tag.objects.create(politician=review.politician,
-                                         value=tag, sentiment=review.sentiment)
+                t = models.Tag.objects.create(politician=review.politician, value=tag,
+                                              sentiment=review.sentiment, active=False)
             else:
                 t.weight += 1
                 t.save()
@@ -208,7 +208,7 @@ class CreateReview(graphene.Mutation):
             try:
                 user = User.objects.get(email=email_address)
             except models.User.DoesNotExist:
-                user, _ = models.User.objects.create(
+                user = models.User.objects.create(
                     username=email_address,
                     email=email_address,
                     first_name=first_name,
