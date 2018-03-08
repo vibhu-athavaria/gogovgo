@@ -133,6 +133,7 @@ class Tag(TimeStampedModel):
     politician = models.ForeignKey(Politician)
     value = models.CharField(max_length=100)
     weight = models.IntegerField(default=1)
+    active = models.BooleanField(default=True)
     sentiment = models.CharField(choices=SENTIMENT_CHOICES,
                                  default=SENTIMENT_NEUTRAL, max_length=64)
 
@@ -144,7 +145,20 @@ class Tag(TimeStampedModel):
         verbose_name = 'Tag'
 
 
-class Review(TimeStampedModel):
+class TagApproveMixin(object):
+    """Logic to approved (or activate) related tags when a review is approved"""
+
+    def __init__(self, *args, **kwargs):
+        super(TagApproveMixin, self).__init__(*args, **kwargs)
+        self._is_approved = self.status == REVIEW_APPROVED
+
+    def save(self, *args, **kwargs):
+        if not self._is_approved and self.status == REVIEW_APPROVED:
+            self.tags.all().update(active=True)
+        return super(TagApproveMixin, self).save(*args, **kwargs)
+
+
+class Review(TagApproveMixin, TimeStampedModel):
     REVIEW_STATUS_CHOICES = (
         (REVIEW_PENDING, REVIEW_PENDING),
         (REVIEW_APPROVED, REVIEW_APPROVED)

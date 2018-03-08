@@ -59,7 +59,7 @@ class HowItWorks extends Component {
                     </Row>
                 </Modal.Body>
                 <Modal.Footer style={footer_style}>
-                    <h3 style={h2_style}>RateYourPolitician</h3> <text>Government, Simplified</text>
+                    <h3 style={h2_style}>RateYourPolitician</h3> <text>Government, simplified</text>
                 </Modal.Footer>
             </Modal>
         );
