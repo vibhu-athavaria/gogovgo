@@ -38,8 +38,8 @@ class ShareReviewURLModal extends Component {
                             <i className="fa fa-check" aria-hidden="true" />
                         </div>
                         <div className="your-review-has-been">
-                            Your rating has been published. Copy the link below to share it with
-                            others.
+                            Your review has been submitted, and will be published within 24 hours.
+                            Use the link below to share with other and track progress.
                         </div>
                     </div>
 
