@@ -19,7 +19,8 @@ class SubscribeModal extends Component {
             emailAddress: "",
             emailValidation: null,
             showShareReviewModal: false,
-            reviewId: null
+            reviewId: null,
+            error: null
         };
     }
 
@@ -80,7 +81,8 @@ class SubscribeModal extends Component {
                     next({ reviewId: data.createReview.review.id });
                 })
                 .catch(error => {
-                    console.log("there was an error sending the query", error);
+                    console.warn("there was an error sending the query", error);
+                    this.setState({ error: error.graphQLErrors[0].message });
                 });
         };
 
@@ -139,6 +141,9 @@ class SubscribeModal extends Component {
                             Your review will remain anonymous.
                         </p>
                     </div>
+                    {this.state.error && (
+                        <div className="text-center text-danger">{this.state.error}</div>
+                    )}
                     <form>
                         <FormGroup validationState={this.state.fullnameValidation}>
                             <ControlLabel>Full name</ControlLabel>

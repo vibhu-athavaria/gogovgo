@@ -4,6 +4,8 @@ from cloudinary import CloudinaryImage
 from django.contrib.auth.models import User
 from graphene_django.converter import convert_django_field
 from graphene_django.types import DjangoObjectType
+from graphql import GraphQLError
+from django.db import IntegrityError
 
 from gogovgo.gogovgo_site import models
 from gogovgo.gogovgo_site.constants import SENTIMENT_NEGATIVE, SENTIMENT_POSITIVE
@@ -222,14 +224,17 @@ class CreateReview(graphene.Mutation):
         location = args['location']
         state, country = location.split(',')
 
-        review = models.Review.objects.create(
-            politician_id=args['politician_id'],
-            user=user,
-            state=state.strip() or None,
-            country=country.strip(),
-            sentiment=args['sentiment'],
-            body=args['body']
-        )
+        try:
+            review = models.Review.objects.create(
+                politician_id=args['politician_id'],
+                user=user,
+                state=state.strip() or None,
+                country=country.strip(),
+                sentiment=args['sentiment'],
+                body=args['body']
+            )
+        except IntegrityError:
+            raise GraphQLError('You have already submitted a review for this politician')
 
         tags = [tag['name'] for tag in args['tags']]
         TagHelper.add_tags(review, tags)
