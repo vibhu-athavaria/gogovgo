@@ -1295,6 +1295,33 @@ select.location-selector {
 /* end tag input css */
 
 
+.review-politician-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 32px;
+}
+.review-politician-info img {
+  display: flex;
+  width: 105px;
+  height: 105px;
+  border-radius: 50%;
+}
+
+.review-politician-info .politician-info {
+  margin-left: 20px;
+}
+
+.review-politician-info .politician-info-field {
+  font: 13px/1.6 Roboto;
+}
+
+.review-politician-info .politician-name {
+  font: 22px Roboto;
+}
+
+
+
 /* Responsive  */
 @media only screen and (min-width: 768px) and (max-width: 992px) {
   #head_politician{

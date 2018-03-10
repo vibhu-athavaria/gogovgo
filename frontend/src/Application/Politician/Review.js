@@ -12,6 +12,25 @@ import { encrypt } from "../../utils/security";
 import { graphql, gql } from "react-apollo";
 import PropTypes from "prop-types";
 
+const PoliticianInfo = props => {
+    const { politician } = props;
+    if (!politician || !politician.firstName) return null;
+    return (
+        <div className="review-politician-info">
+            <img src={politician.avatarUrl} />
+            <div className="politician-info">
+                <div className="politician-info-field">
+                    {politician.publicOfficeTitle.displayName}
+                </div>
+                <div className="politician-name">
+                    {politician.firstName} {politician.lastName}
+                </div>
+                <div className="politician-info-field">{politician.politicalParty}</div>
+            </div>
+        </div>
+    );
+};
+
 class Review extends Component {
     constructor(props, context) {
         super(props, context);
@@ -111,6 +130,7 @@ class Review extends Component {
 
         return (
             <div className="divisor">
+                <PoliticianInfo politician={review.politician} />
                 <div className="article_section_1">
                     <div className={sentimentClass}>{sentimentText}</div>
                     <div className="content_title_2_sub">Anonymous</div>
