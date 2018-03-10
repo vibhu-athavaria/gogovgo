@@ -28,9 +28,8 @@ class Review extends Component {
     }
 
     componentDidMount() {
-        const reviewURL = window.location.href + "/reviews/" + encrypt(this.props.reviewId);
         this.setState({
-            value: reviewURL,
+            value: window.location.href,
             showShareURL: this.props.showShareURL,
             upVoteCount: this.props.data.upVote,
             downVoteCount: this.props.data.downVote
