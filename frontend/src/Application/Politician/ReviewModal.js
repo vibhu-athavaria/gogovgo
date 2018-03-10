@@ -31,6 +31,15 @@ const getReview = gql`
     query getReview($id: ID!) {
         review(id: $id) {
             id
+            politician {
+                firstName
+                lastName
+                politicalParty
+                avatarUrl
+                publicOfficeTitle {
+                    displayName
+                }
+            }
             user {
                 firstName
                 lastName
