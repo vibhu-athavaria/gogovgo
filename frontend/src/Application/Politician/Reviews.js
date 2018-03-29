@@ -60,13 +60,13 @@ class Reviews extends Component {
 
         const topNegativeTags = this.props.negativeTags.slice(0, 5).map((tag, index) => (
             <button type="button" className="btn btn-tags" key={index}>
-                {tag}
+                #{tag}
             </button>
         ));
 
         const topPostiveTags = this.props.positiveTags.slice(0, 5).map((tag, index) => (
             <button type="button" className="btn btn-tags" key={index}>
-                {tag}
+                #{tag}
             </button>
         ));
 
@@ -120,7 +120,7 @@ class Reviews extends Component {
                         </div>
 
                         <div className="content_text margin_abajo_small">
-                            Top reasons why people <span className="color_approve">approve </span>
+                            Top #hashtags why people <span className="color_approve">approve </span>
                             of the way {this.props.politicianName} is handling his job as{" "}
                             {this.props.politicianTitle}:
                         </div>
@@ -136,7 +136,7 @@ class Reviews extends Component {
                             Disapprove
                         </div>
                         <div className="content_text margin_abajo_small ">
-                            Top reasons why people{" "}
+                            Top #hashtags why people
                             <span className="color_disapprove">disapprove </span> of the way{" "}
                             {this.props.politicianName} is handling his job as{" "}
                             {this.props.politicianTitle}:

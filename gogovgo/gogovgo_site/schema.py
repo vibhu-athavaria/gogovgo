@@ -31,17 +31,21 @@ class TagHelper:
         return tags
 
     @staticmethod
-    def clean_tags(tags):
+    def clean_tags(review):
         """Validate tags before inserting"""
-        if not isinstance(tags, list):
-            return
-        tags = [str(tag).strip().lower() for tag in tags if tag ]
-        return tags
+        review_tags = []
+        review_text = review.body.split()
+        for t in review_text:
+            if t.startswith('#'):
+                review_tags.append(t[1:])
+        return review_tags
 
     @staticmethod
-    def add_tags(review, tags):
+    def add_tags(review):
         """Add tags to politician and review"""
-        tags = TagHelper.clean_tags(tags)
+
+
+        tags = TagHelper.clean_tags(review)
         if not tags:
             return
 
@@ -236,8 +240,7 @@ class CreateReview(graphene.Mutation):
         except IntegrityError:
             raise GraphQLError('You have already submitted a review for this politician')
 
-        tags = [tag['name'] for tag in args['tags']]
-        TagHelper.add_tags(review, tags)
+        TagHelper.add_tags(review)
 
         ok = True
         return CreateReview(review=review, ok=ok)

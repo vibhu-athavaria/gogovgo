@@ -8,7 +8,7 @@ import { withCookies, Cookies } from "react-cookie";
 import moment from "moment";
 import { ControlLabel, FormControl, FormGroup, InputGroup } from "react-bootstrap";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { encrypt } from "../../utils/security";
+// import { encrypt } from "../../utils/security";
 import { graphql, gql } from "react-apollo";
 import PropTypes from "prop-types";
 
@@ -17,7 +17,7 @@ const PoliticianInfo = props => {
     if (!politician || !politician.firstName) return null;
     return (
         <div className="review-politician-info">
-            <img src={politician.avatarUrl} />
+            <img src={politician.avatarUrl} alt="politicianImage" />
             <div className="politician-info">
                 <div className="politician-info-field">
                     {politician.publicOfficeTitle.displayName}
@@ -79,7 +79,7 @@ class Review extends Component {
 
         const reasons = review.tags.map((tag, index) => (
             <button key={index} type="button" className="btn btn-tags">
-                {tag}
+                #{tag}
             </button>
         ));
 

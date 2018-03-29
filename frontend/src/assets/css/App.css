@@ -515,6 +515,9 @@ nav.navbar.main-menu {
 .list-group-item{
   border: none;
 }
+.custom-modal {
+  width: 55%;
+}
 
 .modal_btn{
   color: #606060 !important;
@@ -897,6 +900,11 @@ footer .list-inline-item a:hover {text-decoration: none}
 .modal_text_small {
   font-size: 14px;
   color: #999999;
+}
+
+.modal_text_small.opinion {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 

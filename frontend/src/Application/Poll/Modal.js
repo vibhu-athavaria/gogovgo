@@ -7,7 +7,7 @@
 import React, { Component } from "react";
 
 import PollQuestion from "./PollQuestion";
-import PollKeywords from "./PollKeywords";
+
 import PollReview from "./PollReview";
 import PollLocation from "./PollLocation";
 import SubscribeModal from "./SubscribeModal";
@@ -47,18 +47,15 @@ export default class BaseModal extends Component {
         let modal;
         switch (this.state.step) {
             case 2:
-                modal = <PollKeywords {...props} />;
-                break;
-            case 3:
                 modal = <PollReview {...props} />;
                 break;
-            case 4:
+            case 3:
                 modal = <PollLocation {...props} />;
                 break;
-            case 5:
+            case 4:
                 modal = <SubscribeModal {...props} />;
                 break;
-            case 6:
+            case 5:
                 modal = <ShareReviewURLModal {...props} />;
                 break;
             default:
