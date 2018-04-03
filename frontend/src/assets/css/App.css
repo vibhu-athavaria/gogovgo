@@ -516,7 +516,8 @@ nav.navbar.main-menu {
   border: none;
 }
 .custom-modal {
-  width: 55%;
+  width: 75%;
+  max-width: 685px;
 }
 
 .modal_btn{

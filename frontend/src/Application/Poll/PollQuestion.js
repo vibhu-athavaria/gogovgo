@@ -47,7 +47,7 @@ const PollQuestion = props => {
                         </span>
                     </div>
 
-                    <Row className="justify-content-center margin_abajo_big a_or_d">
+                    <Row className="justify-content-center a_or_d">
                         <button
                             className="btn btn-secondary btn_circle modal_btn approve"
                             onClick={() => next(true)}
@@ -69,6 +69,7 @@ const PollQuestion = props => {
                             </div>
                         </button>
                     </Row>
+                    <span className="modal_text_small">Safe, secure, and anonymous</span>
                 </div>
             </Modal.Body>
             <Modal.Footer />

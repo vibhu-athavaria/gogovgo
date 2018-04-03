@@ -137,7 +137,7 @@ class Reviews extends Component {
                         </div>
                         <div className="content_text margin_abajo_small ">
                             Top #hashtags why people
-                            <span className="color_disapprove">disapprove </span> of the way{" "}
+                            <span className="color_disapprove"> disapprove </span> of the way{" "}
                             {this.props.politicianName} is handling his job as{" "}
                             {this.props.politicianTitle}:
                         </div>
