@@ -130,6 +130,8 @@ class PoliticianType(DjangoObjectType):
     hero_url = graphene.String()
     avatar_url = graphene.String()
     thumbnail_tag = graphene.String()
+    approval_count = graphene.Int()
+    disapproval_count = graphene.Int()
 
     class Meta:
         model = models.Politician
@@ -154,6 +156,12 @@ class PoliticianType(DjangoObjectType):
             return src
         else:
             return ""
+
+    def resolve_approval_count(self, *args):
+        return models.Review.objects.filter(politician=self, sentiment=SENTIMENT_POSITIVE).count()
+
+    def resolve_disapproval_count(self, *args):
+        return models.Review.objects.filter(politician=self, sentiment=SENTIMENT_NEGATIVE).count()
 
     def resolve_positive_tags(self, *args):
         return TagHelper.get_tags(politician=self, sentiment=SENTIMENT_POSITIVE)
