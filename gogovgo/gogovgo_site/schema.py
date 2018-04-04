@@ -339,7 +339,7 @@ class Query(graphene.AbstractType):
         country=graphene.String()
     )
     review = graphene.Field(ReviewType, id=graphene.ID())
-    reviews = graphene.List(ReviewsPaginatedType, id=graphene.Int(), page=graphene.Int())
+    reviews = graphene.Field(ReviewsPaginatedType, id=graphene.Int(), page=graphene.Int())
 
     @graphene.resolve_only_args
     def resolve_users(self):
@@ -370,7 +370,7 @@ class Query(graphene.AbstractType):
     def resolve_reviews(self, args, context, info):
         helper = ReviewPaginationHelper(pid=args['id'], page=args['page'])
         reviews = helper.get_reviews()
-        return [ReviewsPaginatedType(**reviews)]
+        return ReviewsPaginatedType(**reviews)
 
     def resolve_review(self, args, context, info):
         id = args.get('id')

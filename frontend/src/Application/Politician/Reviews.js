@@ -30,8 +30,6 @@ class Reviews extends Component {
         }
     }
 
-    componentDidMount() {}
-
     reviewTabChange(event, item) {
         event.preventDefault();
         this.setState({ reviewTab: item });
@@ -43,17 +41,17 @@ class Reviews extends Component {
     onFetchMore = () => {
         const { data: { reviews, fetchMore } } = this.props;
         fetchMore({
-            variables: { id: parseInt(this.props.politicianId), page: reviews[0].page + 1 },
+            variables: { id: parseInt(this.props.politicianId), page: reviews.page + 1 },
             updateQuery: (previousResult, { fetchMoreResult, queryVariables }) => {
-                const newData = fetchMoreResult.reviews[0];
-                const oldData = previousResult.reviews[0];
+                const newData = fetchMoreResult.reviews;
+                const oldData = previousResult.reviews;
 
                 const positiveReviews = oldData.positive.concat(newData.positive);
                 const negativeReviews = oldData.negative.concat(newData.negative);
 
                 let data = { ...fetchMoreResult };
-                data.reviews[0].positive = positiveReviews;
-                data.reviews[0].negative = negativeReviews;
+                data.reviews.positive = positiveReviews;
+                data.reviews.negative = negativeReviews;
                 return data;
             }
         });
@@ -69,11 +67,10 @@ class Reviews extends Component {
         let approvedReviews = [];
         let disapprovedReviews = [];
         if (data.reviews) {
-            const reviews = data.reviews[0];
-            approvedReviews = reviews.positive.map((review, index) => (
+            approvedReviews = data.reviews.positive.map((review, index) => (
                 <Review key={"approve:" + index} data={review} approve={true} />
             ));
-            disapprovedReviews = reviews.negative.map((review, index) => (
+            disapprovedReviews = data.reviews.negative.map((review, index) => (
                 <Review key={"disapprove:" + index} data={review} approve={false} />
             ));
         }
@@ -186,7 +183,7 @@ class Reviews extends Component {
                             className="btn btn-default btn-see-more pull-right"
                             onClick={this.onFetchMore}
                             type="submit"
-                            disabled={!data.reviews || !data.reviews[0].hasMore}
+                            disabled={!data.reviews || !data.reviews.hasMore}
                         >
                             See more
                         </button>
@@ -261,8 +258,8 @@ const getReviews = gql`
     }
 `;
 
-const ReviewsWithDta = graphql(getReviews, {
+const ReviewsWithData = graphql(getReviews, {
     options: props => ({ variables: { id: parseInt(props.politicianId), page: 1 } })
 })(ReviewWithCookies);
 
-export default ReviewsWithDta;
+export default ReviewsWithData;
