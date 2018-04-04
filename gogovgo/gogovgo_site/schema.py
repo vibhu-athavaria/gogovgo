@@ -284,8 +284,10 @@ class Mutations(graphene.ObjectType):
 
 
 class ReviewPaginationHelper(object):
+    """Helper class to get reviews for a politician as paginated Query"""
 
-    per_page = 5  # todo: change this to 20
+    #   show 20 reviews per page
+    per_page = 20
 
     def __init__(self, pid, page):
         self._id = pid
@@ -294,10 +296,11 @@ class ReviewPaginationHelper(object):
     def get_reviews(self):
         positive_reviews = self._get(sentiment=SENTIMENT_POSITIVE)
         negative_reviews = self._get(sentiment=SENTIMENT_NEGATIVE)
+        total_pages = max(positive_reviews['totalPages'], negative_reviews['totalPages'])
         return {
             'page': self.page,
-            'pages': max(positive_reviews['totalPages'], negative_reviews['totalPages']),
-            'hasMore': True,
+            'pages': total_pages,
+            'hasMore': total_pages > self.page,
             'positive': positive_reviews['data'],
             'negative': negative_reviews['data'],
         }

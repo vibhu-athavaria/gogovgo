@@ -18,10 +18,7 @@ class Reviews extends Component {
         this.state = {
             showPoll: false,
             rated: false,
-            reviewTab: "Approve",
-            reviews: [],
-            reviewsLoaded: false,
-            hasMore: null
+            reviewTab: "Approve"
         };
     }
 
@@ -40,8 +37,26 @@ class Reviews extends Component {
         this.setState({ reviewTab: item });
     }
 
+    /**
+     * Logic to load more results in paginated Query
+     */
     onFetchMore = () => {
-        console.log(this.props);
+        const { data: { reviews, fetchMore } } = this.props;
+        fetchMore({
+            variables: { id: parseInt(this.props.politicianId), page: reviews[0].page + 1 },
+            updateQuery: (previousResult, { fetchMoreResult, queryVariables }) => {
+                const newData = fetchMoreResult.reviews[0];
+                const oldData = previousResult.reviews[0];
+
+                const positiveReviews = oldData.positive.concat(newData.positive);
+                const negativeReviews = oldData.negative.concat(newData.negative);
+
+                let data = { ...fetchMoreResult };
+                data.reviews[0].positive = positiveReviews;
+                data.reviews[0].negative = negativeReviews;
+                return data;
+            }
+        });
     };
 
     render() {
@@ -171,6 +186,7 @@ class Reviews extends Component {
                             className="btn btn-default btn-see-more pull-right"
                             onClick={this.onFetchMore}
                             type="submit"
+                            disabled={!data.reviews || !data.reviews[0].hasMore}
                         >
                             See more
                         </button>
