@@ -57,80 +57,60 @@ class Politician extends Component {
             return <p>Loading...</p>;
         } else if (error) {
             return <p>Error!</p>;
-        } else {
-            let approvalCount = 0;
-            let disapprovalCount = 0;
-            politician.reviews.forEach(function(review, index) {
-                if (review.status === "APPROVED") {
-                    if (review.sentiment === "POSITIVE") {
-                        approvalCount += 1;
-                    } else {
-                        disapprovalCount += 1;
-                    }
-                }
-            });
-
-            const reviewModalClose = () => {
-                this.setState({ showReviewModal: false });
-            };
-
-            return (
-                <div>
-                    <div id="head_politician" style={this.state.bgStyle}>
-                        <Grid>
-                            <Col lg={5} md={7}>
-                                <PoliticianBio
-                                    title={politician.publicOfficeTitle.displayName}
-                                    bio={politician.bio}
-                                    avatarUrl={politician.avatarUrl}
-                                    jobDescription={politician.jobDescription}
-                                    name={politician.firstName + " " + politician.lastName}
-                                    politicalParty={politician.politicalParty}
-                                    approvalRating={politician.approvalRating}
-                                    approvalCount={approvalCount}
-                                    disapprovalCount={disapprovalCount}
-                                    politicianId={politician.id}
-                                    positiveTags={politician.positiveTags}
-                                    negativeTags={politician.negativeTags}
-                                />
-                            </Col>
-                        </Grid>
-                    </div>
-                    <div id="politician-content">
-                        <PoliticianDetail
-                            reviews={politician.reviews}
-                            website={politician.website}
-                            phoneNumber={politician.phoneNumber}
-                            mailingAddress={politician.mailingAddress}
-                            approvalCount={approvalCount}
-                            disapprovalCount={disapprovalCount}
-                            politicianId={politician.id}
-                            politicianName={politician.firstName + " " + politician.lastName}
-                            politicianTitle={politician.publicOfficeTitle.displayName}
-                            positiveTags={politician.positiveTags}
-                            negativeTags={politician.negativeTags}
-                            staff={politician.staff}
-                            reviewId={this.props.reviewId}
-                        />
-
-                        <Modal
-                            show={this.state.showReviewModal}
-                            dialogClassName="custom-modal"
-                            keyboard={true}
-                        >
-                            <Modal.Header
-                                bsClass="margin_abajo_mini"
-                                closeButton
-                                onHide={() => reviewModalClose()}
-                            />
-                            <Modal.Body>
-                                <ReviewModal reviewId={this.props.reviewId} showShareURL={true} />
-                            </Modal.Body>
-                        </Modal>
-                    </div>
-                </div>
-            );
         }
+
+        const reviewModalClose = () => {
+            this.setState({ showReviewModal: false });
+        };
+
+        return (
+            <div>
+                <div id="head_politician" style={this.state.bgStyle}>
+                    <Grid>
+                        <Col lg={5} md={7}>
+                            <PoliticianBio
+                                title={politician.publicOfficeTitle.displayName}
+                                bio={politician.bio}
+                                avatarUrl={politician.avatarUrl}
+                                jobDescription={politician.jobDescription}
+                                name={politician.firstName + " " + politician.lastName}
+                                politicalParty={politician.politicalParty}
+                                approvalRating={politician.approvalRating}
+                                approvalCount={politician.approvalCount}
+                                disapprovalCount={politician.disapprovalCount}
+                                politicianId={politician.id}
+                                positiveTags={politician.positiveTags}
+                                negativeTags={politician.negativeTags}
+                            />
+                        </Col>
+                    </Grid>
+                </div>
+                <div id="politician-content">
+                    <PoliticianDetail
+                        {...politician}
+                        politicianId={politician.id}
+                        politicianName={politician.firstName + " " + politician.lastName}
+                        politicianTitle={politician.publicOfficeTitle.displayName}
+                        reviewId={this.props.reviewId}
+                    />
+
+                    <Modal
+                        show={this.state.showReviewModal}
+                        dialogClassName="custom-modal"
+                        keyboard={true}
+                    >
+                        <Modal.Header
+                            bsClass="margin_abajo_mini"
+                            closeButton
+                            onHide={() => reviewModalClose()}
+                        />
+                        <Modal.Body>
+                            <ReviewModal reviewId={this.props.reviewId} showShareURL={true} />
+                        </Modal.Body>
+                    </Modal>
+                </div>
+            </div>
+        );
     }
 }
 
@@ -147,6 +127,8 @@ const getPolitician = gql`
             jobDescription
             politicalParty
             approvalRating
+            approvalCount
+            disapprovalCount
             positiveTags
             negativeTags
             publicOfficeTitle {
@@ -155,22 +137,6 @@ const getPolitician = gql`
             mailingAddress
             website
             phoneNumber
-            reviews {
-                id
-                user {
-                    firstName
-                    lastName
-                }
-                sentiment
-                tags
-                status
-                city
-                state
-                body
-                upVote
-                downVote
-                created
-            }
         }
     }
 `;

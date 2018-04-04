@@ -8,6 +8,7 @@ import Review from "./Review";
 import { withCookies, Cookies } from "react-cookie";
 import { Col, Row } from "react-bootstrap";
 import PropTypes from "prop-types";
+import { gql, graphql } from "react-apollo";
 
 import PollModal from "../Poll/Modal";
 
@@ -34,44 +35,60 @@ class Reviews extends Component {
         this.setState({ reviewTab: item });
     }
 
+    /**
+     * Logic to load more results in paginated Query
+     */
+    onFetchMore = () => {
+        const { data: { reviews, fetchMore } } = this.props;
+        fetchMore({
+            variables: { id: parseInt(this.props.politicianId), page: reviews.page + 1 },
+            updateQuery: (previousResult, { fetchMoreResult, queryVariables }) => {
+                const newData = fetchMoreResult.reviews;
+                const oldData = previousResult.reviews;
+
+                const positiveReviews = oldData.positive.concat(newData.positive);
+                const negativeReviews = oldData.negative.concat(newData.negative);
+
+                let data = { ...fetchMoreResult };
+                data.reviews.positive = positiveReviews;
+                data.reviews.negative = negativeReviews;
+                return data;
+            }
+        });
+    };
+
     render() {
+        const { data } = this.props;
+
         // Event handlers
         const pollModelClose = () => this.setState({ showPoll: false });
 
-        let leftReviews = 0;
-        let rightReviews = 0;
+        //  Reviews
         let approvedReviews = [];
         let disapprovedReviews = [];
-        this.props.reviews.forEach(function(review, index) {
-            if (review.status === "APPROVED") {
-                if (review.sentiment === "POSITIVE") {
-                    approvedReviews.push(
-                        <Review key={"approve:" + index} data={review} approve={true} />
-                    );
-                    leftReviews += 1;
-                } else {
-                    disapprovedReviews.push(
-                        <Review key={"disapprove:" + index} data={review} approve={false} />
-                    );
-                    rightReviews += 1;
-                }
-            }
-        });
+        if (data.reviews) {
+            approvedReviews = data.reviews.positive.map((review, index) => (
+                <Review key={"approve:" + index} data={review} approve={true} />
+            ));
+            disapprovedReviews = data.reviews.negative.map((review, index) => (
+                <Review key={"disapprove:" + index} data={review} approve={false} />
+            ));
+        }
 
+        //  Tags
         const topNegativeTags = this.props.negativeTags.slice(0, 5).map((tag, index) => (
             <button type="button" className="btn btn-tags" key={index}>
-                {tag}
+                #{tag}
             </button>
         ));
-
         const topPostiveTags = this.props.positiveTags.slice(0, 5).map((tag, index) => (
             <button type="button" className="btn btn-tags" key={index}>
-                {tag}
+                #{tag}
             </button>
         ));
 
         const getStyle = () => {
-            if (leftReviews >= rightReviews) {
+            if (approvedReviews.length >= disapprovedReviews.length) {
                 return { borderRight: "1px solid #efefef" };
             } else {
                 return { borderLeft: "1px solid #efefef" };
@@ -120,7 +137,7 @@ class Reviews extends Component {
                         </div>
 
                         <div className="content_text margin_abajo_small">
-                            Top reasons why people <span className="color_approve">approve </span>
+                            Top #hashtags why people <span className="color_approve">approve </span>
                             of the way {this.props.politicianName} is handling his job as{" "}
                             {this.props.politicianTitle}:
                         </div>
@@ -136,8 +153,8 @@ class Reviews extends Component {
                             Disapprove
                         </div>
                         <div className="content_text margin_abajo_small ">
-                            Top reasons why people{" "}
-                            <span className="color_disapprove">disapprove </span> of the way{" "}
+                            Top #hashtags why people
+                            <span className="color_disapprove"> disapprove </span> of the way{" "}
                             {this.props.politicianName} is handling his job as{" "}
                             {this.props.politicianTitle}:
                         </div>
@@ -162,7 +179,12 @@ class Reviews extends Component {
 
                 <Row>
                     <Col sm={6}>
-                        <button className="btn btn-default btn-see-more pull-right" type="submit">
+                        <button
+                            className="btn btn-default btn-see-more pull-right"
+                            onClick={this.onFetchMore}
+                            type="submit"
+                            disabled={!data.reviews || !data.reviews.hasMore}
+                        >
                             See more
                         </button>
                     </Col>
@@ -191,4 +213,53 @@ Reviews.propTypes = {
     cookies: PropTypes.instanceOf(Cookies).isRequired
 };
 
-export default withCookies(Reviews);
+const ReviewWithCookies = withCookies(Reviews);
+
+// Initialize GraphQL queries or mutations with the `gql` tag
+const getReviews = gql`
+    query getReviews($id: Int!, $page: Int!) {
+        reviews(id: $id, page: $page) {
+            page
+            pages
+            hasMore
+            positive {
+                id
+                user {
+                    firstName
+                    lastName
+                }
+                sentiment
+                tags
+                status
+                city
+                state
+                body
+                upVote
+                downVote
+                created
+            }
+            negative {
+                id
+                user {
+                    firstName
+                    lastName
+                }
+                sentiment
+                tags
+                status
+                city
+                state
+                body
+                upVote
+                downVote
+                created
+            }
+        }
+    }
+`;
+
+const ReviewsWithData = graphql(getReviews, {
+    options: props => ({ variables: { id: parseInt(props.politicianId), page: 1 } })
+})(ReviewWithCookies);
+
+export default ReviewsWithData;
