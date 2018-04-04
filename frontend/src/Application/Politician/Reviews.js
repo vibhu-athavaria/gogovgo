@@ -231,8 +231,7 @@ const getReviews = gql`
                 sentiment
                 tags
                 status
-                city
-                state
+                location
                 body
                 upVote
                 downVote
@@ -247,8 +246,7 @@ const getReviews = gql`
                 sentiment
                 tags
                 status
-                city
-                state
+                location
                 body
                 upVote
                 downVote
