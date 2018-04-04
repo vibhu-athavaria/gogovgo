@@ -87,18 +87,10 @@ class Politician extends Component {
                 </div>
                 <div id="politician-content">
                     <PoliticianDetail
-                        reviews={politician.reviews}
-                        website={politician.website}
-                        phoneNumber={politician.phoneNumber}
-                        mailingAddress={politician.mailingAddress}
-                        approvalCount={politician.approvalCount}
-                        disapprovalCount={politician.disapprovalCount}
+                        {...politician}
                         politicianId={politician.id}
                         politicianName={politician.firstName + " " + politician.lastName}
                         politicianTitle={politician.publicOfficeTitle.displayName}
-                        positiveTags={politician.positiveTags}
-                        negativeTags={politician.negativeTags}
-                        staff={politician.staff}
                         reviewId={this.props.reviewId}
                     />
 
@@ -145,22 +137,6 @@ const getPolitician = gql`
             mailingAddress
             website
             phoneNumber
-            reviews {
-                id
-                user {
-                    firstName
-                    lastName
-                }
-                sentiment
-                tags
-                status
-                city
-                state
-                body
-                upVote
-                downVote
-                created
-            }
         }
     }
 `;

@@ -1,10 +1,13 @@
+import math
+
 import graphene
 from cloudinary.models import CloudinaryField
 from cloudinary import CloudinaryImage
-from django.contrib.auth.models import User
 from graphene_django.converter import convert_django_field
 from graphene_django.types import DjangoObjectType
 from graphql import GraphQLError
+
+from django.contrib.auth.models import User
 from django.db import IntegrityError
 
 from gogovgo.gogovgo_site import models
@@ -44,7 +47,6 @@ class TagHelper:
     def add_tags(review):
         """Add tags to politician and review"""
 
-
         tags = TagHelper.clean_tags(review)
         if not tags:
             return
@@ -68,7 +70,6 @@ class TagHelper:
                 t.save()
 
             review.tags.add(t)
-
 
 
 @convert_django_field.register(CloudinaryField)
@@ -182,6 +183,7 @@ class ReviewType(DjangoObjectType):
     def resolve_tags(self, *args):
         return [tag.value for tag in self.tags.all()]
 
+
 ReviewType.Connection = connection_for_type(ReviewType)
 
 
@@ -281,6 +283,43 @@ class Mutations(graphene.ObjectType):
     update_review = UpdateReview.Field()
 
 
+class ReviewPaginationHelper(object):
+
+    per_page = 5  # todo: change this to 20
+
+    def __init__(self, pid, page):
+        self._id = pid
+        self.page = page or 1
+
+    def get_reviews(self):
+        positive_reviews = self._get(sentiment=SENTIMENT_POSITIVE)
+        negative_reviews = self._get(sentiment=SENTIMENT_NEGATIVE)
+        return {
+            'page': self.page,
+            'pages': max(positive_reviews['totalPages'], negative_reviews['totalPages']),
+            'hasMore': True,
+            'positive': positive_reviews['data'],
+            'negative': negative_reviews['data'],
+        }
+
+    def _get(self, sentiment):
+        start = (self.page - 1) * self.per_page
+        end = self.page * self.per_page
+        reviews = models.Review.objects.filter(politician_id=self._id, sentiment=sentiment)
+        total_reviews = reviews.count()
+        total_pages = math.ceil(total_reviews / self.per_page)
+        reviews = reviews.order_by('-up_vote').select_related('user')[start:end]
+        return {'data': reviews, 'totalPages': total_pages}
+
+
+class ReviewsPaginatedType(graphene.ObjectType):
+    page = graphene.Int()
+    pages = graphene.Int()
+    hasMore = graphene.Boolean()
+    positive = graphene.List(ReviewType)
+    negative = graphene.List(ReviewType)
+
+
 class Query(graphene.AbstractType):
     users = graphene.List(UserType)
     userprofiles = graphene.List(UserProfileType)
@@ -297,7 +336,7 @@ class Query(graphene.AbstractType):
         country=graphene.String()
     )
     review = graphene.Field(ReviewType, id=graphene.ID())
-    reviews = graphene.List(ReviewType)
+    reviews = graphene.List(ReviewsPaginatedType, id=graphene.Int(), page=graphene.Int())
 
     @graphene.resolve_only_args
     def resolve_users(self):
@@ -326,16 +365,13 @@ class Query(graphene.AbstractType):
         return models.PublicOfficeTitle.objects.filter(country=country).all()
 
     def resolve_reviews(self, args, context, info):
-        sentiment = args.get('sentiment')
-        reviews = models.Review.objects.all().order_by('-created')
-        if sentiment:
-            reviews = reviews.filter(sentiment=sentiment)
-        return reviews
+        helper = ReviewPaginationHelper(pid=args['id'], page=args['page'])
+        reviews = helper.get_reviews()
+        return [ReviewsPaginatedType(**reviews)]
 
     def resolve_review(self, args, context, info):
         id = args.get('id')
         return models.Review.objects.get(pk=id)
-
 
     @graphene.resolve_only_args
     def resolve_cabinet_members(self):
