@@ -87,14 +87,6 @@ class Reviews extends Component {
             </button>
         ));
 
-        const getStyle = () => {
-            if (approvedReviews.length >= disapprovedReviews.length) {
-                return { borderRight: "1px solid #efefef" };
-            } else {
-                return { borderLeft: "1px solid #efefef" };
-            }
-        };
-
         const getItemClass = item => {
             let className = "r-item " + item.toLowerCase();
             if (item === this.state.reviewTab) className += " active";
@@ -167,14 +159,10 @@ class Reviews extends Component {
                 </Row>
 
                 <div className={getMobileClass("contenedor_articulos text-left")}>
-                    <Row>
-                        <Col lg={6} sm={6} className="review-approve" style={getStyle()}>
-                            {approvedReviews}
-                        </Col>
-                        <Col lg={6} sm={6} className="review-disapprove" style={getStyle()}>
-                            {disapprovedReviews}
-                        </Col>
-                    </Row>
+                    <div className="row-flex">
+                        <div className="col-flex review-approve">{approvedReviews}</div>
+                        <div className="col-flex review-disapprove">{disapprovedReviews}</div>
+                    </div>
                 </div>
 
                 <Row>
