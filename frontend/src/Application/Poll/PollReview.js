@@ -69,10 +69,10 @@ class PollReview extends Component {
                 <Modal.Body>
                     <div className="texto_modales margin_abajo_medium">{pollQuestion}</div>
                     <div className="modal_text_small opinion">
-                        Share your opinion to influence others, and to send your review directly tp
-                        politicans. Reviews with the most upvotes will be displayed most
-                        prominently, and earn exclusive rewardsfor the author. Common #hashtags will
-                        be displayed on the politican's homepage, and all reviews are anonymous.
+                        Share your opinion to influence others and send your review directly to
+                        politicans. Reviews with the most upvotes are displayed at the top of the
+                        page, and earn exclusive rewards for the author. Common #hashtags are
+                        displayed on the politican's homepage, and all reviews are anonymous.
                     </div>
                     <FormGroup
                         className="margin_abajo_big"

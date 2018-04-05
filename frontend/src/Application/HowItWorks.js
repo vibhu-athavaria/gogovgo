@@ -34,7 +34,9 @@ class HowItWorks extends Component {
                                     <img src={profile} alt="" />
                                 </a>
                             </div>
-                            <div className="texto_modales_rg">Find your representatives.</div>
+                            <div className="texto_modales_rg">
+                                Find your representatives or politicians you care about.
+                            </div>
                         </Col>
                         <Col xs={4} className="text-center">
                             <div className="content_circle_blue">
@@ -43,7 +45,7 @@ class HowItWorks extends Component {
                                 </a>
                             </div>
                             <div className="texto_modales_rg">
-                                Submit reviews, report problems and make suggestions.
+                                Submit new reviews, and upvote reviews you agree with.
                             </div>
                         </Col>
                         <Col xs={4} className="text-center">
@@ -53,7 +55,8 @@ class HowItWorks extends Component {
                                 </a>
                             </div>
                             <div className="texto_modales_rg">
-                                We send your comments directly to the politician.
+                                Reviews are sent to politicians, and the most upvoted reviews earn
+                                rewards and exclusive access for authors.
                             </div>
                         </Col>
                     </Row>
