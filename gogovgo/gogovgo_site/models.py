@@ -191,4 +191,3 @@ class Review(TagApproveMixin, TimeStampedModel):
         ordering = ['-created']
         unique_together = ('user', 'politician')
         app_label = 'gogovgo_site'
-

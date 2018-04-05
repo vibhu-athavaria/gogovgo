@@ -39,7 +39,7 @@ class ShareReviewURLModal extends Component {
                         </div>
                         <div className="your-review-has-been">
                             Your review has been submitted, and will be published within 24 hours.
-                            Use the link below to share with other and track progress.
+                            Use the link below to share with others and track progress.
                         </div>
                     </div>
 

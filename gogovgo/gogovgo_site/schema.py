@@ -6,12 +6,13 @@ from cloudinary import CloudinaryImage
 from graphene_django.converter import convert_django_field
 from graphene_django.types import DjangoObjectType
 from graphql import GraphQLError
+from django_countries import countries
 
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 
 from gogovgo.gogovgo_site import models
-from gogovgo.gogovgo_site.constants import SENTIMENT_NEGATIVE, SENTIMENT_POSITIVE
+from gogovgo.gogovgo_site.constants import SENTIMENT_NEGATIVE, SENTIMENT_POSITIVE, US_STATES
 
 
 class TagHelper:
@@ -174,14 +175,35 @@ class PoliticianType(DjangoObjectType):
 PoliticianType.Connection = connection_for_type(PoliticianType)
 
 
+class LocationHelper(object):
+
+    @staticmethod
+    def get_country(review):
+        countries_dict = {short_name: long_name for short_name, long_name in countries}
+        return countries_dict[review.country]
+
+    @staticmethod
+    def get_state(review):
+        states = {short_name: long_name for short_name, long_name in US_STATES}
+        return states[review.state]
+
+
+
 class ReviewType(DjangoObjectType):
     tags = graphene.List(graphene.String)
+    location = graphene.String()
 
     class Meta:
         model = models.Review
 
     def resolve_tags(self, *args):
         return [tag.value for tag in self.tags.all()]
+
+    def resolve_location(self, *args):
+        location = LocationHelper.get_country(review=self).replace(' of America', '')
+        if self.country == 'US' and self.state:
+            location += ', ' + LocationHelper.get_state(review=self)
+        return location
 
 
 ReviewType.Connection = connection_for_type(ReviewType)

@@ -125,8 +125,6 @@ class Review extends Component {
         };
 
         const created_moment = moment(review.created);
-        let location = review.state;
-        if (review.city) location = review.city + ", " + location;
 
         return (
             <div className="divisor">
@@ -134,7 +132,9 @@ class Review extends Component {
                 <div className="article_section_1">
                     <div className={sentimentClass}>{sentimentText}</div>
                     <div className="content_title_2_sub">Anonymous</div>
-                    <div className="content_title_2_ciudad margin_abajo_small">{location}</div>
+                    <div className="content_title_2_ciudad margin_abajo_small">
+                        {review.location}
+                    </div>
                     <div className="content_title_2_ciudad">
                         {created_moment.format("MMMM Do, YYYY")}
                     </div>
