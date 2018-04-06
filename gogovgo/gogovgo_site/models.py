@@ -145,20 +145,136 @@ class Tag(TimeStampedModel):
         verbose_name = 'Tag'
 
 
-class TagApproveMixin(object):
-    """Logic to approved (or activate) related tags when a review is approved"""
+class HashTagsMixin(object):
+    """
+    Functionality to extract hash tags and approved them as review is approved
+    """
 
     def __init__(self, *args, **kwargs):
-        super(TagApproveMixin, self).__init__(*args, **kwargs)
+        """Save initial data for comparison when saving the review in DB"""
+        super(HashTagsMixin, self).__init__(*args, **kwargs)
         self._is_approved = self.status == REVIEW_APPROVED
+        self._body = self.body
 
     def save(self, *args, **kwargs):
+        """Extends logic when saving the review to DB"""
+        disable_auto_approve = kwargs.pop('disable_auto_approve', False)
+
+        #   approved tags if review was approved
         if not self._is_approved and self.status == REVIEW_APPROVED:
             self.tags.all().update(active=True)
-        return super(TagApproveMixin, self).save(*args, **kwargs)
+
+        #   save in DB
+        response = super(HashTagsMixin, self).save(*args, **kwargs)
+
+        #   tag extraction or deletion
+        approve = not disable_auto_approve and self.status == REVIEW_APPROVED
+        self.process_tags(approve=approve)
+
+        return response
+
+    def process_tags(self, approve):
+        """
+        Logic to process tag in the review
+
+        Args:
+            approve/boolean: Whether to approved new reviews or not
+
+        Returns: Nothin!
+
+        """
+        old_tags = self.get_tags(self._body)
+        new_tags = self.get_tags(self.body)
+        if old_tags == new_tags:
+            return
+
+        tags_added = [tag for tag in new_tags if tag not in old_tags]
+        tags_removed = [tag for tag in old_tags if tag not in new_tags]
+
+        if tags_added:
+            self.add_tags(tags_added, approve)
+
+        if tags_removed:
+            self.remove_tags(tags_removed)
+
+    @staticmethod
+    def get_tags(text):
+        """
+        Extract tags from text
+
+        Args:
+            text/string: Review's body text
+
+        Returns: set array of reviews in text
+
+        """
+        if not text:
+            return []
+        text = text.replace('\r\n', ' ').replace('\n', ' ')
+        tags = []
+        for word in text.split(' '):
+            if word.startswith('#'):
+                tags.append(word[1:])
+        return set(sorted(tags))
+
+    def add_tags(self, tags, approve=False):
+        """
+        Handle addition of new tags to review
+
+        The new tag are added to DB
+        If the tag already exists in DB, it's weight is incremented
+
+        Args:
+            tags/list: new tags found in review
+            approved/bool: Whether to approved new tag entries in DB or not
+
+        Returns: Nothin!
+
+        """
+        db_tags = Tag.objects.filter(politician=self.politician,
+                                     sentiment=self.sentiment,
+                                     value__in=tags)
+        db_tags = {tag.value: tag for tag in db_tags}
+
+        #   logic to add new tag or increment weight if tag already exists
+        for tag in tags:
+            t = None
+            try:
+                t = db_tags[tag]
+            except KeyError:
+                query = {'politician': self.politician, 'value': tag,
+                          'sentiment': self.sentiment, 'active': approve}
+                t = Tag.objects.create(**query)
+            else:
+                t.weight += 1
+                t.save()
+
+            self.tags.add(t)
+
+    def remove_tags(self, tags):
+        """
+        Handle removal of tags from review
+
+        The weight of tag is decreased.
+        If the tag is not being used anywhere else, it's deleted from Db
+
+        Args:
+            tags/list: tags that were removed from review
+
+        Returns: Nothin!
+
+        """
+        query = {'politician': self.politician, 'sentiment': self.sentiment, 'value__in': tags}
+        db_tags = Tag.objects.filter(**query)
+        for tag in db_tags:
+            tag.weight -= 1
+            if tag.weight < 1:
+                tag.delete()
+            else:
+                tag.save()
 
 
-class Review(TagApproveMixin, TimeStampedModel):
+class Review(HashTagsMixin, TimeStampedModel):
     REVIEW_STATUS_CHOICES = (
         (REVIEW_PENDING, REVIEW_PENDING),
         (REVIEW_APPROVED, REVIEW_APPROVED)

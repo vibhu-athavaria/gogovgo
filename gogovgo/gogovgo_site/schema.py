@@ -34,44 +34,6 @@ class TagHelper:
         tags = tags.order_by('-weight').values_list('value', flat=True)
         return tags
 
-    @staticmethod
-    def clean_tags(review):
-        """Validate tags before inserting"""
-        review_tags = []
-        review_text = review.body.split()
-        for t in review_text:
-            if t.startswith('#'):
-                review_tags.append(t[1:])
-        return review_tags
-
-    @staticmethod
-    def add_tags(review):
-        """Add tags to politician and review"""
-
-        tags = TagHelper.clean_tags(review)
-        if not tags:
-            return
-
-        #   get existing & matching tags
-        db_tags = models.Tag.objects.filter(politician=review.politician,
-                                            sentiment=review.sentiment,
-                                            value__in=tags)
-        db_tags = {tag.value: tag for tag in db_tags}
-
-        #   logic to add new tag or increment weight if tag already exists
-        for tag in tags:
-            t = None
-            try:
-                t = db_tags[tag]
-            except KeyError:
-                t = models.Tag.objects.create(politician=review.politician, value=tag,
-                                              sentiment=review.sentiment, active=False)
-            else:
-                t.weight += 1
-                t.save()
-
-            review.tags.add(t)
-
 
 @convert_django_field.register(CloudinaryField)
 def my_convert_function(field, registry=None):
@@ -261,18 +223,17 @@ class CreateReview(graphene.Mutation):
         state, country = location.split(',')
 
         try:
-            review = models.Review.objects.create(
+            review = models.Review(
                 politician_id=args['politician_id'],
                 user=user,
                 state=state.strip() or None,
                 country=country.strip(),
                 sentiment=args['sentiment'],
-                body=args['body']
             )
+            review.body = args['body']
+            review.save(disable_auto_approve=True)
         except IntegrityError:
             raise GraphQLError('You have already submitted a review for this politician')
-
-        TagHelper.add_tags(review)
 
         ok = True
         return CreateReview(review=review, ok=ok)
