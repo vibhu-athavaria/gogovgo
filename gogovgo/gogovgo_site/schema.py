@@ -231,7 +231,7 @@ class CreateReview(graphene.Mutation):
                 sentiment=args['sentiment'],
             )
             review.body = args['body']
-            review.save()
+            review.save(disable_auto_approve=True)
         except IntegrityError:
             raise GraphQLError('You have already submitted a review for this politician')
 

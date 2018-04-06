@@ -156,13 +156,18 @@ class HashTagsMixin(object):
         self._body = self.body
 
     def save(self, *args, **kwargs):
+        disable_auto_approve = kwargs.pop('disable_auto_approve', False)
+
         if not self._is_approved and self.status == REVIEW_APPROVED:
             self.tags.all().update(active=True)
         response = super(HashTagsMixin, self).save(*args, **kwargs)
-        self.process_tags()
+
+        approve = not disable_auto_approve and self.status == REVIEW_APPROVED
+        self.process_tags(approve=approve)
+
         return response
 
-    def process_tags(self):
+    def process_tags(self, approve):
         old_tags = self.get_tags(self._body)
         new_tags = self.get_tags(self.body)
         if old_tags == new_tags:
@@ -172,7 +177,7 @@ class HashTagsMixin(object):
         tags_removed = [tag for tag in old_tags if tag not in new_tags]
 
         if tags_added:
-            self.add_tags(tags_added)
+            self.add_tags(tags_added, approve)
 
         if tags_removed:
             self.remove_tags(tags_removed)
@@ -188,10 +193,10 @@ class HashTagsMixin(object):
                 tags.append(word[1:])
         return set(sorted(tags))
 
-    def add_tags(self, tags):
+    def add_tags(self, tags, approve=False):
         db_tags = Tag.objects.filter(politician=self.politician,
-                                            sentiment=self.sentiment,
-                                            value__in=tags)
+                                     sentiment=self.sentiment,
+                                     value__in=tags)
         db_tags = {tag.value: tag for tag in db_tags}
 
         #   logic to add new tag or increment weight if tag already exists
@@ -201,7 +206,7 @@ class HashTagsMixin(object):
                 t = db_tags[tag]
             except KeyError:
                 query = {'politician': self.politician, 'value': tag,
-                          'sentiment': self.sentiment, 'active': False}
+                          'sentiment': self.sentiment, 'active': approve}
                 t = Tag.objects.create(**query)
             else:
                 t.weight += 1
