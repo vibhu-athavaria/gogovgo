@@ -11,6 +11,7 @@ import PropTypes from "prop-types";
 import { gql, graphql } from "react-apollo";
 
 import PollModal from "../Poll/Modal";
+import ReviewsPagination from "./ReviewsPagination";
 
 class Reviews extends Component {
     constructor(props, context) {
@@ -38,21 +39,12 @@ class Reviews extends Component {
     /**
      * Logic to load more results in paginated Query
      */
-    onFetchMore = () => {
-        const { data: { reviews, fetchMore } } = this.props;
+    onFetchPage = page => {
+        const { data: { fetchMore } } = this.props;
         fetchMore({
-            variables: { id: parseInt(this.props.politicianId), page: reviews.page + 1 },
+            variables: { id: parseInt(this.props.politicianId), page: page },
             updateQuery: (previousResult, { fetchMoreResult, queryVariables }) => {
-                const newData = fetchMoreResult.reviews;
-                const oldData = previousResult.reviews;
-
-                const positiveReviews = oldData.positive.concat(newData.positive);
-                const negativeReviews = oldData.negative.concat(newData.negative);
-
-                let data = { ...fetchMoreResult };
-                data.reviews.positive = positiveReviews;
-                data.reviews.negative = negativeReviews;
-                return data;
+                return fetchMoreResult;
             }
         });
     };
@@ -68,20 +60,20 @@ class Reviews extends Component {
         let disapprovedReviews = [];
         if (data.reviews) {
             approvedReviews = data.reviews.positive.map((review, index) => (
-                <Review key={"approve:" + index} data={review} approve={true} />
+                <Review key={"approve:" + review.id} data={review} approve={true} />
             ));
             disapprovedReviews = data.reviews.negative.map((review, index) => (
-                <Review key={"disapprove:" + index} data={review} approve={false} />
+                <Review key={"disapprove:" + review.id} data={review} approve={false} />
             ));
         }
 
         //  Tags
-        const topNegativeTags = this.props.negativeTags.slice(0, 5).map((tag, index) => (
+        const topNegativeTags = this.props.negativeTags.map((tag, index) => (
             <button type="button" className="btn btn-tags" key={index}>
                 #{tag}
             </button>
         ));
-        const topPostiveTags = this.props.positiveTags.slice(0, 5).map((tag, index) => (
+        const topPostiveTags = this.props.positiveTags.map((tag, index) => (
             <button type="button" className="btn btn-tags" key={index}>
                 #{tag}
             </button>
@@ -165,30 +157,20 @@ class Reviews extends Component {
                     </div>
                 </div>
 
-                <Row>
-                    <Col sm={6}>
-                        <button
-                            className="btn btn-default btn-see-more pull-right"
-                            onClick={this.onFetchMore}
-                            type="submit"
-                            disabled={!data.reviews || !data.reviews.hasMore}
-                        >
-                            See more
-                        </button>
-                    </Col>
-                    <Col sm={6}>
-                        <button
-                            className="btn btn-primary btn-see-more-primary pull-left"
-                            type="submit"
-                            onClick={() => {
-                                this.setState({ showPoll: !this.state.rated });
-                            }}
-                        >
-                            {this.state.rated ? "You Already Rated!" : "Submit Review"}
-                        </button>
-                    </Col>
-                </Row>
-
+                <div>
+                    <ReviewsPagination reviews={data.reviews} setPage={this.onFetchPage} />
+                </div>
+                <div>
+                    <button
+                        className="btn btn-primary btn-see-more-primary"
+                        type="submit"
+                        onClick={() => {
+                            this.setState({ showPoll: !this.state.rated });
+                        }}
+                    >
+                        {this.state.rated ? "You Already Rated!" : "Submit Review"}
+                    </button>
+                </div>
                 {this.state.showPoll && (
                     <PollModal {...this.props} show={true} onHide={pollModelClose} />
                 )}

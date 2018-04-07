@@ -757,26 +757,19 @@ a.link_second_menu.active, a.link_second_menu:hover a.link_second_menu:focus {
   text-decoration: underline;
 }
 
-.btn-see-more{
-  height: 50px;
-  width: 195px;
-  border: 2px solid #F5F5F5;
-  border-radius: 4px;
-  background-color: #FFFFFF;
-  margin-bottom: 56px;
-  margin-top: 30px;
-  color: #808080;
-  text-transform: uppercase;
-  font: 700 12px/12px 'Roboto';
-  letter-spacing: 1px;
+nav ul.pagination {
+  margin-bottom: 0;
 }
-.btn-see-more:hover{background-color: #eee;}
+
+nav ul.pagination a:hover {
+  cursor: pointer;
+}
+
 .btn-see-more-primary{
   height: 50px;
   width: 195px;
   border-radius: 4px;
-  margin-bottom: 56px;
-  margin-top: 30px;
+  margin: 20px 0;
   text-transform: uppercase;
   font:900 12px/12px 'Roboto';
   letter-spacing: 1px;
@@ -1366,7 +1359,7 @@ select.location-selector {
 
   a.link_second_menu{ display: block;  }
 
-  .btn-see-more,.btn-see-more-primary{
+.btn-see-more-primary{
     margin: 25px auto 40px;
     text-align: center;
     display: block;
@@ -1658,7 +1651,6 @@ select.location-selector {
     display: none;
   }
 
-  .btn-see-more,
   .btn-see-more-primary {
     width: 90%;
     margin: 20px auto;
