@@ -7,8 +7,9 @@ from gogovgo.gogovgo_site import models
 
 
 class ReviewAdmin(admin.ModelAdmin):
-    fields = ('politician', 'sentiment', 'city', 'state', 'country', 'body', 'status')
-    list_display = ('id', 'user', 'politician', 'sentiment', 'city', 'country', 'status', 'created')
+    fields = ('politician', 'sentiment', 'city', 'state', 'country', 'body', 'up_vote', 'status')
+    list_display = ('id', 'user', 'politician', 'sentiment', 'city', 'country', 'up_vote',
+                    'status', 'created')
 
     def get_queryset(self, request):
         return self.model.all.get_queryset().prefetch_related('tags').order_by('id')
