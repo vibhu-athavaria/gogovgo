@@ -60,10 +60,10 @@ class Reviews extends Component {
         let disapprovedReviews = [];
         if (data.reviews) {
             approvedReviews = data.reviews.positive.map((review, index) => (
-                <Review key={"approve:" + index} data={review} approve={true} />
+                <Review key={"approve:" + review.id} data={review} approve={true} />
             ));
             disapprovedReviews = data.reviews.negative.map((review, index) => (
-                <Review key={"disapprove:" + index} data={review} approve={false} />
+                <Review key={"disapprove:" + review.id} data={review} approve={false} />
             ));
         }
 
