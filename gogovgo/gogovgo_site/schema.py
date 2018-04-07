@@ -31,7 +31,7 @@ class TagHelper:
 
         """
         tags = models.Tag.objects.filter(politician=politician, sentiment=sentiment, active=True)
-        tags = tags.order_by('-weight').values_list('value', flat=True)
+        tags = tags.order_by('-weight').values_list('value', flat=True)[:10]
         return tags
 
 
