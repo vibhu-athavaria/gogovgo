@@ -5,10 +5,7 @@ import { CookiesProvider } from "react-cookie";
 import App from "./App";
 
 const networkInterface = createNetworkInterface({
-    uri:
-        process.env.NODE_ENV === "development"
-            ? "http://localhost:8030/graphql"
-            : "https://rateyourpolitician.org/graphql"
+    uri: process.env.REACT_APP_GRAPHQL_URL
 });
 
 const client = new ApolloClient({
