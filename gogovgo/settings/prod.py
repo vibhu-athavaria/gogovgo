@@ -60,6 +60,7 @@ STATICFILES_DIRS = [
 
 CORS_ORIGIN_WHITELIST = (
     'rateyourpolitician.com',
+    'donaldtrumpreviews.com'
     '127.0.0.1:3000',
     'localhost:3000',
 )

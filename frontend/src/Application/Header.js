@@ -21,7 +21,7 @@ class Header extends Component {
                     <Navbar.Brand>
                         <a className="main" href="/">
                             <div className="logo">
-                                <span className="main">RateYourPolitician.org</span>
+                                <span className="main">DonaldTrumpReviews.com</span>
                                 <span className="slogan">Government, simplified</span>
                             </div>
                         </a>

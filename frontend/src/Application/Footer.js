@@ -31,7 +31,7 @@ class Footer extends Component {
                     <div className="row">
                         <div className="col-xs-12 col-sm-2">
                             <div className="row">
-                                <span className="logo_header">RateYourPolitician.org</span>
+                                <span className="logo_header">DonaldTrumpReviews.com</span>
                             </div>
                         </div>
                         <div className="col-xs-12 col-sm-10">
