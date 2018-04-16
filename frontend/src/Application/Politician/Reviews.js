@@ -40,9 +40,11 @@ class Reviews extends Component {
      * Logic to load more results in paginated Query
      */
     onFetchPage = page => {
-        const { data: { fetchMore } } = this.props;
+        const {
+            data: { fetchMore }
+        } = this.props;
         fetchMore({
-            variables: { id: parseInt(this.props.politicianId), page: page },
+            variables: { id: parseInt(this.props.politicianId, 10), page: page },
             updateQuery: (previousResult, { fetchMoreResult, queryVariables }) => {
                 return fetchMoreResult;
             }
@@ -227,7 +229,7 @@ const getReviews = gql`
 `;
 
 const ReviewsWithData = graphql(getReviews, {
-    options: props => ({ variables: { id: parseInt(props.politicianId), page: 1 } })
+    options: props => ({ variables: { id: parseInt(props.politicianId, 10), page: 1 } })
 })(ReviewWithCookies);
 
 export default ReviewsWithData;
