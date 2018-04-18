@@ -28,27 +28,18 @@ class HowItWorks extends Component {
                     <div className="texto_modales margin_abajo_big">How it Works</div>
 
                     <Row className="margin_abajo_medium">
-                        <Col xs={4} className="text-center ">
-                            <div className="content_circle_blue">
-                                <a>
-                                    <img src={profile} alt="" />
-                                </a>
-                            </div>
-                            <div className="texto_modales_rg">
-                                Find your representatives or politicians you care about.
-                            </div>
-                        </Col>
-                        <Col xs={4} className="text-center">
+                        <Col xs={6} className="text-center">
                             <div className="content_circle_blue">
                                 <a>
                                     <img src={baloon} alt="" />
                                 </a>
                             </div>
                             <div className="texto_modales_rg">
-                                Submit new reviews, and upvote reviews you agree with.
+                                Submit new reviews, and upvote reviews you agree with. #Hashtags are
+                                encouraged.
                             </div>
                         </Col>
-                        <Col xs={4} className="text-center">
+                        <Col xs={6} className="text-center">
                             <div className="content_circle_blue">
                                 <a>
                                     <img src={hand} alt="" />
@@ -56,13 +47,13 @@ class HowItWorks extends Component {
                             </div>
                             <div className="texto_modales_rg">
                                 Reviews are sent to politicians, and the most upvoted reviews earn
-                                rewards and exclusive access for authors.
+                                authors special access to new product features.
                             </div>
                         </Col>
                     </Row>
                 </Modal.Body>
                 <Modal.Footer style={footer_style}>
-                    <h3 style={h2_style}>DonaldTrumpReviews</h3> <text>Government, simplified</text>
+                    <h3 style={h2_style}>DonaldTrumpReviews</h3>
                 </Modal.Footer>
             </Modal>
         );
