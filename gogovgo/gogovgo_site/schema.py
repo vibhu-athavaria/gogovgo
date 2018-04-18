@@ -123,10 +123,20 @@ class PoliticianType(DjangoObjectType):
             return ""
 
     def resolve_approval_count(self, *args):
-        return models.Review.objects.filter(politician=self, sentiment=SENTIMENT_POSITIVE).count()
+        query = {
+            'politician': self,
+            'sentiment': SENTIMENT_POSITIVE,
+            'status': REVIEW_APPROVED
+        }
+        return models.Review.objects.filter(**query).count()
 
     def resolve_disapproval_count(self, *args):
-        return models.Review.objects.filter(politician=self, sentiment=SENTIMENT_NEGATIVE).count()
+        query = {
+            'politician': self,
+            'sentiment': SENTIMENT_NEGATIVE,
+            'status': REVIEW_APPROVED
+        }
+        return models.Review.objects.filter(**query).count()
 
     def resolve_positive_tags(self, *args):
         return TagHelper.get_tags(politician=self, sentiment=SENTIMENT_POSITIVE)
