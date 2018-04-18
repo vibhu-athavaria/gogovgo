@@ -12,7 +12,8 @@ from django.contrib.auth.models import User
 from django.db import IntegrityError
 
 from gogovgo.gogovgo_site import models
-from gogovgo.gogovgo_site.constants import SENTIMENT_NEGATIVE, SENTIMENT_POSITIVE, US_STATES
+from gogovgo.gogovgo_site.constants import SENTIMENT_NEGATIVE, SENTIMENT_POSITIVE
+from gogovgo.gogovgo_site.constants import REVIEW_APPROVED, US_STATES
 
 
 class TagHelper:
@@ -292,6 +293,7 @@ class ReviewPaginationHelper(object):
         start = (self.page - 1) * self.per_page
         end = self.page * self.per_page
         reviews = models.Review.objects.filter(politician_id=self._id, sentiment=sentiment)
+        reviews = reviews.filter(status=REVIEW_APPROVED)
         total_reviews = reviews.count()
         total_pages = math.ceil(total_reviews / self.per_page)
         reviews = reviews.order_by('-up_vote').select_related('user')[start:end]
