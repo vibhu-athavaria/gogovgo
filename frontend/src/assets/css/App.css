@@ -710,6 +710,12 @@ a.link_second_menu.active, a.link_second_menu:hover a.link_second_menu:focus {
   text-decoration: none;
 }
 
+.btn-tags .tag-weight {
+  border-left: 1px solid #ddd;
+  margin-left: 5px;
+  padding-left: 5px;
+}
+
 .review-approve {
   padding-right: 0;
 }

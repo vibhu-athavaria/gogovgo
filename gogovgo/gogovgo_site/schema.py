@@ -31,7 +31,7 @@ class TagHelper:
 
         """
         tags = models.Tag.objects.filter(politician=politician, sentiment=sentiment, active=True)
-        tags = tags.order_by('-weight').values_list('value', flat=True)[:10]
+        tags = tags.order_by('-weight').values_list('value', 'weight')[:10]
         return tags
 
 
@@ -89,8 +89,8 @@ PollType.Connection = connection_for_type(PollType)
 
 
 class PoliticianType(DjangoObjectType):
-    positive_tags = graphene.List(graphene.String)
-    negative_tags = graphene.List(graphene.String)
+    positive_tags = graphene.List(graphene.List(graphene.String))
+    negative_tags = graphene.List(graphene.List(graphene.String))
     hero_url = graphene.String()
     avatar_url = graphene.String()
     thumbnail_tag = graphene.String()

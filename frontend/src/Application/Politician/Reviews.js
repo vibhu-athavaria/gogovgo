@@ -72,12 +72,14 @@ class Reviews extends Component {
         //  Tags
         const topNegativeTags = this.props.negativeTags.map((tag, index) => (
             <button type="button" className="btn btn-tags" key={index}>
-                #{tag}
+                <span className="tag-name">#{tag[0]}</span>
+                <span className="tag-weight">{tag[1]}</span>
             </button>
         ));
         const topPostiveTags = this.props.positiveTags.map((tag, index) => (
             <button type="button" className="btn btn-tags" key={index}>
-                #{tag}
+                <span className="tag-name">#{tag[0]}</span>
+                <span className="tag-weight">{tag[1]}</span>
             </button>
         ));
 
