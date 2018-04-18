@@ -22,7 +22,7 @@ class Header extends Component {
                         <a className="main" href="/">
                             <div className="logo">
                                 <span className="main">DonaldTrumpReviews.com</span>
-                                <span className="slogan">Government, simplified</span>
+                                {/* <span className="slogan">Government, simplified</span> */}
                             </div>
                         </a>
                     </Navbar.Brand>
