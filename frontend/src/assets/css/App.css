@@ -704,6 +704,7 @@ a.link_second_menu.active, a.link_second_menu:hover a.link_second_menu:focus {
   font-family: 'Roboto';
   font-size: 12px;
   margin: 8px 6px 8px 0;
+  cursor: default;
 }
 .btn-tags:active, .btn-tags:focus, .btn-tags:hover {
   color: #ffffff;

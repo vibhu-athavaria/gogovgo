@@ -5,7 +5,7 @@
 import React from "react";
 import { Component } from "react/lib/ReactBaseClasses";
 import { Col, Modal, Row } from "react-bootstrap";
-import profile from "../assets/images/profile.png";
+// import profile from "../assets/images/profile.png";
 import hand from "../assets/images/hand.png";
 import baloon from "../assets/images/baloon.png";
 

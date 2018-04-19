@@ -78,9 +78,9 @@ class Review extends Component {
         sentimentClass += " content_title_2";
 
         const reasons = review.tags.map((tag, index) => (
-            <button key={index} type="button" className="btn btn-tags">
+            <div key={index} className="btn btn-tags">
                 #{tag}
-            </button>
+            </div>
         ));
 
         const actionIconHandler = thumbUp => {
