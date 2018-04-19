@@ -12,6 +12,7 @@ import { gql, graphql } from "react-apollo";
 
 import PollModal from "../Poll/Modal";
 import ReviewsPagination from "./ReviewsPagination";
+import Map from "./Map";
 
 class Reviews extends Component {
     constructor(props, context) {
@@ -107,9 +108,13 @@ class Reviews extends Component {
             <Col>
                 <Row>
                     <Col xs={12} lg={12} md={18}>
-                        <div className="titulo_content text-center marg_top_large">Reviews</div>
+                        <div className="titulo_content text-center marg_top_large">
+                            Ratings &amp; Reviews
+                        </div>
                     </Col>
                 </Row>
+
+                <Map />
 
                 {/* selector for approved or disapproved reviews on mobile devices */}
                 {reviewNav}
