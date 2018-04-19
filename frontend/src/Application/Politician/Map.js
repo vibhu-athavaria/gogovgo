@@ -1,32 +1,20 @@
 import React, { Component } from "react";
+import { gql, graphql } from "react-apollo";
 import ReactHighmaps from "react-highcharts/ReactHighmaps";
 import map from "./mapdata";
 
-const data = [
-    {
-        code: "CA",
-        value: 12,
-        name: "Canada"
-    },
-    {
-        code: "IN",
-        value: 5,
-        name: "India"
-    },
-    {
-        code: "MX",
-        value: 20,
-        name: "Mexico"
-    },
-    {
-        code: "US",
-        value: 63,
-        name: "United States"
-    }
-];
-
-export default class Map extends Component {
+class Map extends Component {
     render() {
+        const { mapdata } = this.props.data;
+        if (!mapdata) return null;
+
+        const cleanData = data => {
+            let _data = [];
+            for (let entry of data)
+                _data.push({ code: entry.code, value: entry.value, name: entry.name });
+            return _data;
+        };
+
         const config = {
             title: {
                 text: ""
@@ -46,13 +34,13 @@ export default class Map extends Component {
 
             colorAxis: {
                 min: 1,
-                max: 80,
+                max: mapdata.maxScale,
                 type: "linear"
             },
 
             series: [
                 {
-                    data: data,
+                    data: cleanData(mapdata.data),
                     mapData: map,
                     joinBy: ["iso-a2", "code"],
                     name: "Reviews per country",
@@ -67,3 +55,23 @@ export default class Map extends Component {
         return <ReactHighmaps config={config} />;
     }
 }
+
+// Initialize GraphQL queries or mutations with the `gql` tag
+const getMapData = gql`
+    query getMapdata($id: Int!, $maptype: String!) {
+        mapdata(id: $id, maptype: $maptype) {
+            maxScale
+            data {
+                code
+                name
+                value
+            }
+        }
+    }
+`;
+
+const MapWithData = graphql(getMapData, {
+    options: props => ({ variables: { id: props.politicianId, maptype: "world" } })
+})(Map);
+
+export default MapWithData;

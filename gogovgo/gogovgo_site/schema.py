@@ -1,3 +1,4 @@
+from __future__ import division
 import math
 
 import graphene
@@ -318,6 +319,44 @@ class ReviewsPaginatedType(graphene.ObjectType):
     negative = graphene.List(ReviewType)
 
 
+
+class MapEntryData(graphene.ObjectType):
+    code = graphene.String()
+    name = graphene.String()
+    value = graphene.Int()
+
+
+class MapDataType(graphene.ObjectType):
+    maxScale = graphene.Int()
+    data = graphene.List(MapEntryData)
+
+
+class MapHelper:
+
+    @staticmethod
+    def get_world_data(politician_id):
+        reviews = models.Review.objects.filter(politician_id=politician_id, status=REVIEW_APPROVED)
+        reviews = tuple(reviews.values_list('country', flat=True))
+
+        total_reviews = len(reviews)
+        count = {}
+        for country in reviews:
+            try:
+                count[country] += 1
+            except KeyError:
+                count[country] = 1
+
+        countries_dict = {short_name: long_name for short_name, long_name in countries}
+        data, max_value = [], 0
+        for country in count:
+            value = round(count[country] / total_reviews * 100, 2)
+            entry = MapEntryData(code=country, name=countries_dict[country], value=value)
+            data.append(entry)
+            if entry.value > max_value:
+                max_value = entry.value
+        return data, max_value
+
+
 class Query(graphene.AbstractType):
     users = graphene.List(UserType)
     userprofiles = graphene.List(UserProfileType)
@@ -335,6 +374,13 @@ class Query(graphene.AbstractType):
     )
     review = graphene.Field(ReviewType, id=graphene.ID())
     reviews = graphene.Field(ReviewsPaginatedType, id=graphene.Int(), page=graphene.Int())
+    mapdata = graphene.Field(MapDataType, id=graphene.Int(), maptype=graphene.String())
+
+    def resolve_mapdata(self, args, context, info):
+        map_type = args['maptype']
+        if map_type == 'world':
+            map_data, max_value = MapHelper.get_world_data(args['id'])
+            return MapDataType(maxScale=max_value, data=map_data)
 
     @graphene.resolve_only_args
     def resolve_users(self):

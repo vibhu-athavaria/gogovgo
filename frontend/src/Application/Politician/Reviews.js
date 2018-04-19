@@ -114,7 +114,7 @@ class Reviews extends Component {
                     </Col>
                 </Row>
 
-                <Map />
+                <Map politicianId={this.props.politicianId} />
 
                 {/* selector for approved or disapproved reviews on mobile devices */}
                 {reviewNav}
