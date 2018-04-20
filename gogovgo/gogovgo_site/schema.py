@@ -1,5 +1,6 @@
 from __future__ import division
 import math
+from datetime import timedelta
 
 import graphene
 from cloudinary.models import CloudinaryField
@@ -9,6 +10,7 @@ from graphene_django.types import DjangoObjectType
 from graphql import GraphQLError
 from django_countries import countries
 
+from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 
@@ -312,6 +314,9 @@ class ReviewPaginationHelper(object):
             query['country'] = self.country
         if self.country == 'US' and self.state != 'all':
             query['state'] = self.state
+        if self.timelimit != 'all':
+            limit = timezone.now().date() - timedelta(days=int(self.timelimit))
+            query['created__gte'] = limit
 
         reviews = models.Review.objects.filter(**query)
         total_reviews = reviews.count()
