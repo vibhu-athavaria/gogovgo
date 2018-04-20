@@ -14,6 +14,8 @@ import PollModal from "../Poll/Modal";
 import ReviewsPagination from "./ReviewsPagination";
 import Map from "./Map";
 
+import LocationFilter from "./LocationFilter";
+
 class Reviews extends Component {
     constructor(props, context) {
         super(props, context);
@@ -114,7 +116,14 @@ class Reviews extends Component {
                     </Col>
                 </Row>
 
-                <Map politicianId={this.props.politicianId} />
+                <Row>
+                    <Col sm={8} className="col-map">
+                        <Map politicianId={this.props.politicianId} />
+                    </Col>
+                    <Col sm={4}>
+                        <LocationFilter />
+                    </Col>
+                </Row>
 
                 {/* selector for approved or disapproved reviews on mobile devices */}
                 {reviewNav}
