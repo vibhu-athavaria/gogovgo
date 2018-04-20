@@ -284,9 +284,12 @@ class ReviewPaginationHelper(object):
     #   show 20 reviews per page
     per_page = 20
 
-    def __init__(self, pid, page):
-        self._id = pid
-        self.page = page or 1
+    def __init__(self, *args, **kwargs):
+        self._id = kwargs['id']
+        self.page = kwargs['page'] or 1
+        self.country = kwargs['country']
+        self.state = kwargs['state']
+        self.timelimit = kwargs['timelimit']
 
     def get_reviews(self):
         positive_reviews = self._get(sentiment=SENTIMENT_POSITIVE)
@@ -303,8 +306,14 @@ class ReviewPaginationHelper(object):
     def _get(self, sentiment):
         start = (self.page - 1) * self.per_page
         end = self.page * self.per_page
-        reviews = models.Review.objects.filter(politician_id=self._id, sentiment=sentiment)
-        reviews = reviews.filter(status=REVIEW_APPROVED)
+
+        query = {'politician_id': self._id, 'sentiment': sentiment, 'status': REVIEW_APPROVED}
+        if self.country != 'all':
+            query['country'] = self.country
+        if self.country == 'US' and self.state != 'all':
+            query['state'] = self.state
+
+        reviews = models.Review.objects.filter(**query)
         total_reviews = reviews.count()
         total_pages = math.ceil(total_reviews / self.per_page)
         reviews = reviews.order_by('-up_vote').select_related('user')[start:end]
@@ -373,7 +382,12 @@ class Query(graphene.AbstractType):
         country=graphene.String()
     )
     review = graphene.Field(ReviewType, id=graphene.ID())
-    reviews = graphene.Field(ReviewsPaginatedType, id=graphene.Int(), page=graphene.Int())
+    reviews = graphene.Field(ReviewsPaginatedType,
+                            id=graphene.Int(),
+                            page=graphene.Int(),
+                            country=graphene.String(),
+                            state=graphene.String(),
+                            timelimit=graphene.String())
     mapdata = graphene.Field(MapDataType, id=graphene.Int(), maptype=graphene.String())
 
     def resolve_mapdata(self, args, context, info):
@@ -409,7 +423,7 @@ class Query(graphene.AbstractType):
         return models.PublicOfficeTitle.objects.filter(country=country).all()
 
     def resolve_reviews(self, args, context, info):
-        helper = ReviewPaginationHelper(pid=args['id'], page=args['page'])
+        helper = ReviewPaginationHelper(**args)
         reviews = helper.get_reviews()
         return ReviewsPaginatedType(**reviews)
 
