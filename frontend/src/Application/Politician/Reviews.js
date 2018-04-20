@@ -54,6 +54,18 @@ class Reviews extends Component {
         });
     };
 
+    onFilter = filters => {
+        const {
+            data: { fetchMore }
+        } = this.props;
+        fetchMore({
+            variables: { id: parseInt(this.props.politicianId, 10), page: 1, ...filters },
+            updateQuery: (previousResult, { fetchMoreResult, queryVariables }) => {
+                return fetchMoreResult;
+            }
+        });
+    };
+
     render() {
         const { data } = this.props;
 
@@ -121,7 +133,7 @@ class Reviews extends Component {
                         <Map politicianId={this.props.politicianId} />
                     </Col>
                     <Col sm={4}>
-                        <LocationFilter />
+                        <LocationFilter filter={this.onFilter} />
                     </Col>
                 </Row>
 
@@ -205,8 +217,14 @@ const ReviewWithCookies = withCookies(Reviews);
 
 // Initialize GraphQL queries or mutations with the `gql` tag
 const getReviews = gql`
-    query getReviews($id: Int!, $page: Int!) {
-        reviews(id: $id, page: $page) {
+    query getReviews(
+        $id: Int!
+        $page: Int!
+        $country: String!
+        $state: String!
+        $timelimit: String!
+    ) {
+        reviews(id: $id, page: $page, country: $country, state: $state, timelimit: $timelimit) {
             page
             pages
             hasMore
@@ -245,7 +263,15 @@ const getReviews = gql`
 `;
 
 const ReviewsWithData = graphql(getReviews, {
-    options: props => ({ variables: { id: parseInt(props.politicianId, 10), page: 1 } })
+    options: props => ({
+        variables: {
+            id: parseInt(props.politicianId, 10),
+            page: 1,
+            country: "all",
+            state: "all",
+            timelimit: "all"
+        }
+    })
 })(ReviewWithCookies);
 
 export default ReviewsWithData;
