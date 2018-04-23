@@ -5,7 +5,22 @@ import WorldMap from "./mapdata";
 import USMap from "./usdata";
 
 class Map extends Component {
-    state = { mapType: "us" };
+    state = { mapType: "world" };
+
+    componentWillReceiveProps(nextProps) {
+        const map = nextProps.country === "US" ? "us" : "world";
+        if (map === this.state.mapType) return;
+        this.setState({ mapType: map });
+        const {
+            data: { fetchMore }
+        } = this.props;
+        fetchMore({
+            variables: { id: parseInt(this.props.politicianId, 10), maptype: map },
+            updateQuery: (previousResult, { fetchMoreResult, queryVariables }) => {
+                return fetchMoreResult;
+            }
+        });
+    }
 
     render() {
         const { mapdata } = this.props.data;
@@ -50,6 +65,11 @@ class Map extends Component {
                         mapData: WorldMap,
                         joinBy: ["iso-a2", "code"],
                         name: "Reviews per country",
+                        dataLabels: {
+                            enabled: true,
+                            color: "#FFFFFF",
+                            format: "{point.code}"
+                        },
                         states: {
                             hover: {
                                 color: "#a4edba"
@@ -66,22 +86,10 @@ class Map extends Component {
                 },
 
                 title: {
-                    text: "US population density (/km²)"
+                    text: ""
                 },
 
-                exporting: {
-                    sourceWidth: 600,
-                    sourceHeight: 500
-                },
-
-                legend: {
-                    layout: "horizontal",
-                    borderWidth: 0,
-                    backgroundColor: "rgba(255,255,255,0.85)",
-                    floating: true,
-                    verticalAlign: "top",
-                    y: 25
-                },
+                legend: false,
 
                 mapNavigation: {
                     enabled: false
@@ -100,12 +108,12 @@ class Map extends Component {
                         },
                         data: cleanData(mapdata.data),
                         joinBy: ["postal-code", "code"],
-                        // dataLabels: {
-                        //     enabled: true,
-                        //     color: "#FFFFFF",
-                        //     format: "{point.code}"
-                        // },
-                        name: "Population density",
+                        dataLabels: {
+                            enabled: true,
+                            color: "#FFFFFF",
+                            format: "{point.code}"
+                        },
+                        name: "Reviews per state",
                         tooltip: {
                             pointFormat: "{point.name}: {point.value}%"
                         }
@@ -132,7 +140,7 @@ const getMapData = gql`
 `;
 
 const MapWithData = graphql(getMapData, {
-    options: props => ({ variables: { id: props.politicianId, maptype: "us" } })
+    options: props => ({ variables: { id: props.politicianId, maptype: "world" } })
 })(Map);
 
 export default MapWithData;

@@ -22,7 +22,8 @@ class Reviews extends Component {
         this.state = {
             showPoll: false,
             rated: false,
-            reviewTab: "Approve"
+            reviewTab: "Approve",
+            country: "all"
         };
     }
 
@@ -130,10 +131,13 @@ class Reviews extends Component {
 
                 <Row>
                     <Col sm={8} className="col-map">
-                        <Map politicianId={this.props.politicianId} />
+                        <Map country={this.state.country} politicianId={this.props.politicianId} />
                     </Col>
                     <Col sm={4}>
-                        <LocationFilter filter={this.onFilter} />
+                        <LocationFilter
+                            onCountryChange={country => this.setState({ country: country })}
+                            filter={this.onFilter}
+                        />
                     </Col>
                 </Row>
 

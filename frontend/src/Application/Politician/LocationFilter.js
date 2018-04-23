@@ -19,6 +19,7 @@ export default class LocationFilter extends Component {
         let { location } = this.state;
         location[field] = event.target.value;
         this.setState({ location: location });
+        if (field === "country") this.props.onCountryChange(event.target.value);
     }
 
     onSubmit = () => {
