@@ -337,7 +337,7 @@ class ReviewsPaginatedType(graphene.ObjectType):
 class MapEntryData(graphene.ObjectType):
     code = graphene.String()
     name = graphene.String()
-    value = graphene.Int()
+    value = graphene.Float()
 
 
 class MapDataType(graphene.ObjectType):
@@ -365,6 +365,30 @@ class MapHelper:
         for country in count:
             value = round(count[country] / total_reviews * 100, 2)
             entry = MapEntryData(code=country, name=countries_dict[country], value=value)
+            data.append(entry)
+            if entry.value > max_value:
+                max_value = entry.value
+        return data, max_value
+
+    @staticmethod
+    def get_us_data(politician_id):
+        query = {'politician_id': politician_id, 'status': REVIEW_APPROVED, 'country': 'US'}
+        reviews = models.Review.objects.filter(**query)
+        reviews = tuple(reviews.values_list('state', flat=True))
+
+        total_reviews = len(reviews)
+        count = {}
+        for state in reviews:
+            try:
+                count[state] += 1
+            except KeyError:
+                count[state] = 1
+
+        states = {short_name: long_name for short_name, long_name in US_STATES}
+        data, max_value = [], 0
+        for state in states:
+            value = round(count.get(state, 0) / total_reviews * 100, 2)
+            entry = MapEntryData(code=state, name=states[state], value=value)
             data.append(entry)
             if entry.value > max_value:
                 max_value = entry.value
@@ -399,7 +423,11 @@ class Query(graphene.AbstractType):
         map_type = args['maptype']
         if map_type == 'world':
             map_data, max_value = MapHelper.get_world_data(args['id'])
-            return MapDataType(maxScale=max_value, data=map_data)
+        elif map_type == 'us':
+            map_data, max_value = MapHelper.get_us_data(args['id'])
+        else:
+            raise GraphQLError('Invalid map type')
+        return MapDataType(maxScale=max_value, data=map_data)
 
     @graphene.resolve_only_args
     def resolve_users(self):
