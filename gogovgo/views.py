@@ -6,7 +6,9 @@ from django.http import HttpResponse, JsonResponse
 from django.conf import settings
 
 from django_countries import countries
-from gogovgo.gogovgo_site.constants import US_STATES
+
+from gogovgo.gogovgo_site.constants import US_STATES, REVIEW_APPROVED
+from gogovgo.gogovgo_site.models import Review
 
 
 class FrontendAppView(View):
@@ -29,8 +31,9 @@ class LocationData(View):
     """Returns list of all countries and list of all states in U.S"""
 
     def get(self, request):
+        restrict = request.GET.get('restrict') == 'reviews'
         context = {
-            'countries': self._jsonify(countries),
+            'countries': self._jsonify(countries) if not restrict else self.get_countries(),
             'states': self._jsonify(US_STATES)
         }
         return JsonResponse(context)
@@ -41,3 +44,14 @@ class LocationData(View):
         for short_name, long_name in data:
             _data.append({'short': short_name, 'long': long_name})
         return _data
+
+    @staticmethod
+    def get_countries():
+        data = [{'short': 'US', 'long': 'United States of America'}]
+        countries_dict = {short: long for short, long in countries}
+        reviews = Review.objects.filter(status=REVIEW_APPROVED).values_list('country', flat=True)
+        reviews = reviews.order_by('country').distinct()
+        for country in reviews:
+            if country != 'US':
+                data.append({'short': country, 'long': countries_dict[country]})
+        return data

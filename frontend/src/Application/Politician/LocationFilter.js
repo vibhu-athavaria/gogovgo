@@ -10,7 +10,7 @@ export default class LocationFilter extends Component {
     componentDidMount() {
         let { origin } = window.location;
         if (origin.indexOf("localhost") !== -1) origin = "http://localhost:8030";
-        fetch(origin + "/api/countries/")
+        fetch(origin + "/api/countries/?restrict=reviews")
             .then(res => res.json())
             .then(data => this.setState({ locationOptions: data }));
     }
