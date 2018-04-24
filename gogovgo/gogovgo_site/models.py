@@ -158,7 +158,7 @@ class HashTagsMixin(object):
 
     def save(self, *args, **kwargs):
         """Extends logic when saving the review to DB"""
-        disable_auto_approve = kwargs.pop('disable_auto_approve', False)
+        # disable_auto_approve = kwargs.pop('disable_auto_approve', False)
 
         #   approved tags if review was approved
         if not self._is_approved and self.status == REVIEW_APPROVED:
@@ -168,8 +168,9 @@ class HashTagsMixin(object):
         response = super(HashTagsMixin, self).save(*args, **kwargs)
 
         #   tag extraction or deletion
-        approve = not disable_auto_approve and self.status == REVIEW_APPROVED
-        self.process_tags(approve=approve)
+        # approve = not disable_auto_approve and self.status == REVIEW_APPROVED
+        # self.process_tags(approve=approve)
+        self.process_tags(approve=True)
 
         return response
 

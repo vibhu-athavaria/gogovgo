@@ -214,7 +214,7 @@ class CreateReview(graphene.Mutation):
 
         if all(key in args for key in ['full_name', 'email_address']):
             fullname = args.get('full_name', '')
-            email_address = args.get('email_address', '')
+            email_address = args.get('email_address', '').lower()
             split_name = fullname.split(' ')
             first_name = split_name[0]
             last_name = ' '.join(split_name[1:]) if len(split_name) > 1 else ''
@@ -243,9 +243,10 @@ class CreateReview(graphene.Mutation):
                 state=state.strip() or None,
                 country=country.strip(),
                 sentiment=args['sentiment'],
+                status=REVIEW_APPROVED,
             )
             review.body = args['body']
-            review.save(disable_auto_approve=True)
+            review.save()
         except IntegrityError:
             raise GraphQLError('You have already submitted a review for this politician')
 
