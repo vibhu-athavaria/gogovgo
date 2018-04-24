@@ -23,7 +23,8 @@ class Reviews extends Component {
             showPoll: false,
             rated: false,
             reviewTab: "Approve",
-            country: "all"
+            country: "all",
+            filters: {}
         };
     }
 
@@ -48,7 +49,11 @@ class Reviews extends Component {
             data: { fetchMore }
         } = this.props;
         fetchMore({
-            variables: { id: parseInt(this.props.politicianId, 10), page: page },
+            variables: {
+                id: parseInt(this.props.politicianId, 10),
+                page: page,
+                ...this.state.filters
+            },
             updateQuery: (previousResult, { fetchMoreResult, queryVariables }) => {
                 return fetchMoreResult;
             }
@@ -56,6 +61,7 @@ class Reviews extends Component {
     };
 
     onFilter = filters => {
+        this.setState({ filters: filters });
         const {
             data: { fetchMore }
         } = this.props;
