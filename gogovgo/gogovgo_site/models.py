@@ -308,3 +308,16 @@ class Review(HashTagsMixin, TimeStampedModel):
         ordering = ['-created']
         unique_together = ('user', 'politician')
         app_label = 'gogovgo_site'
+
+    def __str__(self):
+        return '{}: {}'.format(self.politician.full_name, self.pk)
+
+
+class FlaggedReview(TimeStampedModel):
+    review = models.OneToOneField(Review, primary_key=True)
+    counter = models.PositiveSmallIntegerField(default=1)
+    is_safe = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['is_safe', '-counter']
+        app_label = 'gogovgo_site'
