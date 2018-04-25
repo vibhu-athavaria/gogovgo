@@ -470,6 +470,13 @@ nav.navbar.main-menu {
   padding-left: 5px;
 }
 
+.report-link {
+  font-size: 12px;
+  color: #999;
+  float: right;
+  cursor: pointer;
+}
+
 /*
 .action-icons .fa-thumbs-o-up, .action-icons .fa-thumbs-o-down {
   color: #646464;

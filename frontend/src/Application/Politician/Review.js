@@ -9,7 +9,7 @@ import moment from "moment";
 import { ControlLabel, FormControl, FormGroup, InputGroup } from "react-bootstrap";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 // import { encrypt } from "../../utils/security";
-import { graphql, gql } from "react-apollo";
+import { graphql, gql, compose } from "react-apollo";
 import PropTypes from "prop-types";
 
 const PoliticianInfo = props => {
@@ -42,7 +42,8 @@ class Review extends Component {
             reactedUp: false,
             reactedDown: false,
             upVoteCount: 0,
-            downVoteCount: 0
+            downVoteCount: 0,
+            reported: false
         };
     }
 
@@ -68,9 +69,9 @@ class Review extends Component {
     }
 
     render() {
-        const { data, cookies, mutate } = this.props;
+        const { data, cookies } = this.props;
         const review = data;
-        const { reactedUp, reactedDown, upVoteCount, downVoteCount } = this.state;
+        const { reactedUp, reactedDown, upVoteCount, downVoteCount, reported } = this.state;
 
         let sentimentClass = this.props.approve ? "color_approve" : "color_disapprove";
         let sentimentText = this.props.approve ? "Approve" : "Disapprove";
@@ -84,21 +85,18 @@ class Review extends Component {
         ));
 
         const actionIconHandler = thumbUp => {
-            mutate({
-                variables: {
-                    reviewId: review.id,
-                    upVote: thumbUp
-                }
-            }).then(({ data }) => {
-                let emotionalReaction = cookies.get("emotionalReaction") || {};
-                emotionalReaction[review.id] = thumbUp;
-                cookies.set("emotionalReaction", emotionalReaction, { path: "/" });
-                if (thumbUp) {
-                    this.setState({ upVoteCount: upVoteCount + 1, reactedUp: true });
-                } else {
-                    this.setState({ downVoteCount: downVoteCount + 1, reactedDown: true });
-                }
-            });
+            this.props
+                .updateReview({ variables: { reviewId: review.id, upVote: thumbUp } })
+                .then(({ data }) => {
+                    let emotionalReaction = cookies.get("emotionalReaction") || {};
+                    emotionalReaction[review.id] = thumbUp;
+                    cookies.set("emotionalReaction", emotionalReaction, { path: "/" });
+                    if (thumbUp) {
+                        this.setState({ upVoteCount: upVoteCount + 1, reactedUp: true });
+                    } else {
+                        this.setState({ downVoteCount: downVoteCount + 1, reactedDown: true });
+                    }
+                });
         };
 
         const ellipsify = (str, length) => {
@@ -122,6 +120,11 @@ class Review extends Component {
             } else {
                 return <div className="content_title_2_text">{str}</div>;
             }
+        };
+
+        const report = () => {
+            this.setState({ reported: true });
+            this.props.reportReview({ variables: { reviewId: review.id } });
         };
 
         const created_moment = moment(review.created);
@@ -155,6 +158,9 @@ class Review extends Component {
                         <span className="vote-text">{reactedUp ? "Upvoted" : "Upvote"}</span>
                         <span className="vote-count">{upVoteCount}</span>
                     </button>
+                    <a className="report-link" onClick={report}>
+                        {reported ? "Reported" : "Report abuse"}
+                    </a>
                 </div>
 
                 {this.state.showShareURL && (
@@ -191,7 +197,7 @@ Review.propTypes = {
     cookies: PropTypes.instanceOf(Cookies).isRequired
 };
 
-const updateQuery = gql`
+const updateReview = gql`
     mutation updateReview($reviewId: ID!, $upVote: Boolean!) {
         updateReview(reviewId: $reviewId, upVote: $upVote) {
             review {
@@ -201,5 +207,18 @@ const updateQuery = gql`
     }
 `;
 
-Review = graphql(updateQuery)(Review);
+const reportReview = gql`
+    mutation reportReview($reviewId: ID!) {
+        reportReview(reviewId: $reviewId) {
+            review {
+                id
+            }
+        }
+    }
+`;
+
+Review = compose(
+    graphql(updateReview, { name: "updateReview" }),
+    graphql(reportReview, { name: "reportReview" })
+)(Review);
 export default withCookies(Review);

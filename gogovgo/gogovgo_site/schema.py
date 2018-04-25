@@ -276,9 +276,23 @@ class UpdateReview(graphene.Mutation):
         return CreateReview(review=review, ok=ok)
 
 
+class ReportReview(graphene.Mutation):
+    class Input:
+        review_id = graphene.ID()
+
+    review = graphene.Field(lambda: ReviewType)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        review = models.Review.objects.get(pk=args['review_id'])
+        ok = True
+        return CreateReview(review=review)
+
+
 class Mutations(graphene.ObjectType):
     create_review = CreateReview.Field()
     update_review = UpdateReview.Field()
+    report_review = ReportReview.Field()
 
 
 class ReviewPaginationHelper(object):
