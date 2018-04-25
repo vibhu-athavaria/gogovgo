@@ -353,6 +353,8 @@ class MapEntryData(graphene.ObjectType):
     code = graphene.String()
     name = graphene.String()
     value = graphene.Float()
+    positive = graphene.Float()
+    negative = graphene.Float()
 
 
 class MapDataType(graphene.ObjectType):
@@ -389,25 +391,34 @@ class MapHelper:
     def get_us_data(politician_id):
         query = {'politician_id': politician_id, 'status': REVIEW_APPROVED, 'country': 'US'}
         reviews = models.Review.objects.filter(**query)
-        reviews = tuple(reviews.values_list('state', flat=True))
+        reviews = tuple(reviews.values_list('state', 'sentiment'))
 
         total_reviews = len(reviews)
         count = {}
-        for state in reviews:
+
+        for state, sentiment in reviews:
             try:
-                count[state] += 1
+                count[state][sentiment] += 1
             except KeyError:
-                count[state] = 1
+                count[state] = {'positive': 0, 'negative': 0}
+                count[state][sentiment] = 1
 
         states = {short_name: long_name for short_name, long_name in US_STATES}
-        data, max_value = [], 0
+
+        data = []
         for state in states:
-            value = round(count.get(state, 0) / total_reviews * 100, 2)
-            entry = MapEntryData(code=state, name=states[state], value=value)
+            _data = count.get(state, {'positive': 0, 'negative': 0})
+            total = _data['positive'] + _data['negative']
+            if not total:
+                entry = MapEntryData(code=state, name=states[state], positive=0, negative=0, value=0)
+            else:
+                positive = round(_data['positive'] / total * 100, 2)
+                negative = round(_data['negative'] / total * 100, 2)
+                value = positive - negative
+                entry = MapEntryData(code=state, name=states[state], value=value,
+                                     positive=positive, negative=negative)
             data.append(entry)
-            if entry.value > max_value:
-                max_value = entry.value
-        return data, max_value
+        return data
 
 
 class Query(graphene.AbstractType):
@@ -436,10 +447,11 @@ class Query(graphene.AbstractType):
 
     def resolve_mapdata(self, args, context, info):
         map_type = args['maptype']
+        max_value = 0
         if map_type == 'world':
             map_data, max_value = MapHelper.get_world_data(args['id'])
         elif map_type == 'us':
-            map_data, max_value = MapHelper.get_us_data(args['id'])
+            map_data = MapHelper.get_us_data(args['id'])
         else:
             raise GraphQLError('Invalid map type')
         return MapDataType(maxScale=max_value, data=map_data)

@@ -135,7 +135,7 @@ class Reviews extends Component {
                     </Col>
                 </Row>
 
-                <Row>
+                <Row style={{ marginBottom: "40px" }}>
                     <Col sm={8} className="col-map">
                         <Map country={this.state.country} politicianId={this.props.politicianId} />
                     </Col>

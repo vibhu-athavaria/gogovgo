@@ -29,7 +29,13 @@ class Map extends Component {
         const cleanData = data => {
             let _data = [];
             for (let entry of data)
-                _data.push({ code: entry.code, value: entry.value, name: entry.name });
+                _data.push({
+                    code: entry.code,
+                    value: entry.value,
+                    name: entry.name,
+                    negative: entry.negative,
+                    positive: entry.positive
+                });
             return _data;
         };
 
@@ -96,9 +102,50 @@ class Map extends Component {
                 },
 
                 colorAxis: {
-                    min: 1,
-                    max: mapdata.maxScale,
-                    type: "linear"
+                    dataClasses: [
+                        {
+                            from: -100,
+                            to: -75,
+                            color: "#D92D24",
+                            name: "Disapprove"
+                        },
+                        {
+                            from: -75,
+                            to: -40,
+                            color: "#D66F6B",
+                            name: "Disapprove"
+                        },
+                        {
+                            from: -40,
+                            to: -10,
+                            color: "#D8ADAB",
+                            name: "Disapprove"
+                        },
+                        {
+                            from: -10,
+                            to: 10,
+                            color: "#E8E8E8",
+                            name: "Neutral"
+                        },
+                        {
+                            from: 10,
+                            to: 40,
+                            color: "#ABC9B0",
+                            name: "Approve"
+                        },
+                        {
+                            from: 40,
+                            to: 75,
+                            color: "#73B57D",
+                            name: "Approve"
+                        },
+                        {
+                            from: 75,
+                            to: 100,
+                            color: "#2FA543",
+                            name: "Approve"
+                        }
+                    ]
                 },
 
                 series: [
@@ -113,9 +160,10 @@ class Map extends Component {
                             color: "#FFFFFF",
                             format: "{point.code}"
                         },
-                        name: "Reviews per state",
+                        name: "Approval rating per state",
                         tooltip: {
-                            pointFormat: "{point.name}: {point.value}%"
+                            pointFormat:
+                                "{point.name}: <br/> Approval: {point.positive}% <br/> Disapproval: {point.negative}%"
                         }
                     }
                 ]
@@ -134,6 +182,8 @@ const getMapData = gql`
                 code
                 name
                 value
+                positive
+                negative
             }
         }
     }
