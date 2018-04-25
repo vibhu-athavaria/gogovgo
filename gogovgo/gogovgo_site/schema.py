@@ -284,8 +284,21 @@ class ReportReview(graphene.Mutation):
 
     @staticmethod
     def mutate(root, args, context, info):
-        review = models.Review.objects.get(pk=args['review_id'])
-        ok = True
+        try:
+            review = models.Review.objects.get(pk=args['review_id'])
+        except models.Review.DoesNotExist:
+            raise GraphQLError('The review_id is incorrect')
+
+        try:
+            flag = models.FlaggedReview.objects.get(review=review)
+        except models.FlaggedReview.DoesNotExist:
+            flag = models.FlaggedReview(review=review, counter=0)
+
+        limit = 32000 # rounded limit to nearest thousand for PositiveSmallIntegerField
+        if not flag.is_safe and flag.counter < limit:
+            flag.counter += 1
+            flag.save()
+
         return CreateReview(review=review)
 
 
