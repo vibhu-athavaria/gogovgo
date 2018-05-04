@@ -28,17 +28,18 @@ class PoliticianAdmin(admin.ModelAdmin):
 
 class FlaggedReviewAdmin(admin.ModelAdmin):
     list_display = ('review', 'counter', 'is_safe')
-    fields = ('review', 'counter', 'is_safe', 'links')
-    readonly_fields = ('links',)
+    fields = ('review', 'counter', 'is_safe', 'review_text', 'review_link')
+    readonly_fields = ('review_text', 'review_link')
 
-    def links(self, obj):
-        if obj.is_safe:
-            return
+    def review_text(self, obj):
+        return obj.review.body
+
+    def review_link(self, obj):
         base_url = '/admin/gogovgo_site/review/{}/'.format(obj.review_id)
         link = '<a href="{}" target="_blank">See review</a>'.format(base_url)
         return link
 
-    links.allow_tags = True
+    review_link.allow_tags = True
 
 
 admin.site.register(models.Cabinet)
