@@ -12,7 +12,8 @@ class PollLocation extends Component {
         super(props, context);
         this.state = {
             location: { state: "", country: "US" },
-            locationOptions: { countries: [], states: [] }
+            locationOptions: { countries: [], states: [] },
+            error: null
         };
     }
 
@@ -36,13 +37,17 @@ class PollLocation extends Component {
         let { location } = this.state;
         location[field] = event.target.value;
         if (field === "country") location.state = "";
-        this.setState({ location: location });
+        this.setState({ location: location, error: null });
     }
 
     /**
      * Handle click on next button
      */
     submit = () => {
+        const { location } = this.state;
+        if (location.country === "US" && !location.state.length) {
+            return this.setState({ error: "The state field is required." });
+        }
         //	track event
         ReactGA.event({
             category: "User",
@@ -58,7 +63,7 @@ class PollLocation extends Component {
      */
     render() {
         const { onHide, prev } = this.props;
-        const { location, locationOptions } = this.state;
+        const { location, locationOptions, error } = this.state;
 
         /**
          * Country & state select elements
@@ -85,7 +90,7 @@ class PollLocation extends Component {
                     value={location.state}
                     onChange={e => this.handleChange("state", e)}
                 >
-                    <option value="">Select your state (optional)</option>
+                    <option value="">Select your state</option>
                     {locationOptions.states.map((state, i) => (
                         <option key={i} value={state.short}>
                             {state.long}
@@ -104,6 +109,14 @@ class PollLocation extends Component {
                         <div className="margin_abajo_big">
                             {countrySelector}
                             {stateSelector}
+                            {error && (
+                                <div
+                                    className="alert alert-danger"
+                                    style={{ fontSize: "1.3rem", padding: "5px", margin: 0 }}
+                                >
+                                    {error}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </Modal.Body>
