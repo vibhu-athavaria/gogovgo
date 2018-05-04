@@ -135,7 +135,7 @@ class SubscribeModal extends Component {
                 <Modal.Header closeButton />
                 <Modal.Body>
                     <div className="texto_modales margin_abajo_big">
-                        Get Updates from DonaldTrumpReviews
+                        Get Updates from DonaldTrumpReviews.com
                         <p>
                             Your name and contact information will NOT be displayed publicly.<br />
                             Your review will remain anonymous.
