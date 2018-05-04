@@ -26,6 +26,8 @@ class Map extends Component {
         const { mapdata } = this.props.data;
         if (!mapdata) return null;
 
+        const { mapType } = this.state;
+
         const cleanData = data => {
             let _data = [];
             for (let entry of data)
@@ -39,136 +41,81 @@ class Map extends Component {
             return _data;
         };
 
-        let mapConfig;
+        let mapConfig = {
+            chart: {
+                map: mapType !== "us" ? WorldMap : USMap,
+                borderWidth: 0
+            },
 
-        if (this.state.mapType === "world") {
-            mapConfig = {
-                title: {
-                    text: ""
-                },
+            title: { text: "" },
 
-                mapNavigation: {
-                    enabled: false
-                },
+            legend: false,
 
-                tooltip: {
-                    backgroundColor: null,
-                    borderWidth: 0,
-                    shadow: false,
-                    useHTML: true,
-                    pointFormat: "{point.name}: <b>{point.value}</b>%"
-                },
+            mapNavigation: { enabled: false },
 
-                colorAxis: {
-                    min: 1,
-                    max: mapdata.maxScale,
-                    type: "linear"
-                },
-
-                series: [
+            colorAxis: {
+                dataClasses: [
                     {
-                        data: cleanData(mapdata.data),
-                        mapData: WorldMap,
-                        joinBy: ["iso-a2", "code"],
-                        name: "Reviews per country",
-                        dataLabels: {
-                            enabled: true,
-                            color: "#FFFFFF",
-                            format: "{point.code}"
-                        },
-                        states: {
-                            hover: {
-                                color: "#a4edba"
-                            }
-                        }
+                        from: -100,
+                        to: -75,
+                        color: "#D92D24",
+                        name: "Disapprove"
+                    },
+                    {
+                        from: -75,
+                        to: -40,
+                        color: "#D66F6B",
+                        name: "Disapprove"
+                    },
+                    {
+                        from: -40,
+                        to: -10,
+                        color: "#D8ADAB",
+                        name: "Disapprove"
+                    },
+                    {
+                        from: -10,
+                        to: 10,
+                        color: "#E8E8E8",
+                        name: "Neutral"
+                    },
+                    {
+                        from: 10,
+                        to: 40,
+                        color: "#ABC9B0",
+                        name: "Approve"
+                    },
+                    {
+                        from: 40,
+                        to: 75,
+                        color: "#73B57D",
+                        name: "Approve"
+                    },
+                    {
+                        from: 75,
+                        to: 100,
+                        color: "#2FA543",
+                        name: "Approve"
                     }
                 ]
-            };
-        } else {
-            mapConfig = {
-                chart: {
-                    map: USMap,
-                    borderWidth: 0
-                },
+            },
 
-                title: {
-                    text: ""
-                },
-
-                legend: false,
-
-                mapNavigation: {
-                    enabled: false
-                },
-
-                colorAxis: {
-                    dataClasses: [
-                        {
-                            from: -100,
-                            to: -75,
-                            color: "#D92D24",
-                            name: "Disapprove"
-                        },
-                        {
-                            from: -75,
-                            to: -40,
-                            color: "#D66F6B",
-                            name: "Disapprove"
-                        },
-                        {
-                            from: -40,
-                            to: -10,
-                            color: "#D8ADAB",
-                            name: "Disapprove"
-                        },
-                        {
-                            from: -10,
-                            to: 10,
-                            color: "#E8E8E8",
-                            name: "Neutral"
-                        },
-                        {
-                            from: 10,
-                            to: 40,
-                            color: "#ABC9B0",
-                            name: "Approve"
-                        },
-                        {
-                            from: 40,
-                            to: 75,
-                            color: "#73B57D",
-                            name: "Approve"
-                        },
-                        {
-                            from: 75,
-                            to: 100,
-                            color: "#2FA543",
-                            name: "Approve"
-                        }
-                    ]
-                },
-
-                series: [
-                    {
-                        animation: {
-                            duration: 1000
-                        },
-                        data: cleanData(mapdata.data),
-                        joinBy: ["postal-code", "code"],
-                        dataLabels: {
-                            enabled: true,
-                            color: "#FFFFFF",
-                            format: "{point.code}"
-                        },
-                        name: "Approval rating per state",
-                        tooltip: {
-                            pointFormat:
-                                "{point.name}: <br/> Approval: {point.positive}% <br/> Disapproval: {point.negative}%"
-                        }
+            series: [
+                {
+                    animation: { duration: 1000 },
+                    data: cleanData(mapdata.data),
+                    joinBy: mapType !== "us" ? ["iso-a2", "code"] : ["postal-code", "code"],
+                    dataLabels: { enabled: true, color: "#FFFFFF", format: "{point.code}" },
+                    name: `Approval rating per ${mapType == "us" ? "state" : "country"}`,
+                    tooltip: {
+                        pointFormat:
+                            "{point.name}: <br/> Approval: {point.positive}% <br/> Disapproval: {point.negative}%"
                     }
-                ]
-            };
-        }
+                }
+            ]
+        };
+
+        //
         return <ReactHighmaps config={mapConfig} />;
     }
 }
@@ -177,7 +124,6 @@ class Map extends Component {
 const getMapData = gql`
     query getMapdata($id: Int!, $maptype: String!) {
         mapdata(id: $id, maptype: $maptype) {
-            maxScale
             data {
                 code
                 name

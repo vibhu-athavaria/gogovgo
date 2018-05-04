@@ -371,7 +371,6 @@ class MapEntryData(graphene.ObjectType):
 
 
 class MapDataType(graphene.ObjectType):
-    maxScale = graphene.Int()
     data = graphene.List(MapEntryData)
 
 
@@ -380,25 +379,32 @@ class MapHelper:
     @staticmethod
     def get_world_data(politician_id):
         reviews = models.Review.objects.filter(politician_id=politician_id, status=REVIEW_APPROVED)
-        reviews = tuple(reviews.values_list('country', flat=True))
+        reviews = tuple(reviews.values_list('country', 'sentiment'))
 
         total_reviews = len(reviews)
         count = {}
-        for country in reviews:
+        for country, sentiment in reviews:
             try:
-                count[country] += 1
+                count[country][sentiment] += 1
             except KeyError:
-                count[country] = 1
+                count[country] = {'positive': 0, 'negative': 0}
+                count[country][sentiment] = 1
 
         countries_dict = {short_name: long_name for short_name, long_name in countries}
-        data, max_value = [], 0
+        data = []
         for country in count:
-            value = round(count[country] / total_reviews * 100, 2)
-            entry = MapEntryData(code=country, name=countries_dict[country], value=value)
+            _data = count[country]
+            total = _data['positive'] + _data['negative']
+            if not total:
+                entry = MapEntryData(code=country, name=country, positive=0, negative=0, value=0)
+            else:
+                positive = round(_data['positive'] / total * 100, 2)
+                negative = round(_data['negative'] / total * 100, 2)
+                value = positive - negative
+                entry = MapEntryData(code=country, name=country, value=value,
+                                     positive=positive, negative=negative)
             data.append(entry)
-            if entry.value > max_value:
-                max_value = entry.value
-        return data, max_value
+        return data
 
     @staticmethod
     def get_us_data(politician_id):
@@ -462,12 +468,12 @@ class Query(graphene.AbstractType):
         map_type = args['maptype']
         max_value = 0
         if map_type == 'world':
-            map_data, max_value = MapHelper.get_world_data(args['id'])
+            map_data = MapHelper.get_world_data(args['id'])
         elif map_type == 'us':
             map_data = MapHelper.get_us_data(args['id'])
         else:
             raise GraphQLError('Invalid map type')
-        return MapDataType(maxScale=max_value, data=map_data)
+        return MapDataType(data=map_data)
 
     @graphene.resolve_only_args
     def resolve_users(self):
