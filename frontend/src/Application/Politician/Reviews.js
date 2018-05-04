@@ -23,7 +23,7 @@ class Reviews extends Component {
             showPoll: false,
             rated: false,
             reviewTab: "Approve",
-            country: "all",
+            country: "US",
             filters: {}
         };
     }
@@ -277,7 +277,7 @@ const ReviewsWithData = graphql(getReviews, {
         variables: {
             id: parseInt(props.politicianId, 10),
             page: 1,
-            country: "all",
+            country: "US",
             state: "all",
             timelimit: "all"
         }

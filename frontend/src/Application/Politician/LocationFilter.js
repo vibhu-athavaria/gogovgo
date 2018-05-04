@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 export default class LocationFilter extends Component {
     state = {
-        location: { country: "all", state: "all" },
+        location: { country: "US", state: "all" },
         locationOptions: { countries: [], states: [] },
         timelimit: "all"
     };

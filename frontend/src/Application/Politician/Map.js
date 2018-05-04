@@ -5,7 +5,7 @@ import WorldMap from "./mapdata";
 import USMap from "./usdata";
 
 class Map extends Component {
-    state = { mapType: "world" };
+    state = { mapType: "us" };
 
     componentWillReceiveProps(nextProps) {
         const map = nextProps.country === "US" ? "us" : "world";
@@ -190,7 +190,7 @@ const getMapData = gql`
 `;
 
 const MapWithData = graphql(getMapData, {
-    options: props => ({ variables: { id: props.politicianId, maptype: "world" } })
+    options: props => ({ variables: { id: props.politicianId, maptype: "us" } })
 })(Map);
 
 export default MapWithData;
