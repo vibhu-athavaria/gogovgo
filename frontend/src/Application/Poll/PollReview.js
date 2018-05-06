@@ -64,7 +64,7 @@ class PollReview extends Component {
         );
 
         return (
-            <Modal show={true} dialogClassName="custom-modal" keyboard={true}>
+            <div className="submit-step">
                 <Modal.Body>
                     <div className="texto_modales margin_abajo_medium">{pollQuestion}</div>
                     <div className="modal_text_small opinion">
@@ -108,7 +108,7 @@ class PollReview extends Component {
                         </button>
                     </div>
                 </Modal.Footer>
-            </Modal>
+            </div>
         );
     }
 }

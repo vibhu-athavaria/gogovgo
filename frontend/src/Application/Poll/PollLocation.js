@@ -100,7 +100,7 @@ class PollLocation extends Component {
         }
 
         return (
-            <Modal show={true} dialogClassName="custom-modal">
+            <div className="submit-step">
                 <Modal.Body>
                     <div className="texto_modales_center">
                         <div className="margin_abajo_big">Your location</div>
@@ -136,7 +136,7 @@ class PollLocation extends Component {
                         </button>
                     </div>
                 </Modal.Footer>
-            </Modal>
+            </div>
         );
     }
 }

@@ -1684,7 +1684,7 @@ select.location-selector {
 
 @media screen and (max-width: 500px) {
   .custom-modal {
-    width: 92%;
+    width: auto;
     margin: 5px auto;
   }
 
@@ -1780,4 +1780,15 @@ select.location-selector {
   letter-spacing: 1px;
   text-transform: uppercase;
   padding: 1.5em 6em;
+}
+
+.submit-step {
+  margin: 30px auto;
+}
+
+@media all and (min-width: 768px) {
+  .submit-step {
+    width: 75%;
+    max-width: 685px;
+  }
 }

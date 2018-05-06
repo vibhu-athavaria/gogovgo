@@ -29,7 +29,7 @@ class ShareReviewURLModal extends Component {
         };
 
         return (
-            <Modal show={true} dialogClassName="custom-modal">
+            <div className="submit-step">
                 <Modal.Body>
                     <div className="text-center">
                         <div className="circle centered blue">
@@ -70,7 +70,7 @@ class ShareReviewURLModal extends Component {
                         </button>
                     </div>
                 </Modal.Footer>
-            </Modal>
+            </div>
         );
     }
 }

@@ -131,7 +131,7 @@ class SubscribeModal extends Component {
         };
 
         return (
-            <Modal show={true} dialogClassName="custom-modal">
+            <div className="submit-step">
                 <Modal.Body>
                     <div className="texto_modales margin_abajo_big">
                         Get Updates from DonaldTrumpReviews.com
@@ -175,7 +175,7 @@ class SubscribeModal extends Component {
                         </button>
                     </div>
                 </Modal.Footer>
-            </Modal>
+            </div>
         );
     }
 }

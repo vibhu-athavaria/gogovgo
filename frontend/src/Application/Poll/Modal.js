@@ -23,7 +23,7 @@ export default class BaseModal extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        let step = parseInt(nextProps.location.search.replace("?", "").split("=")[1]);
+        let step = parseInt(nextProps.location.search.replace("?", "").split("=")[1], 10);
         if (!step) step = 1;
         this.setState({ step: step });
     }
