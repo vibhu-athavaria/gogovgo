@@ -42,12 +42,12 @@ class FlaggedReviewAdmin(admin.ModelAdmin):
     review_link.allow_tags = True
 
 
-admin.site.register(models.Cabinet)
-admin.site.register(models.GovernmentDepartment)
-admin.site.register(models.Poll)
+# admin.site.register(models.Cabinet)
+# admin.site.register(models.GovernmentDepartment)
+# admin.site.register(models.Poll)
 admin.site.register(models.Politician, PoliticianAdmin)
 admin.site.register(models.PublicOfficeTitle)
 admin.site.register(models.Tag)
 admin.site.register(models.Review, ReviewAdmin)
 admin.site.register(models.FlaggedReview, FlaggedReviewAdmin)
-admin.site.register(models.UserProfile)
+# admin.site.register(models.UserProfile)
