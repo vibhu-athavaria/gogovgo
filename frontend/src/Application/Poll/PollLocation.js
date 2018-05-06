@@ -62,7 +62,6 @@ class PollLocation extends Component {
      * @returns JSX
      */
     render() {
-        const { onHide, prev } = this.props;
         const { location, locationOptions, error } = this.state;
 
         /**
@@ -101,8 +100,7 @@ class PollLocation extends Component {
         }
 
         return (
-            <Modal show={true} onHide={() => onHide(true)} dialogClassName="custom-modal">
-                <Modal.Header closeButton />
+            <Modal show={true} dialogClassName="custom-modal">
                 <Modal.Body>
                     <div className="texto_modales_center">
                         <div className="margin_abajo_big">Your location</div>
@@ -125,7 +123,7 @@ class PollLocation extends Component {
                         <button
                             type="button"
                             className="btn btn-modal btn-link"
-                            onClick={() => prev()}
+                            onClick={this.props.prev}
                         >
                             Back
                         </button>

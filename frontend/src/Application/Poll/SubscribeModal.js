@@ -46,7 +46,6 @@ class SubscribeModal extends Component {
             approved,
             location,
             mutate,
-            onHide,
             tags,
             next
         } = this.props;
@@ -78,6 +77,7 @@ class SubscribeModal extends Component {
                 .then(({ data }) => {
                     rated[politicianId] = approved ? "approved" : "disapproved";
                     cookies.set("rated", rated, { path: "/" });
+                    window.store = {};
                     next({ reviewId: data.createReview.review.id });
                 })
                 .catch(error => {
@@ -131,8 +131,7 @@ class SubscribeModal extends Component {
         };
 
         return (
-            <Modal show={true} onHide={() => onHide()} dialogClassName="custom-modal">
-                <Modal.Header closeButton />
+            <Modal show={true} dialogClassName="custom-modal">
                 <Modal.Body>
                     <div className="texto_modales margin_abajo_big">
                         Get Updates from DonaldTrumpReviews.com

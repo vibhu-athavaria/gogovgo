@@ -106,7 +106,7 @@ class Map extends Component {
                     data: cleanData(mapdata.data),
                     joinBy: mapType !== "us" ? ["iso-a2", "code"] : ["postal-code", "code"],
                     dataLabels: { enabled: true, color: "#FFFFFF", format: "{point.code}" },
-                    name: `Approval rating per ${mapType == "us" ? "state" : "country"}`,
+                    name: `Approval rating per ${mapType === "us" ? "state" : "country"}`,
                     tooltip: {
                         pointFormat:
                             "{point.name}: <br/> Approval: {point.positive}% <br/> Disapproval: {point.negative}%"

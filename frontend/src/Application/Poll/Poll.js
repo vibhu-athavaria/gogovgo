@@ -8,14 +8,12 @@ import { withCookies, Cookies } from "react-cookie";
 import { Col, Row } from "react-bootstrap";
 import PropTypes from "prop-types";
 import ReactGA from "react-ga";
-
-import BaseModal from "./Modal";
+import { withRouter } from "react-router-dom";
 
 class Poll extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            showPoll: false,
             approved: false,
             rated: false,
             ratedSentiment: ""
@@ -36,23 +34,7 @@ class Poll extends Component {
     render() {
         const { rated, ratedSentiment } = this.state;
 
-        const pollModelClose = () => {
-            this.setState({ showPoll: false });
-        };
-
-        const showPollModel = isApproved => {
-            ReactGA.event({
-                category: "User",
-                action: "Clicks_RateYourPolitician"
-            });
-            this.setState({
-                showPoll: true,
-                approved: isApproved
-            });
-        };
-
         const modalProps = {
-            onHide: pollModelClose,
             politicianId: this.props.politicianId,
             politicianName: this.props.politicianName,
             politicianTitle: this.props.politicianTitle,
@@ -60,6 +42,17 @@ class Poll extends Component {
             disapprovalCount: this.props.disapprovalCount,
             positiveTags: this.props.positiveTags,
             negativeTags: this.props.negativeTags
+        };
+
+        const showPollModel = isApproved => {
+            ReactGA.event({
+                category: "User",
+                action: "Clicks_RateYourPolitician"
+            });
+
+            window.store = { ...modalProps, approved: isApproved };
+            const url = `${window.location.pathname}/submit?step=1`;
+            this.props.history.push(url);
         };
 
         return (
@@ -114,8 +107,6 @@ class Poll extends Component {
                         <div className="share-your-opinion-b">Safe. Secure. Anonymous.</div>
                     </div>
                 </Row>
-
-                {this.state.showPoll && <BaseModal {...modalProps} />}
             </div>
         );
     }
@@ -125,4 +116,4 @@ Poll.propTypes = {
     cookies: PropTypes.instanceOf(Cookies).isRequired
 };
 
-export default withCookies(Poll);
+export default withRouter(withCookies(Poll));

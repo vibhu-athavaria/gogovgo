@@ -19,7 +19,7 @@ class PollReview extends Component {
     }
 
     render() {
-        const { onHide, prev, next, approved, politicianName } = this.props;
+        const { prev, next, approved, politicianName } = this.props;
 
         // const reviewTags = tags.map(tag => (
         //     <button className="reason-tags" key={tag.id}>
@@ -64,8 +64,7 @@ class PollReview extends Component {
         );
 
         return (
-            <Modal show={true} onHide={onHide} dialogClassName="custom-modal" keyboard={true}>
-                <Modal.Header closeButton />
+            <Modal show={true} dialogClassName="custom-modal" keyboard={true}>
                 <Modal.Body>
                     <div className="texto_modales margin_abajo_medium">{pollQuestion}</div>
                     <div className="modal_text_small opinion">

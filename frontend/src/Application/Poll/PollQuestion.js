@@ -7,14 +7,7 @@ import ReactGA from "react-ga";
 import { Modal, Row } from "react-bootstrap";
 
 const PollQuestion = props => {
-    const {
-        approvalCount,
-        disapprovalCount,
-        onHide,
-        politicianName,
-        politicianTitle,
-        show
-    } = props;
+    const { approvalCount, disapprovalCount, politicianName, politicianTitle } = props;
 
     /**
      * Handle click on Approve or Disapprove button
@@ -32,8 +25,7 @@ const PollQuestion = props => {
     };
 
     return (
-        <Modal show={show} onHide={onHide} dialogClassName="custom-modal">
-            <Modal.Header closeButton />
+        <Modal show={true} dialogClassName="custom-modal">
             <Modal.Body>
                 <div className="texto_modales_center">
                     <div className="margin_abajo_big">

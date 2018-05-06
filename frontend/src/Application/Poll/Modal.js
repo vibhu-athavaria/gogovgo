@@ -7,14 +7,26 @@
 import React, { Component } from "react";
 
 import PollQuestion from "./PollQuestion";
-
 import PollReview from "./PollReview";
 import PollLocation from "./PollLocation";
 import SubscribeModal from "./SubscribeModal";
 import ShareReviewURLModal from "./ShareReviewURLModal";
 
 export default class BaseModal extends Component {
-    state = { step: 1, approved: null, tags: [], reviewId: null, reviewText: "" };
+    constructor(props) {
+        super(props);
+        this.baseUrl = "/politician/us/president-united-states";
+        this.state = { step: 1, approved: null, tags: [], reviewId: null, reviewText: "" };
+        if (props.location.pathname !== this.baseUrl + "/submit" || !this.getProps().politicianId) {
+            props.history.push(this.baseUrl);
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        let step = parseInt(nextProps.location.search.replace("?", "").split("=")[1]);
+        if (!step) step = 1;
+        this.setState({ step: step });
+    }
 
     /**
      * A central list of props to show on all sub components/modals
@@ -22,10 +34,11 @@ export default class BaseModal extends Component {
      */
     getProps() {
         return {
-            ...this.props,
+            ...window.store,
             ...this.state,
-            prev: () => this.setState({ step: this.state.step - 1 }),
+            prev: () => this.props.history.push("?step=" + (this.state.step - 1)),
             next: data => this.next(data),
+            history: this.props.history,
             show: true
         };
     }
@@ -36,7 +49,9 @@ export default class BaseModal extends Component {
      * @param {object} newState - new values to update state with
      */
     next(newState) {
-        this.setState({ ...newState, step: this.state.step + 1 });
+        this.setState({ ...newState }, () => {
+            this.props.history.push("?step=" + (this.state.step + 1));
+        });
     }
 
     /**

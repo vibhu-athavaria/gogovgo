@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Tracker from "./Tracker";
 import Home from "./Application/Home";
+import Submit from "./Application/Poll/Modal";
 // import LandingPage from "./Application/LandingPage";
 
 class App extends Component {
@@ -39,6 +40,10 @@ class App extends Component {
                         exact
                         path="/politician/:country/:title_url"
                         component={Tracker(Politician)}
+                    />
+                    <Route
+                        path="/politician/:country/:title_url/submit"
+                        component={Tracker(Submit)}
                     />
                     <Route
                         path="/politician/:country/:title_url/reviews/:review_id"

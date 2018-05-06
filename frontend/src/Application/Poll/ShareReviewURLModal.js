@@ -25,13 +25,11 @@ class ShareReviewURLModal extends Component {
 
     render() {
         const onClose = () => {
-            this.props.onHide(true);
-            window.location.reload();
+            this.props.history.push("/politician/us/president-united-states");
         };
 
         return (
-            <Modal show={true} onHide={onClose} dialogClassName="custom-modal">
-                <Modal.Header />
+            <Modal show={true} dialogClassName="custom-modal">
                 <Modal.Body>
                     <div className="text-center">
                         <div className="circle centered blue">
@@ -68,7 +66,7 @@ class ShareReviewURLModal extends Component {
                 <Modal.Footer>
                     <div className="form-group text-center margin_abajo_medium">
                         <button type="button" className="btn btn-modal btn-link" onClick={onClose}>
-                            Close
+                            Continue
                         </button>
                     </div>
                 </Modal.Footer>
