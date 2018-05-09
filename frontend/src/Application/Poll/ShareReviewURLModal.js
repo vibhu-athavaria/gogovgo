@@ -19,7 +19,9 @@ class ShareReviewURLModal extends Component {
 
     componentDidMount() {
         const reviewURL =
-            window.location.href.replace("#", "") + "/reviews/" + encrypt(this.props.reviewId);
+            window.location.origin +
+            "/politician/us/president-united-states/reviews/" +
+            encrypt(this.props.reviewId);
         this.setState({ value: reviewURL });
     }
 
@@ -36,8 +38,9 @@ class ShareReviewURLModal extends Component {
                             <i className="fa fa-check" aria-hidden="true" />
                         </div>
                         <div className="your-review-has-been">
-                            Your review has been submitted, and will be published within 24 hours.
-                            Use the link below to share with others and track progress.
+                            Your review has been published. Use the link below to access your review
+                            and share with friends. The most upvoted reviews earn authors special
+                            access to new product features.
                         </div>
                     </div>
 
@@ -57,7 +60,9 @@ class ShareReviewURLModal extends Component {
                                     text={this.state.value}
                                     onCopy={() => this.setState({ copied: true })}
                                 >
-                                    <button>{this.state.copied ? "Copied" : "Copy"}</button>
+                                    <button className="btn btn-primary">
+                                        {this.state.copied ? "Copied" : "Copy"}
+                                    </button>
                                 </CopyToClipboard>
                             </InputGroup.Button>
                         </InputGroup>
@@ -65,7 +70,11 @@ class ShareReviewURLModal extends Component {
                 </Modal.Body>
                 <Modal.Footer>
                     <div className="form-group text-center margin_abajo_medium">
-                        <button type="button" className="btn btn-modal btn-link" onClick={onClose}>
+                        <button
+                            type="button"
+                            className="btn btn-modal btn-primary"
+                            onClick={onClose}
+                        >
                             Continue
                         </button>
                     </div>
