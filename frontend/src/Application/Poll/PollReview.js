@@ -95,7 +95,7 @@ class PollReview extends Component {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <div className="form-group text-center margin_abajo_medium">
+                    <div className="form-group text-center m0">
                         <button type="button" className="btn btn-modal btn-link" onClick={prev}>
                             Back
                         </button>

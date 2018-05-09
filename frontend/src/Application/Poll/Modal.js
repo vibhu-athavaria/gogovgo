@@ -5,6 +5,7 @@
  */
 
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 import PollQuestion from "./PollQuestion";
 import PollReview from "./PollReview";
@@ -20,6 +21,14 @@ export default class BaseModal extends Component {
         if (props.location.pathname !== this.baseUrl + "/submit" || !this.getProps().politicianId) {
             props.history.push(this.baseUrl);
         }
+    }
+
+    componentDidMount() {
+        document.childNodes[1].className = "bg-grey";
+    }
+
+    componentWillUnmount() {
+        document.childNodes[1].className = "";
     }
 
     componentWillReceiveProps(nextProps) {
@@ -82,6 +91,15 @@ export default class BaseModal extends Component {
 
     render() {
         let modal = this.getModal();
-        return modal;
+        return (
+            <div id="submit-pm">
+                <div className="logo">
+                    <Link to="/politician/us/president-united-states" className="main">
+                        DonaldTrumpReviews.com
+                    </Link>
+                </div>
+                {modal}
+            </div>
+        );
     }
 }
