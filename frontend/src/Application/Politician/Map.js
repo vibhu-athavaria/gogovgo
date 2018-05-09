@@ -49,7 +49,7 @@ class Map extends Component {
 
             title: { text: "" },
 
-            legend: false,
+            legend: { enabled: true },
 
             mapNavigation: { enabled: false },
 
@@ -59,7 +59,7 @@ class Map extends Component {
                         from: -100,
                         to: -75,
                         color: "#D92D24",
-                        name: "Disapprove"
+                        name: "Strongly Disapprove"
                     },
                     {
                         from: -75,
@@ -71,7 +71,7 @@ class Map extends Component {
                         from: -40,
                         to: -10,
                         color: "#D8ADAB",
-                        name: "Disapprove"
+                        name: "Slightly Disapprove"
                     },
                     {
                         from: -10,
@@ -83,7 +83,7 @@ class Map extends Component {
                         from: 10,
                         to: 40,
                         color: "#ABC9B0",
-                        name: "Approve"
+                        name: "Slightly Approve"
                     },
                     {
                         from: 40,
@@ -95,7 +95,7 @@ class Map extends Component {
                         from: 75,
                         to: 100,
                         color: "#2FA543",
-                        name: "Approve"
+                        name: "Strongly Approve"
                     }
                 ]
             },
