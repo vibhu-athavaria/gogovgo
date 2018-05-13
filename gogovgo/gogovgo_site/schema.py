@@ -19,26 +19,6 @@ from gogovgo.gogovgo_site.constants import SENTIMENT_NEGATIVE, SENTIMENT_POSITIV
 from gogovgo.gogovgo_site.constants import REVIEW_APPROVED, US_STATES
 
 
-class TagHelper:
-    """Helper method to get, set or update tags"""
-
-    @staticmethod
-    def get_tags(politician, sentiment):
-        """
-        Get  tags for a politician
-
-        Args:
-            politician: Politician to get tags for
-            sentiment: Type of tags to selected i.e. positive or negative
-
-        Returns: list of tags
-
-        """
-        tags = models.Tag.objects.filter(politician=politician, sentiment=sentiment, active=True)
-        tags = tags.order_by('-weight').values_list('value', 'weight')[:10]
-        return tags
-
-
 @convert_django_field.register(CloudinaryField)
 def my_convert_function(field, registry=None):
     return graphene.String()
@@ -93,8 +73,6 @@ PollType.Connection = connection_for_type(PollType)
 
 
 class PoliticianType(DjangoObjectType):
-    positive_tags = graphene.List(graphene.List(graphene.String))
-    negative_tags = graphene.List(graphene.List(graphene.String))
     hero_url = graphene.String()
     avatar_url = graphene.String()
     thumbnail_tag = graphene.String()
@@ -140,12 +118,6 @@ class PoliticianType(DjangoObjectType):
             'status': REVIEW_APPROVED
         }
         return models.Review.objects.filter(**query).count()
-
-    def resolve_positive_tags(self, *args):
-        return TagHelper.get_tags(politician=self, sentiment=SENTIMENT_POSITIVE)
-
-    def resolve_negative_tags(self, *args):
-        return TagHelper.get_tags(politician=self, sentiment=SENTIMENT_NEGATIVE)
 
 
 PoliticianType.Connection = connection_for_type(PoliticianType)
@@ -320,6 +292,7 @@ class ReviewPaginationHelper(object):
         self.country = kwargs['country']
         self.state = kwargs['state']
         self.timelimit = kwargs['timelimit']
+        self.reviews = {SENTIMENT_NEGATIVE: [], SENTIMENT_POSITIVE: []}
 
     def get_reviews(self):
         positive_reviews = self._get(sentiment=SENTIMENT_POSITIVE)
@@ -331,6 +304,8 @@ class ReviewPaginationHelper(object):
             'hasMore': total_pages > self.page,
             'positive': positive_reviews['data'],
             'negative': negative_reviews['data'],
+            'positive_tags': self.get_tags(sentiment=SENTIMENT_POSITIVE),
+            'negative_tags': self.get_tags(sentiment=SENTIMENT_NEGATIVE)
         }
 
     def _get(self, sentiment):
@@ -347,10 +322,32 @@ class ReviewPaginationHelper(object):
             query['created__gte'] = limit
 
         reviews = models.Review.objects.filter(**query)
-        total_reviews = reviews.count()
+        total_reviews = len(reviews)
+        self.reviews[sentiment] = reviews
+
         total_pages = math.ceil(total_reviews / self.per_page)
         reviews = reviews.order_by('-up_vote').select_related('user')[start:end]
         return {'data': reviews, 'totalPages': total_pages}
+
+    def get_tags(self, sentiment):
+        """
+        Get  tags for a politician
+
+        Args:
+            sentiment: Type of tags to selected i.e. positive or negative
+
+        Returns: list of tags
+
+        """
+        reviews = self.reviews[sentiment]
+        review_ids = [review.id for review in reviews]
+
+        tags = models.Review.tags.through.objects.filter(review_id__in=review_ids)
+        tags = tags.values_list('tag_id', flat=True)
+
+        tags = models.Tag.objects.filter(id__in=tags, active=True)
+        tags = tags.order_by('-weight').values_list('value', 'weight')[:10]
+        return tags
 
 
 class ReviewsPaginatedType(graphene.ObjectType):
@@ -359,7 +356,8 @@ class ReviewsPaginatedType(graphene.ObjectType):
     hasMore = graphene.Boolean()
     positive = graphene.List(ReviewType)
     negative = graphene.List(ReviewType)
-
+    positive_tags = graphene.List(graphene.List(graphene.String))
+    negative_tags = graphene.List(graphene.List(graphene.String))
 
 
 class MapEntryData(graphene.ObjectType):
