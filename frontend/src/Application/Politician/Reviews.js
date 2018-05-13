@@ -79,9 +79,11 @@ class Reviews extends Component {
         // Event handlers
         const pollModelClose = () => this.setState({ showPoll: false });
 
-        //  Reviews
+        //  Reviews & top tags
         let approvedReviews = [];
         let disapprovedReviews = [];
+        let topNegativeTags = [];
+        let topPostiveTags = [];
         if (data.reviews) {
             approvedReviews = data.reviews.positive.map((review, index) => (
                 <Review key={"approve:" + review.id} data={review} approve={true} />
@@ -89,21 +91,19 @@ class Reviews extends Component {
             disapprovedReviews = data.reviews.negative.map((review, index) => (
                 <Review key={"disapprove:" + review.id} data={review} approve={false} />
             ));
+            topNegativeTags = data.reviews.negativeTags.map((tag, index) => (
+                <div className="btn btn-tags" key={index}>
+                    <span className="tag-name">#{tag[0]}</span>
+                    <span className="tag-weight">{tag[1]}</span>
+                </div>
+            ));
+            topPostiveTags = data.reviews.positiveTags.map((tag, index) => (
+                <div className="btn btn-tags" key={index}>
+                    <span className="tag-name">#{tag[0]}</span>
+                    <span className="tag-weight">{tag[1]}</span>
+                </div>
+            ));
         }
-
-        //  Tags
-        const topNegativeTags = this.props.negativeTags.map((tag, index) => (
-            <div className="btn btn-tags" key={index}>
-                <span className="tag-name">#{tag[0]}</span>
-                <span className="tag-weight">{tag[1]}</span>
-            </div>
-        ));
-        const topPostiveTags = this.props.positiveTags.map((tag, index) => (
-            <div className="btn btn-tags" key={index}>
-                <span className="tag-name">#{tag[0]}</span>
-                <span className="tag-weight">{tag[1]}</span>
-            </div>
-        ));
 
         const getItemClass = item => {
             let className = "r-item " + item.toLowerCase();
@@ -238,6 +238,8 @@ const getReviews = gql`
             page
             pages
             hasMore
+            positiveTags
+            negativeTags
             positive {
                 id
                 user {

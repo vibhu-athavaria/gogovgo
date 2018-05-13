@@ -52,7 +52,9 @@ class Politician extends Component {
     }
 
     render() {
-        const { data: { loading, error, politician } } = this.props;
+        const {
+            data: { loading, error, politician }
+        } = this.props;
         if (loading) {
             return <p>Loading...</p>;
         } else if (error) {
@@ -129,8 +131,6 @@ const getPolitician = gql`
             approvalRating
             approvalCount
             disapprovalCount
-            positiveTags
-            negativeTags
             publicOfficeTitle {
                 displayName
             }
