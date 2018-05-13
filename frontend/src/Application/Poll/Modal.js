@@ -92,7 +92,7 @@ export default class BaseModal extends Component {
     render() {
         let modal = this.getModal();
         return (
-            <div id="submit-pm">
+            <div className="submit-step">
                 <div className="logo">
                     <Link to="/politician/us/president-united-states" className="main">
                         DonaldTrumpReviews.com

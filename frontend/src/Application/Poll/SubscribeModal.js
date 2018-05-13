@@ -131,7 +131,7 @@ class SubscribeModal extends Component {
         };
 
         return (
-            <div className="submit-step">
+            <div>
                 <Modal.Body>
                     <div className="texto_modales margin_abajo_big">
                         Get Updates from DonaldTrumpReviews.com

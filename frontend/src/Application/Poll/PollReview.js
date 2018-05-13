@@ -64,7 +64,7 @@ class PollReview extends Component {
         );
 
         return (
-            <div className="submit-step">
+            <div>
                 <Modal.Body>
                     <div className="texto_modales margin_abajo_medium">{pollQuestion}</div>
                     <div className="modal_text_small opinion">

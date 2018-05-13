@@ -31,7 +31,7 @@ class ShareReviewURLModal extends Component {
         };
 
         return (
-            <div className="submit-step">
+            <div>
                 <Modal.Body>
                     <div className="text-center">
                         <div className="circle centered blue">

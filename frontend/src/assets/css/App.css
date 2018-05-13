@@ -1,5 +1,5 @@
 html.bg-grey, html.bg-grey body {
-  background-color: #eee;
+  background-color: #f9f9f9;
 }
 
 body{
@@ -1790,16 +1790,18 @@ select.location-selector {
   padding: 1.5em 6em;
 }
 
-#submit-pm .logo {
-  width: 100%;
-  text-align: center;
-  padding: 20px 0 10px;
-}
-
 .submit-step {
-  margin: 10px auto;
+  margin: 20px auto;
   padding: 20px;
   background-color: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.submit-step .logo {
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
 }
 
 @media all and (min-width: 768px) {
