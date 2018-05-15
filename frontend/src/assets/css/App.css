@@ -1810,3 +1810,22 @@ select.location-selector {
     max-width: 685px;
   }
 }
+
+.map-legend {
+  justify-content: center;
+  align-items: center;
+}
+
+.map-legend .legend-bar {
+  display: inline-block;
+  height: 10px;
+  width: 200px;
+  margin: 0 10px;
+  border: 1px solid #aaa;
+
+  background: #2fa543; /* Old browsers */
+  background: -moz-linear-gradient(left, #2fa543 0%, #e3e3e3 50%, #d92d24 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(left, #2fa543 0%,#e3e3e3 50%,#d92d24 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to right, #2fa543 0%,#e3e3e3 50%,#d92d24 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2fa543', endColorstr='#d92d24',GradientType=0 ); /* IE6-9 */
+}

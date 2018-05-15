@@ -394,11 +394,11 @@ class MapHelper:
             _data = count[country]
             total = _data['positive'] + _data['negative']
             if not total:
-                entry = MapEntryData(code=country, name=country, positive=0, negative=0, value=0)
+                entry = MapEntryData(code=country, name=country, positive=0, negative=0, value=0.5)
             else:
                 positive = round(_data['positive'] / total * 100, 2)
                 negative = round(_data['negative'] / total * 100, 2)
-                value = positive - negative
+                value = _data['positive'] / total
                 entry = MapEntryData(code=country, name=country, value=value,
                                      positive=positive, negative=negative)
             data.append(entry)
@@ -427,11 +427,11 @@ class MapHelper:
             _data = count.get(state, {'positive': 0, 'negative': 0})
             total = _data['positive'] + _data['negative']
             if not total:
-                entry = MapEntryData(code=state, name=states[state], positive=0, negative=0, value=0)
+                entry = MapEntryData(code=state, name=states[state], positive=0, negative=0, value=0.5)
             else:
                 positive = round(_data['positive'] / total * 100, 2)
                 negative = round(_data['negative'] / total * 100, 2)
-                value = positive - negative
+                value = _data['positive'] / total
                 entry = MapEntryData(code=state, name=states[state], value=value,
                                      positive=positive, negative=negative)
             data.append(entry)

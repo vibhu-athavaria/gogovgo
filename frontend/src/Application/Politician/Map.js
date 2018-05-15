@@ -49,55 +49,14 @@ class Map extends Component {
 
             title: { text: "" },
 
-            legend: { enabled: true },
+            legend: { enabled: false },
 
             mapNavigation: { enabled: false },
 
             colorAxis: {
-                dataClasses: [
-                    {
-                        from: -100,
-                        to: -75,
-                        color: "#D92D24",
-                        name: "Strongly Disapprove"
-                    },
-                    {
-                        from: -75,
-                        to: -40,
-                        color: "#D66F6B",
-                        name: "Disapprove"
-                    },
-                    {
-                        from: -40,
-                        to: -10,
-                        color: "#D8ADAB",
-                        name: "Slightly Disapprove"
-                    },
-                    {
-                        from: -10,
-                        to: 10,
-                        color: "#E8E8E8",
-                        name: "Neutral"
-                    },
-                    {
-                        from: 10,
-                        to: 40,
-                        color: "#ABC9B0",
-                        name: "Slightly Approve"
-                    },
-                    {
-                        from: 40,
-                        to: 75,
-                        color: "#73B57D",
-                        name: "Approve"
-                    },
-                    {
-                        from: 75,
-                        to: 100,
-                        color: "#2FA543",
-                        name: "Strongly Approve"
-                    }
-                ]
+                min: 0,
+                max: 1,
+                stops: [[0, "#D92D24"], [0.5, "#E3E3E3"], [1, "#2FA543"]]
             },
 
             series: [
