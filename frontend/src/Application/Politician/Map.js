@@ -1,16 +1,19 @@
 import React, { Component } from "react";
 import { gql, graphql } from "react-apollo";
 import ReactHighmaps from "react-highcharts/ReactHighmaps";
-import WorldMap from "./mapdata";
-import USMap from "./usdata";
 
 class Map extends Component {
-    state = { mapType: "us" };
+    state = { mapType: "us", mapLayout: null, loading: true };
+
+    componentDidMount() {
+        this.loadMap();
+    }
 
     componentWillReceiveProps(nextProps) {
         const map = nextProps.country === "US" ? "us" : "world";
         if (map === this.state.mapType) return;
         this.setState({ mapType: map });
+        this.loadMap(nextProps);
         const {
             data: { fetchMore }
         } = this.props;
@@ -22,11 +25,26 @@ class Map extends Component {
         });
     }
 
+    loadMap(props) {
+        if (!props) props = this.props;
+        let { origin } = window.location;
+        if (origin.indexOf("localhost") !== -1) origin = "http://localhost:8030";
+
+        let key = props.country;
+        if (props.state) key += "-" + props.state;
+        let url = origin + "/api/map/?q=" + key;
+
+        fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                this.setState({ loading: false, mapLayout: data });
+            });
+    }
+
     render() {
         const { mapdata } = this.props.data;
-        if (!mapdata) return null;
-
-        const { mapType } = this.state;
+        const { mapType, loading, mapLayout } = this.state;
+        if (!mapdata || loading) return null;
 
         const cleanData = data => {
             let _data = [];
@@ -43,7 +61,7 @@ class Map extends Component {
 
         let mapConfig = {
             chart: {
-                map: mapType !== "us" ? WorldMap : USMap,
+                map: mapLayout,
                 borderWidth: 0
             },
 
@@ -75,7 +93,16 @@ class Map extends Component {
         };
 
         //
-        return <ReactHighmaps config={mapConfig} />;
+        return (
+            <div>
+                <ReactHighmaps config={mapConfig} />
+                <div className="row-flex map-legend">
+                    <span className="color_approve">Approve</span>
+                    <span className="legend-bar" />
+                    <span className="color_disapprove">Disapprove</span>
+                </div>
+            </div>
+        );
     }
 }
 

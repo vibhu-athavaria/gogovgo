@@ -16,14 +16,6 @@ import Map from "./Map";
 
 import LocationFilter from "./LocationFilter";
 
-const Legend = props => (
-    <div className="row-flex map-legend">
-        <span className="color_approve">Approve</span>
-        <span className="legend-bar" />
-        <span className="color_disapprove">Disapprove</span>
-    </div>
-);
-
 class Reviews extends Component {
     constructor(props, context) {
         super(props, context);
@@ -146,7 +138,6 @@ class Reviews extends Component {
                 <Row style={{ marginBottom: "40px" }}>
                     <Col sm={8} className="col-map">
                         <Map country={this.state.country} politicianId={this.props.politicianId} />
-                        <Legend />
                     </Col>
                     <Col sm={4}>
                         <LocationFilter
