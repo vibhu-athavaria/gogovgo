@@ -9,6 +9,7 @@ from django_countries import countries
 
 from gogovgo.gogovgo_site.constants import US_STATES, REVIEW_APPROVED
 from gogovgo.gogovgo_site.models import Review
+from gogovgo.scripts.map import get_map
 
 
 class FrontendAppView(View):
@@ -55,3 +56,13 @@ class LocationData(View):
             if country != 'US':
                 data.append({'short': country, 'long': countries_dict[country]})
         return data
+
+
+class MapData(View):
+
+    def get(self, request):
+        country = request.GET.get('country', '').lower()
+        if country not in ('world', 'us'):
+            return HttpResponse(status=400)
+        mapdata = get_map(country=country, state=request.GET.get('state'))
+        return JsonResponse(mapdata)
