@@ -61,8 +61,6 @@ class LocationData(View):
 class MapData(View):
 
     def get(self, request):
-        country = request.GET.get('country', '').lower()
-        if country not in ('world', 'us'):
-            return HttpResponse(status=400)
-        mapdata = get_map(country=country, state=request.GET.get('state'))
+        map_type = str(request.GET.get('q', '').lower())
+        mapdata = get_map(map_type)
         return JsonResponse(mapdata)
