@@ -2,9 +2,7 @@ import React, { Component } from "react";
 
 export default class LocationFilter extends Component {
     state = {
-        location: { country: "US", state: "all" },
-        locationOptions: { countries: [], states: [] },
-        timelimit: "all"
+        options: { countries: [], states: [] }
     };
 
     componentDidMount() {
@@ -12,14 +10,13 @@ export default class LocationFilter extends Component {
         if (origin.indexOf("localhost") !== -1) origin = "http://localhost:8030";
         fetch(origin + "/api/countries/?restrict=reviews")
             .then(res => res.json())
-            .then(data => this.setState({ locationOptions: data }));
+            .then(data => this.setState({ options: data }));
     }
 
     handleChange(field, event) {
-        let { location } = this.state;
-        location[field] = event.target.value;
-        this.setState({ location: location });
-        if (field === "country") this.props.onCountryChange(event.target.value);
+        let filters = Object.assign({}, this.props.filters);
+        filters[field] = event.target.value;
+        this.props.onFilter(filters);
     }
 
     onSubmit = () => {
@@ -28,16 +25,17 @@ export default class LocationFilter extends Component {
     };
 
     render() {
-        const { location, locationOptions } = this.state;
+        const { options } = this.state;
+        const { filters } = this.props;
 
         const countrySelector = (
             <select
                 className="form-control location-selector"
-                value={location.country}
+                value={filters.country}
                 onChange={e => this.handleChange("country", e)}
             >
                 <option value="all">All countries</option>
-                {locationOptions.countries.map((country, i) => (
+                {options.countries.map((country, i) => (
                     <option key={i} value={country.short}>
                         {country.long}
                     </option>
@@ -46,15 +44,15 @@ export default class LocationFilter extends Component {
         );
 
         let stateSelector;
-        if (location.country === "US") {
+        if (filters.country === "US") {
             stateSelector = (
                 <select
                     className="form-control location-selector"
-                    value={location.state}
+                    value={filters.state}
                     onChange={e => this.handleChange("state", e)}
                 >
                     <option value="all">All states</option>
-                    {locationOptions.states.map((state, i) => (
+                    {options.states.map((state, i) => (
                         <option key={i} value={state.short}>
                             {state.long}
                         </option>
@@ -68,11 +66,16 @@ export default class LocationFilter extends Component {
             { name: "Last 90 days", value: 90 }
         ].map(option => {
             const iconClass =
-                this.state.timelimit === option.value
+                filters.timelimit === option.value
                     ? "glyphicon glyphicon-record"
                     : "fa fa-circle-o";
             return (
-                <div key={option.value} onClick={e => this.setState({ timelimit: option.value })}>
+                <div
+                    key={option.value}
+                    onClick={e =>
+                        this.handleChange("timelimit", { target: { value: option.value } })
+                    }
+                >
                     <i className={"icon " + iconClass} />
                     <span>{option.name}</span>
                 </div>

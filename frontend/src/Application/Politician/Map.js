@@ -10,7 +10,8 @@ class Map extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const map = nextProps.country === "US" ? "us" : "world";
+        const { filters } = nextProps;
+        const map = filters.country === "US" ? "us" : "world";
         if (map === this.state.mapType) return;
         this.setState({ mapType: map });
         this.loadMap(nextProps);

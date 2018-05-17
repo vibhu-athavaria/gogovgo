@@ -23,8 +23,11 @@ class Reviews extends Component {
             showPoll: false,
             rated: false,
             reviewTab: "Approve",
-            country: "US",
-            filters: {}
+            filters: {
+                country: "US",
+                state: "all",
+                timelimit: "all"
+            }
         };
     }
 
@@ -74,7 +77,7 @@ class Reviews extends Component {
     };
 
     render() {
-        const { data } = this.props;
+        const { data, politicianId } = this.props;
 
         // Event handlers
         const pollModelClose = () => this.setState({ showPoll: false });
@@ -125,6 +128,12 @@ class Reviews extends Component {
             return classNames + " tab-" + this.state.reviewTab.toLowerCase();
         };
 
+        const props = {
+            filters: this.state.filters,
+            onFilter: this.onFilter,
+            politicianId: politicianId
+        };
+
         return (
             <Col>
                 <Row>
@@ -137,13 +146,10 @@ class Reviews extends Component {
 
                 <Row style={{ marginBottom: "40px" }}>
                     <Col sm={8} className="col-map">
-                        <Map country={this.state.country} politicianId={this.props.politicianId} />
+                        <Map {...props} />
                     </Col>
                     <Col sm={4}>
-                        <LocationFilter
-                            onCountryChange={country => this.setState({ country: country })}
-                            filter={this.onFilter}
-                        />
+                        <LocationFilter {...props} />
                     </Col>
                 </Row>
 
