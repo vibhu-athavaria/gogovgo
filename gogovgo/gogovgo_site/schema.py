@@ -445,6 +445,40 @@ class MapHelper:
             data.append(entry)
         return data
 
+    @staticmethod
+    def get_state_data(politician_id, state):
+        query = {'politician_id': politician_id,
+                 'status': REVIEW_APPROVED,
+                 'country': 'US',
+                 'state': state}
+        reviews = models.Review.objects.filter(**query).exclude(county=None)
+        reviews = tuple(reviews.values_list('county', 'sentiment'))
+
+        total_reviews = len(reviews)
+        count = {}
+        for county, sentiment in reviews:
+            try:
+                count[county][sentiment] += 1
+            except KeyError:
+                count[county] = {'positive': 0, 'negative': 0}
+                count[county][sentiment] = 1
+
+        data = []
+        for county in count:
+            _data = count[county]
+            total = _data['positive'] + _data['negative']
+            if not total:
+                entry = MapEntryData(code=county, name=county, positive=0, negative=0, value=0.5)
+            else:
+                positive = round(_data['positive'] / total * 100, 2)
+                negative = round(_data['negative'] / total * 100, 2)
+                value = _data['positive'] / total
+                entry = MapEntryData(code=county, name=county, value=value,
+                                     positive=positive, negative=negative)
+            data.append(entry)
+        return data
+
+
 
 class Query(graphene.AbstractType):
     users = graphene.List(UserType)
@@ -477,6 +511,9 @@ class Query(graphene.AbstractType):
             map_data = MapHelper.get_world_data(args['id'])
         elif map_type == 'us':
             map_data = MapHelper.get_us_data(args['id'])
+        elif map_type.startswith('us-'):
+            state = map_type.replace('us-', '').upper()
+            map_data = MapHelper.get_state_data(args['id'], state)
         else:
             raise GraphQLError('Invalid map type')
         return MapDataType(data=map_data)
