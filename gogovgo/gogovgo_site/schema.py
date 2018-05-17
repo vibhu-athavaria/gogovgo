@@ -17,7 +17,7 @@ from django.db import IntegrityError
 from gogovgo.gogovgo_site import models
 from gogovgo.gogovgo_site.constants import SENTIMENT_NEGATIVE, SENTIMENT_POSITIVE
 from gogovgo.gogovgo_site.constants import REVIEW_APPROVED, US_STATES
-
+from gogovgo.scripts.geocode import get_county
 
 @convert_django_field.register(CloudinaryField)
 def my_convert_function(field, registry=None):
@@ -206,13 +206,21 @@ class CreateReview(graphene.Mutation):
             del args['email_address']
 
         location = args['location']
-        state, country = location.split(',')
+        state, country, postal_code = location.split(',')
+
+        county = None
+        if country == 'US':
+            county = get_county(postal_code, state)
+            if not country:
+                raise GraphQLError('The postal code is invalid')
 
         try:
             review = models.Review(
                 politician_id=args['politician_id'],
                 user=user,
                 state=state.strip() or None,
+                county=county,
+                postal_code=postal_code.strip() or None,
                 country=country.strip(),
                 sentiment=args['sentiment'],
                 status=REVIEW_APPROVED,
