@@ -20,8 +20,7 @@ export default class LocationFilter extends Component {
     }
 
     onSubmit = () => {
-        const filters = { ...this.state.location, timelimit: this.state.timelimit };
-        this.props.filter(filters);
+        this.props.onFilter(this.props.filters);
     };
 
     render() {
