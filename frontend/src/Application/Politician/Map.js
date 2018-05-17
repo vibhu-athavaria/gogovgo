@@ -6,15 +6,16 @@ class Map extends Component {
     state = { mapType: "us", mapLayout: null, loading: true };
 
     componentDidMount() {
-        this.loadMap({ country: "US", state: null });
+        this.loadMap(this.props.filters);
     }
 
     componentWillReceiveProps(nextProps) {
         const { filters } = nextProps;
-        const map = filters.country === "US" ? "us" : "world";
+        let map = filters.country === "US" ? "us" : "world";
+        if (map === "US" && filters.state !== "all") map += "-" + filters.state.toLowerCase();
         if (map === this.state.mapType) return;
         this.setState({ mapType: map });
-        this.loadMap(nextProps);
+        this.loadMap(filters);
         const {
             data: { fetchMore }
         } = this.props;
@@ -26,14 +27,13 @@ class Map extends Component {
         });
     }
 
-    loadMap(props) {
-        console.log("load map\n", props);
-        if (!props) return;
+    loadMap(filters) {
+        if (!filters) return;
         let url = "https://code.highcharts.com/mapdata/";
-        if (props.country !== "US") {
+        if (filters.country !== "US") {
             url += "custom/world.js";
         } else {
-            const postfix = props.state ? `-${props.state.toLowerCase()}` : "";
+            const postfix = filters.state != "all" ? `-${filters.state.toLowerCase()}` : "";
             url += `countries/us/us${postfix}-all.js`;
         }
 
