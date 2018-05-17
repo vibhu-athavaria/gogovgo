@@ -6,7 +6,7 @@ class Map extends Component {
     state = { mapType: "us", mapLayout: null, loading: true };
 
     componentDidMount() {
-        this.loadMap();
+        this.loadMap({ country: "US", state: null });
     }
 
     componentWillReceiveProps(nextProps) {
@@ -26,17 +26,21 @@ class Map extends Component {
     }
 
     loadMap(props) {
-        if (!props) props = this.props;
-        let { origin } = window.location;
-        if (origin.indexOf("localhost") !== -1) origin = "http://localhost:8030";
-
-        let key = props.country;
-        if (props.state) key += "-" + props.state;
-        let url = origin + "/api/map/?q=" + key;
+        console.log("load map\n", props);
+        if (!props) return;
+        let url = "https://code.highcharts.com/mapdata/";
+        if (props.country !== "US") {
+            url += "custom/world.js";
+        } else {
+            const postfix = props.state ? `-${props.state.toLowerCase()}` : "";
+            url += `countries/us/us${postfix}-all.js`;
+        }
 
         fetch(url)
-            .then(res => res.json())
+            .then(res => res.text())
             .then(data => {
+                data = data.substring(data.indexOf("=") + 2);
+                data = JSON.parse(data);
                 this.setState({ loading: false, mapLayout: data });
             });
     }
@@ -58,6 +62,8 @@ class Map extends Component {
                 });
             return _data;
         };
+
+        const _this = this;
 
         let mapConfig = {
             chart: {
@@ -87,6 +93,27 @@ class Map extends Component {
                     tooltip: {
                         pointFormat:
                             "{point.name}: <br/> Approval: {point.positive}% <br/> Disapproval: {point.negative}%"
+                    },
+                    point: {
+                        events: {
+                            click: event => {
+                                if (mapType !== "us") return;
+                                let state;
+                                if (event.target.tagName === "tspan") {
+                                    state = event.target.innerHTML;
+                                } else {
+                                    const params = event.target.className.baseVal.split(" ");
+                                    const keyword = "highcharts-key-us-";
+                                    for (let param of params) {
+                                        if (param.indexOf(keyword) !== -1) {
+                                            state = param.replace(keyword, "").toUpperCase();
+                                            break;
+                                        }
+                                    }
+                                }
+                                _this.loadMap({ country: "US", state: state });
+                            }
+                        }
                     }
                 }
             ]
