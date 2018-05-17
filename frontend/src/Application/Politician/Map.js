@@ -12,7 +12,7 @@ class Map extends Component {
     componentWillReceiveProps(nextProps) {
         const { filters } = nextProps;
         let map = filters.country === "US" ? "us" : "world";
-        if (map === "US" && filters.state !== "all") map += "-" + filters.state.toLowerCase();
+        if (map === "us" && filters.state !== "all") map += "-" + filters.state.toLowerCase();
         if (map === this.state.mapType) return;
         this.setState({ mapType: map });
         this.loadMap(filters);
@@ -33,7 +33,7 @@ class Map extends Component {
         if (filters.country !== "US") {
             url += "custom/world.js";
         } else {
-            const postfix = filters.state != "all" ? `-${filters.state.toLowerCase()}` : "";
+            const postfix = filters.state !== "all" ? `-${filters.state.toLowerCase()}` : "";
             url += `countries/us/us${postfix}-all.js`;
         }
 
@@ -112,7 +112,9 @@ class Map extends Component {
                                         }
                                     }
                                 }
-                                _this.loadMap({ country: "US", state: state });
+                                let filters = Object.assign({}, _this.props.filters);
+                                filters.state = state;
+                                _this.props.onFilter(filters);
                             }
                         }
                     }
