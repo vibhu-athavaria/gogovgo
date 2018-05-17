@@ -11,7 +11,7 @@ class PollLocation extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            location: { state: "", country: "US" },
+            location: { state: "", country: "US", postalCode: "" },
             locationOptions: { countries: [], states: [] },
             error: null
         };
@@ -21,6 +21,7 @@ class PollLocation extends Component {
      * Load list of available countries and state from API
      */
     componentDidMount() {
+        if (this.props.location) this.setState({ location: this.props.location });
         let { origin } = window.location;
         if (origin.indexOf("localhost") !== -1) origin = "http://localhost:8030";
         fetch(origin + "/api/countries/")
@@ -45,8 +46,13 @@ class PollLocation extends Component {
      */
     submit = () => {
         const { location } = this.state;
-        if (location.country === "US" && !location.state.length) {
-            return this.setState({ error: "The state field is required." });
+        if (location.country === "US") {
+            if (!location.state.length) {
+                return this.setState({ error: "The state field is required." });
+            }
+            if (!location.postalCode.length) {
+                return this.setState({ error: "The postal code field is required." });
+            }
         }
         //	track event
         ReactGA.event({
@@ -82,6 +88,8 @@ class PollLocation extends Component {
         );
 
         let stateSelector;
+        let postalCode;
+
         if (location.country === "US") {
             stateSelector = (
                 <select
@@ -97,6 +105,19 @@ class PollLocation extends Component {
                     ))}
                 </select>
             );
+
+            if (location.state.length) {
+                postalCode = (
+                    <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Postal code"
+                        value={location.postalCode}
+                        onChange={e => this.handleChange("postalCode", e)}
+                        style={{ marginBottom: "10px" }}
+                    />
+                );
+            }
         }
 
         return (
@@ -107,6 +128,7 @@ class PollLocation extends Component {
                         <div className="margin_abajo_big">
                             {countrySelector}
                             {stateSelector}
+                            {postalCode}
                             {error && (
                                 <div
                                     className="alert alert-danger"
