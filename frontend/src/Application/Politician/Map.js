@@ -66,6 +66,19 @@ class Map extends Component {
 
         const _this = this;
 
+        let _mapType;
+        let joinBy;
+        if (mapType === "us") {
+            _mapType = "state";
+            joinBy = ["postal-code", "code"];
+        } else if (mapType.indexOf("us-") !== -1) {
+            _mapType = "county";
+            joinBy = ["name", "code"];
+        } else {
+            _mapType = "country";
+            joinBy = ["iso-a2", "code"];
+        }
+
         let mapConfig = {
             chart: {
                 map: mapLayout,
@@ -88,9 +101,9 @@ class Map extends Component {
                 {
                     animation: { duration: 1000 },
                     data: cleanData(mapdata.data),
-                    joinBy: mapType !== "us" ? ["iso-a2", "code"] : ["postal-code", "code"],
+                    joinBy: joinBy,
                     dataLabels: { enabled: true, color: "#FFFFFF", format: "{point.code}" },
-                    name: `Approval rating per ${mapType === "us" ? "state" : "country"}`,
+                    name: `Approval rating per ${_mapType}`,
                     tooltip: {
                         pointFormat:
                             "{point.name}: <br/> Approval: {point.positive}% <br/> Disapproval: {point.negative}%"
