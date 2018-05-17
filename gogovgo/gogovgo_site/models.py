@@ -291,6 +291,8 @@ class Review(HashTagsMixin, TimeStampedModel):
     sentiment = models.CharField(choices=SENTIMENT_CHOICES,
                                  default=SENTIMENT_NEUTRAL, max_length=64)
     city = models.CharField(null=True, blank=True, max_length=255)
+    postal_code = models.CharField(max_length=8, null=True)
+    county = models.CharField(max_length=100, null=True)
     state = models.CharField(choices=US_STATES, default='CA', max_length=120, null=True)
     country = CountryField(default='US')
     body = models.TextField(null=True)
