@@ -1241,6 +1241,7 @@ footer .list-inline-item a:hover {text-decoration: none}
 .recaptcha .grecaptcha-badge {
   position: static !important;
   box-shadow: none !important;
+  margin: 0 auto;
 }
 
 /*  */
