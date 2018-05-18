@@ -1850,3 +1850,8 @@ select.location-selector {
   background: linear-gradient(to right, #2fa543 0%,#e3e3e3 50%,#d92d24 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2fa543', endColorstr='#d92d24',GradientType=0 ); /* IE6-9 */
 }
+
+.p-bio button.read-more {
+  color: #1875F0 !important;
+  background-color: transparent;
+}
