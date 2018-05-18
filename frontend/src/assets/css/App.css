@@ -14,6 +14,7 @@ button:focus {outline:0;}
 
 .p0 {padding: 0;}
 .m0 {margin: 0;}
+.mb10 {margin-bottom: 10px;}
 
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   color: #999999;
@@ -1803,6 +1804,25 @@ select.location-selector {
   width: 100%;
   text-align: center;
   padding: 10px 0;
+}
+
+.submit-step label.control-label {
+  display: block;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.submit-step input#fullnametxt {
+  font-weight: 400;
+}
+
+.submit-step .circle.centered {
+  margin-top: 10px;
+}
+
+.submit-step .circle.centered i.fa {
+  line-height: 112px;
 }
 
 @media all and (min-width: 768px) {

@@ -4,7 +4,6 @@
  */
 import React, { Component } from "react";
 import ReactGA from "react-ga";
-import { Modal } from "react-bootstrap";
 
 class PollLocation extends Component {
     constructor(props, context) {
@@ -120,43 +119,39 @@ class PollLocation extends Component {
         }
 
         return (
-            <div>
-                <Modal.Body>
-                    <div className="texto_modales_center">
-                        <div className="margin_abajo_big">Your location</div>
-                        <div className="margin_abajo_big">
-                            {countrySelector}
-                            {stateSelector}
-                            {postalCode}
-                            {error && (
-                                <div
-                                    className="alert alert-danger"
-                                    style={{ fontSize: "1.3rem", padding: "5px", margin: 0 }}
-                                >
-                                    {error}
-                                </div>
-                            )}
+            <div className="texto_modales_center">
+                <div className="texto_modales margin_abajo_medium">Your location</div>
+
+                <div className="margin_abajo_big">
+                    {countrySelector}
+                    {stateSelector}
+                    {postalCode}
+                    {error && (
+                        <div
+                            className="alert alert-danger"
+                            style={{ fontSize: "1.3rem", padding: "5px", margin: 0 }}
+                        >
+                            {error}
                         </div>
-                    </div>
-                </Modal.Body>
-                <Modal.Footer>
-                    <div className="form-group text-center m0">
-                        <button
-                            type="button"
-                            className="btn btn-modal btn-link"
-                            onClick={this.props.prev}
-                        >
-                            Back
-                        </button>
-                        <button
-                            type="button"
-                            className="btn btn-modal btn-primary"
-                            onClick={this.submit}
-                        >
-                            Next
-                        </button>
-                    </div>
-                </Modal.Footer>
+                    )}
+                </div>
+
+                <div className="form-group text-center m0">
+                    <button
+                        type="button"
+                        className="btn btn-modal btn-link"
+                        onClick={this.props.prev}
+                    >
+                        Back
+                    </button>
+                    <button
+                        type="button"
+                        className="btn btn-modal btn-primary"
+                        onClick={this.submit}
+                    >
+                        Next
+                    </button>
+                </div>
             </div>
         );
     }

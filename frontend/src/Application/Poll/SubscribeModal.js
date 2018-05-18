@@ -4,7 +4,7 @@
 
 import React, { Component } from "react";
 import { withCookies, Cookies } from "react-cookie";
-import { ControlLabel, FormControl, FormGroup, Modal } from "react-bootstrap";
+import { ControlLabel, FormControl, FormGroup } from "react-bootstrap";
 import { graphql, gql } from "react-apollo";
 import PropTypes from "prop-types";
 import ReactGA from "react-ga";
@@ -131,50 +131,44 @@ class SubscribeModal extends Component {
         };
 
         return (
-            <div>
-                <Modal.Body>
-                    <div className="texto_modales margin_abajo_big">
-                        Get Updates from DonaldTrumpReviews.com
-                        <p>
-                            Your name and contact information will NOT be displayed publicly.<br />
-                            Your review will remain anonymous.
-                        </p>
-                    </div>
-                    {this.state.error && (
-                        <div className="text-center text-danger">{this.state.error}</div>
-                    )}
-                    <form>
-                        <FormGroup validationState={this.state.fullnameValidation}>
-                            <ControlLabel>Full name</ControlLabel>
-                            <FormControl
-                                id="fullnametxt"
-                                type="text"
-                                placeholder="Enter your name"
-                                onChange={fullnameTextChange}
-                            />
-                        </FormGroup>
-                        <FormGroup validationState={this.state.emailValidation}>
-                            <ControlLabel>E-mail</ControlLabel>
-                            <FormControl
-                                id="emailtxt"
-                                type="email"
-                                placeholder="Enter your e-mail"
-                                onChange={emailAddressTextChange}
-                            />
-                        </FormGroup>
-                    </form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <div className="form-group text-center m0">
-                        <button
-                            type="button"
-                            className="btn btn-modal btn-primary"
-                            onClick={onSubmitWithUserValidation.bind(this)}
-                        >
-                            Submit
-                        </button>
-                    </div>
-                </Modal.Footer>
+            <div className="texto_modales_center">
+                <div className="texto_modales mb10">Get Updates from DonaldTrumpReviews.com</div>
+                <div className="modal_text_small opinion">
+                    Your name and contact information will NOT be displayed publicly. Your review
+                    will remain anonymous.
+                </div>
+                {this.state.error && (
+                    <div className="text-center text-danger">{this.state.error}</div>
+                )}
+                <form className="user-d">
+                    <FormGroup validationState={this.state.fullnameValidation}>
+                        <ControlLabel>Full name</ControlLabel>
+                        <FormControl
+                            id="fullnametxt"
+                            type="text"
+                            placeholder="Enter your name"
+                            onChange={fullnameTextChange}
+                        />
+                    </FormGroup>
+                    <FormGroup validationState={this.state.emailValidation}>
+                        <ControlLabel>E-mail</ControlLabel>
+                        <FormControl
+                            id="emailtxt"
+                            type="email"
+                            placeholder="Enter your e-mail"
+                            onChange={emailAddressTextChange}
+                        />
+                    </FormGroup>
+                </form>
+                <div className="form-group text-center m0">
+                    <button
+                        type="button"
+                        className="btn btn-modal btn-primary"
+                        onClick={onSubmitWithUserValidation.bind(this)}
+                    >
+                        Submit
+                    </button>
+                </div>
             </div>
         );
     }

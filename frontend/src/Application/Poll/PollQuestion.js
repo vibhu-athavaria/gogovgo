@@ -26,15 +26,15 @@ const PollQuestion = props => {
 
     return (
         <div className="texto_modales_center">
-            <div className="margin_abajo_big">
+            <div className="texto_modales mb10">
                 Do you <span className="color_approve">approve</span> or{" "}
                 <span className="color_disapprove">disapprove</span> of the way {politicianName} is
                 handling his job as {politicianTitle}?
-                <br />
-                <span className="modal_text_small">
-                    Reviews are published publicly, organized by topic, and sent directly to
-                    politicians.
-                </span>
+            </div>
+
+            <div className="modal_text_small opinion">
+                Reviews are published publicly, organized by topic, and sent directly to
+                politicians.
             </div>
 
             <Row className="justify-content-center a_or_d">
