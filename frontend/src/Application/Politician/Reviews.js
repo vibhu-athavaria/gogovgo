@@ -2,8 +2,7 @@
  * Created by vathavaria on 6/23/17.
  */
 
-import React from "react";
-import { Component } from "react/lib/ReactBaseClasses";
+import React, { Component } from "react";
 import Review from "./Review";
 import { withCookies, Cookies } from "react-cookie";
 import { Col, Row } from "react-bootstrap";

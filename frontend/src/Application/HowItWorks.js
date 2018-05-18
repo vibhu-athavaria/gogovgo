@@ -2,8 +2,7 @@
  * Created by vathavaria on 6/29/17.
  */
 
-import React from "react";
-import { Component } from "react/lib/ReactBaseClasses";
+import React, { Component } from "react";
 import { Col, Modal, Row } from "react-bootstrap";
 // import profile from "../assets/images/profile.png";
 import hand from "../assets/images/hand.png";

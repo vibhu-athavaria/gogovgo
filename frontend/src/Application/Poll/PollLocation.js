@@ -2,9 +2,8 @@
  * Location step in review modal
  * Save country and state information
  */
-import React from "react";
+import React, { Component } from "react";
 import ReactGA from "react-ga";
-import { Component } from "react/lib/ReactBaseClasses";
 import { Modal } from "react-bootstrap";
 
 class PollLocation extends Component {

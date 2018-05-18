@@ -2,8 +2,7 @@
  * Created by vathavaria on 6/23/17.
  */
 
-import React from "react";
-import { Component } from "react/lib/ReactBaseClasses";
+import React, { Component } from "react";
 import { ControlLabel, FormControl, FormGroup, InputGroup, Modal } from "react-bootstrap";
 import { encrypt } from "../../utils/security";
 import { CopyToClipboard } from "react-copy-to-clipboard";

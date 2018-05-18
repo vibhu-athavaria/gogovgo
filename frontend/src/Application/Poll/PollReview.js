@@ -2,8 +2,7 @@
  * Created by vathavaria on 6/23/17.
  */
 
-import React from "react";
-import { Component } from "react/lib/ReactBaseClasses";
+import React, { Component } from "react";
 import { FormControl, FormGroup, Modal } from "react-bootstrap";
 import ReCAPTCHA from "react-google-recaptcha";
 import ReactGA from "react-ga";

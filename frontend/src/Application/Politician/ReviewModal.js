@@ -2,14 +2,15 @@
  * Created by vathavaria on 12/9/17.
  */
 
-import React from "react";
-import { Component } from "react/lib/ReactBaseClasses";
+import React, { Component } from "react";
 import { gql, graphql } from "react-apollo";
 import Review from "./Review";
 
 class ReviewModal extends Component {
     render() {
-        const { data: { loading, error, review } } = this.props;
+        const {
+            data: { loading, error, review }
+        } = this.props;
         if (loading) {
             return <p>Loading...</p>;
         } else if (error) {

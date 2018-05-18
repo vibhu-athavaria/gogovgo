@@ -2,8 +2,7 @@
  * Created by vathavaria on 6/29/17.
  */
 
-import React from "react";
-import { Component } from "react/lib/ReactBaseClasses";
+import React, { Component } from "react";
 import { Col, ListGroup, ListGroupItem, Modal, Row } from "react-bootstrap";
 
 class Terms extends Component {
