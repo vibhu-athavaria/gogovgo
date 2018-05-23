@@ -226,6 +226,12 @@ class HashTagsMixin(object):
                 tags.append(word[1:])
         return set(sorted(tags))
 
+    def get_weights(self, tags):
+        tag_ids = (tag.pk for tag in tags)
+        weights = TagWeight.objects.filter(tag_id__in=tag_ids, country=self.country,
+                                           state=self.state if self.country == 'US' else None)
+        return {weight.tag_id: weight for weight in weights}
+
     def add_tags(self, tags, approve=False):
         """
         Handle addition of new tags to review
@@ -243,22 +249,33 @@ class HashTagsMixin(object):
         db_tags = Tag.objects.filter(politician=self.politician,
                                      sentiment=self.sentiment,
                                      value__in=tags)
+        weights = self.get_weights(db_tags)
         db_tags = {tag.value: tag for tag in db_tags}
 
         #   logic to add new tag or increment weight if tag already exists
-        for tag in tags:
-            t = None
+        for _tag in tags:
+            #   add or update tag
             try:
-                t = db_tags[tag]
+                tag = db_tags[_tag]
             except KeyError:
-                query = {'politician': self.politician, 'value': tag,
+                query = {'politician': self.politician, 'value': _tag,
                          'sentiment': self.sentiment, 'active': approve}
-                t = Tag.objects.create(**query)
+                tag = Tag.objects.create(**query)
             else:
-                t.weight += 1
-                t.save()
+                tag.weight += 1
+                tag.save()
 
-            self.tags.add(t)
+            #   add or update tag weight
+            try:
+                weight = weights[tag.id]
+            except KeyError:
+                TagWeight.objects.create(tag=tag, country=self.country,
+                                         state=self.state if self.country == 'US' else None)
+            else:
+                weight.weight += 1
+                weight.save()
+
+            self.tags.add(tag)
 
     def remove_tags(self, tags):
         """
@@ -275,12 +292,27 @@ class HashTagsMixin(object):
         """
         query = {'politician': self.politician, 'sentiment': self.sentiment, 'value__in': tags}
         db_tags = Tag.objects.filter(**query)
+        weights = self.get_weights(db_tags)
         for tag in db_tags:
+            #   decrement weight
+            #   delete if weight falls to zero
+            _id = int(tag.pk)
             tag.weight -= 1
-            if tag.weight < 1:
-                tag.delete()
-            else:
+            if tag.weight > 0:
                 tag.save()
+            else:
+                tag.delete()
+
+            #   decrement individual weight
+            try:
+                weight = weights[_id]
+            except KeyError:
+                continue
+            weight.weight -= 1
+            if weight.weight > 0:
+                weight.save()
+            else:
+                weight.delete()
 
 
 class Review(HashTagsMixin, TimeStampedModel):
