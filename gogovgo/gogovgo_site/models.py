@@ -145,6 +145,14 @@ class Tag(TimeStampedModel):
         verbose_name = 'Tag'
 
 
+class TagWeight(models.Model):
+    """Model to save individual weights for tags for a specific country and/or state"""
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    country = models.CharField(max_length=2)
+    state = models.CharField(max_length=2, null=True)
+    weight = models.IntegerField(default=1)
+
+
 class HashTagsMixin(object):
     """
     Functionality to extract hash tags and approved them as review is approved
@@ -244,7 +252,7 @@ class HashTagsMixin(object):
                 t = db_tags[tag]
             except KeyError:
                 query = {'politician': self.politician, 'value': tag,
-                          'sentiment': self.sentiment, 'active': approve}
+                         'sentiment': self.sentiment, 'active': approve}
                 t = Tag.objects.create(**query)
             else:
                 t.weight += 1
