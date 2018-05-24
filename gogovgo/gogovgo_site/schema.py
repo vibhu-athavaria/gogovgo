@@ -19,6 +19,7 @@ from gogovgo.gogovgo_site.constants import SENTIMENT_NEGATIVE, SENTIMENT_POSITIV
 from gogovgo.gogovgo_site.constants import REVIEW_APPROVED, US_STATES
 from gogovgo.scripts.geocode import get_county
 
+
 @convert_django_field.register(CloudinaryField)
 def my_convert_function(field, registry=None):
     return graphene.String()
@@ -136,7 +137,6 @@ class LocationHelper(object):
         return states[review.state]
 
 
-
 class ReviewType(DjangoObjectType):
     tags = graphene.List(graphene.String)
     location = graphene.String()
@@ -211,7 +211,7 @@ class CreateReview(graphene.Mutation):
         county = None
         if country == 'US':
             county = get_county(postal_code, state)
-            if not country:
+            if not county:
                 raise GraphQLError('The postal code is invalid')
 
         try:
@@ -274,7 +274,7 @@ class ReportReview(graphene.Mutation):
         except models.FlaggedReview.DoesNotExist:
             flag = models.FlaggedReview(review=review, counter=0)
 
-        limit = 32000 # rounded limit to nearest thousand for PositiveSmallIntegerField
+        limit = 32000  # rounded limit to nearest thousand for PositiveSmallIntegerField
         if not flag.is_safe and flag.counter < limit:
             flag.counter += 1
             flag.save()
@@ -435,7 +435,8 @@ class MapHelper:
             _data = count.get(state, {'positive': 0, 'negative': 0})
             total = _data['positive'] + _data['negative']
             if not total:
-                entry = MapEntryData(code=state, name=states[state], positive=0, negative=0, value=0.5)
+                entry = MapEntryData(
+                    code=state, name=states[state], positive=0, negative=0, value=0.5)
             else:
                 positive = round(_data['positive'] / total * 100, 2)
                 negative = round(_data['negative'] / total * 100, 2)
@@ -479,7 +480,6 @@ class MapHelper:
         return data
 
 
-
 class Query(graphene.AbstractType):
     users = graphene.List(UserType)
     userprofiles = graphene.List(UserProfileType)
@@ -497,11 +497,11 @@ class Query(graphene.AbstractType):
     )
     review = graphene.Field(ReviewType, id=graphene.ID())
     reviews = graphene.Field(ReviewsPaginatedType,
-                            id=graphene.Int(),
-                            page=graphene.Int(),
-                            country=graphene.String(),
-                            state=graphene.String(),
-                            timelimit=graphene.String())
+                             id=graphene.Int(),
+                             page=graphene.Int(),
+                             country=graphene.String(),
+                             state=graphene.String(),
+                             timelimit=graphene.String())
     mapdata = graphene.Field(MapDataType, id=graphene.Int(), maptype=graphene.String())
 
     def resolve_mapdata(self, args, context, info):
