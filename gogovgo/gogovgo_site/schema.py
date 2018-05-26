@@ -353,8 +353,16 @@ class ReviewPaginationHelper(object):
         tags = models.Review.tags.through.objects.filter(review_id__in=review_ids)
         tags = tags.values_list('tag_id', flat=True)
 
-        tags = models.Tag.objects.filter(id__in=tags, active=True)
-        tags = tags.order_by('-weight').values_list('value', 'weight')[:10]
+        if self.country == 'all':
+            tags = models.Tag.objects.filter(id__in=tags, active=True)
+            tags = tags.order_by('-weight').values_list('value', 'weight')[:10]
+        else:
+            tags = models.TagWeight.objects.filter(tag_id__in=tags, tag__active=True,
+                                                   country=self.country)
+            if self.country == 'US' and self.state != 'all':
+                tags = tags.filter(state=self.state)
+            tags = tags.order_by('-weight')[:10]
+            tags = ((tag.tag.value, tag.weight) for tag in tags)
         return tags
 
 
