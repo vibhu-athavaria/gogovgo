@@ -1,9 +1,14 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+
 import Tracker from "./Tracker";
+
 import Home from "./Application/Home";
 import Submit from "./Application/Poll/Modal";
 // import LandingPage from "./Application/LandingPage";
+
+import Terms from "./Application/static/Terms";
+import PrivacyPolicy from "./Application/static/PrivacyPolicy";
 
 class App extends Component {
     render() {
@@ -49,6 +54,10 @@ class App extends Component {
                         path="/politician/:country/:title_url/reviews/:review_id"
                         component={Tracker(PoliticianWithReview)}
                     />
+
+                    {/* Static pages */}
+                    <Route path="/terms" component={Tracker(Terms)} />
+                    <Route path="/privacy" component={Tracker(PrivacyPolicy)} />
                 </div>
             </Router>
         );
