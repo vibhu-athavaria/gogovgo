@@ -8,6 +8,7 @@ import Submit from "./Application/Poll/Modal";
 // import LandingPage from "./Application/LandingPage";
 
 import Terms from "./Application/static/Terms";
+import Contact from "./Application/static/Contact";
 import PrivacyPolicy from "./Application/static/PrivacyPolicy";
 
 class App extends Component {
@@ -58,6 +59,7 @@ class App extends Component {
                     {/* Static pages */}
                     <Route path="/terms" component={Tracker(Terms)} />
                     <Route path="/privacy" component={Tracker(PrivacyPolicy)} />
+                    <Route path="/contact" component={Tracker(Contact)} />
                 </div>
             </Router>
         );

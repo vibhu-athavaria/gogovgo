@@ -1827,6 +1827,14 @@ select.location-selector {
   line-height: 112px;
 }
 
+.contact-form .form-control {
+  margin-bottom: 10px;
+}
+
+.contact-form textarea {
+  height: 86px;
+}
+
 @media all and (min-width: 768px) {
   .submit-step {
     width: 75%;
