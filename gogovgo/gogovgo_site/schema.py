@@ -19,6 +19,8 @@ from gogovgo.gogovgo_site.constants import SENTIMENT_NEGATIVE, SENTIMENT_POSITIV
 from gogovgo.gogovgo_site.constants import REVIEW_APPROVED, US_STATES
 from gogovgo.scripts.geocode import get_county
 
+from gogovgo.graphql.mutations import Contact
+
 
 @convert_django_field.register(CloudinaryField)
 def my_convert_function(field, registry=None):
@@ -286,6 +288,7 @@ class Mutations(graphene.ObjectType):
     create_review = CreateReview.Field()
     update_review = UpdateReview.Field()
     report_review = ReportReview.Field()
+    contact = Contact.Field()
 
 
 class ReviewPaginationHelper(object):
