@@ -8,6 +8,11 @@ from graphql import GraphQLError
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 
+from gogovgo.scripts.email import send_email
+
+
+ADMIN_EMAIL = 'adam@adamtreister.com'
+
 
 class Validator:
     """Form validation"""
@@ -58,6 +63,12 @@ class Form(Validator):
         self.validate()
         return not self.errors
 
+    def send_email(self):
+        data = self.cleaned_data
+        message = '{} ({}) says: \n {}'.format(data['name'], data['email'], data['message'])
+        send_email(send_from=data['email'], send_to=ADMIN_EMAIL,
+                   subject='DonaldTrumpReviews.com contact message', message=message)
+
 
 class Contact(graphene.Mutation):
     """GraphQL mutation to contact admin"""
@@ -74,6 +85,6 @@ class Contact(graphene.Mutation):
     def mutate(root, args, context, info):
         form = Form(data=args)
         if not form.is_valid():
-            print(form.errors)
             return Contact(sent=False, errors=form.errors)
-        return Contact(sent=False, errors=['Implementation pending'])
+        form.send_email()
+        return Contact(sent=True, errors=[])
