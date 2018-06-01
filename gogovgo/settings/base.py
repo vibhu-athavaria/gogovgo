@@ -23,8 +23,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '8x$)j$z*&p%+ud8j!h5vg!uwjhv^ly@lk3s9!)_lwe=&3-r%c%'
 
 
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -167,7 +165,8 @@ GRAPHENE = {
 
 }
 
-CLOUDINARY="cloudinary://637444662864227:qG7mmAvWWrSjKoZtKOe_2WeUiLk@gogovgo-com"
+#   Cloudinary image hosting
+CLOUDINARY = "cloudinary://637444662864227:qG7mmAvWWrSjKoZtKOe_2WeUiLk@gogovgo-com"
 cloudinary.config(
     cloud_name="gogovgo-com",
     api_key="637444662864227",
@@ -175,3 +174,5 @@ cloudinary.config(
 )
 
 
+#   SendGrid
+SENDGRID_API_KEY = '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'
