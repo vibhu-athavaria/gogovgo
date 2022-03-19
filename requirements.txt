@@ -48,7 +48,7 @@ pyasn1-modules==0.0.10
 PyJWT==1.5.3
 python-http-client==3.1.0
 pytz==2017.2
-requests==2.18.2
+requests==2.20.0
 rsa==4.7
 Rx==1.6.0
 sendgrid==5.3.0
